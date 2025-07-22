@@ -122,6 +122,60 @@ function App() {
       setIsSending(false);
     });
 
+    // Listen for general email logs (ALL server logs)
+    newSocket.on('emailLog', (data) => {
+      console.log('📝 Email log received:', data);
+      setEmailLogs(prev => [...prev, {
+        type: data.type || 'info',
+        message: data.message,
+        timestamp: data.timestamp || new Date().toISOString()
+      }]);
+    });
+
+    // Listen for email status updates
+    newSocket.on('emailStatus', (data) => {
+      console.log('📊 Email status received:', data);
+      setEmailLogs(prev => [...prev, {
+        type: data.type || 'info',
+        message: data.message,
+        timestamp: data.timestamp || new Date().toISOString()
+      }]);
+      
+      if (data.progress) {
+        setProgress(data.progress);
+      }
+    });
+
+    // Listen for general notifications
+    newSocket.on('notification', (data) => {
+      console.log('🔔 Notification received:', data);
+      setEmailLogs(prev => [...prev, {
+        type: data.type || 'info',
+        message: data.message,
+        timestamp: data.timestamp || new Date().toISOString()
+      }]);
+    });
+
+    // Listen for server info logs (capture all server activity)
+    newSocket.on('serverLog', (data) => {
+      console.log('🔍 Server log received:', data);
+      setEmailLogs(prev => [...prev, {
+        type: data.level || 'info',
+        message: data.message,
+        timestamp: data.timestamp || new Date().toISOString()
+      }]);
+    });
+
+    // Listen for campaign-started events
+    newSocket.on('campaign-started', (data) => {
+      console.log('🚀 Campaign started event:', data);
+      setEmailLogs(prev => [...prev, {
+        type: 'info',
+        message: `🚀 Campaign started: ${data.campaignName || data.name} (ID: ${data.campaignId || data.id})`,
+        timestamp: data.timestamp || new Date().toISOString()
+      }]);
+    });
+
     setSocket(newSocket);
     
     // Make socket globally accessible for components

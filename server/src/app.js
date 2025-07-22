@@ -175,6 +175,9 @@ class App {
     // Store scheduler reference for routes
     this.app.set('schedulerService', this.schedulerService);
     
+    // Configure logger to emit logs to socket
+    logger.setSocketHandler(this.emailSocketHandler);
+    
     logger.info('Services configured');
   }
 

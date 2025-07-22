@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Calendar, Mail, TrendingUp, Clock, CheckCircle, AlertCircle, BarChart3 } from 'lucide-react';
-import axios from 'axios';
+import api from '../utils/api';
 import toast from 'react-hot-toast';
 import './CampaignDashboard.css';
 
@@ -18,7 +18,7 @@ const CampaignDashboard = () => {
 
   const loadCampaigns = async () => {
     try {
-      const response = await axios.get('/api/campaigns');
+      const response = await api.get('/api/campaigns');
       setCampaigns(response.data);
     } catch (error) {
       console.error('Error loading campaigns:', error);
@@ -30,7 +30,7 @@ const CampaignDashboard = () => {
 
   const loadCampaignDetails = async (campaignId) => {
     try {
-      const response = await axios.get(`/api/campaign/${campaignId}`);
+      const response = await api.get(`/api/campaign/${campaignId}`);
       setSelectedCampaign(response.data);
     } catch (error) {
       console.error('Error loading campaign details:', error);

@@ -148,10 +148,31 @@ class SchedulerService {
     const currentCount = await this.getTodaysEmailCount();
     const remaining = this.DAILY_EMAIL_LIMIT - currentCount;
     
-    logger.info(`📊 Daily email status: ${currentCount}/${this.DAILY_EMAIL_LIMIT} sent, ${remaining} remaining`);
+    const statusMessage = `📊 Daily email status: ${currentCount}/${this.DAILY_EMAIL_LIMIT} sent, ${remaining} remaining`;
+    logger.info(statusMessage);
+    
+    // Emit to client
+    if (this.socketHandler) {
+      this.socketHandler.emitGeneralNotification('serverLog', {
+        level: 'info',
+        message: statusMessage,
+        timestamp: new Date().toISOString()
+      });
+    }
     
     if (currentCount >= this.DAILY_EMAIL_LIMIT) {
-      logger.warning(`🚫 Daily email limit reached: ${currentCount}/${this.DAILY_EMAIL_LIMIT}. Stopping email processing for today to prevent Gmail blacklisting.`);
+      const limitMessage = `🚫 Daily email limit reached: ${currentCount}/${this.DAILY_EMAIL_LIMIT}. Stopping email processing for today to prevent Gmail blacklisting.`;
+      logger.warning(limitMessage);
+      
+      // Emit to client
+      if (this.socketHandler) {
+        this.socketHandler.emitGeneralNotification('serverLog', {
+          level: 'warning',
+          message: limitMessage,
+          timestamp: new Date().toISOString()
+        });
+      }
+      
       return false;
     }
     
@@ -230,13 +251,21 @@ class SchedulerService {
         startedAt: new Date()
       });
 
-      logger.info(`Started campaign: ${campaign.name} (${campaignId})`);
+      const startMessage = `Started campaign: ${campaign.name} (${campaignId})`;
+      logger.info(startMessage);
 
       // Emit socket notification
       if (this.socketHandler) {
         this.socketHandler.emitGeneralNotification('campaign-started', {
           campaignId,
           name: campaign.name
+        });
+        
+        // Also emit as server log
+        this.socketHandler.emitGeneralNotification('serverLog', {
+          level: 'info',
+          message: `ℹ️ INFO: ${startMessage}`,
+          timestamp: new Date().toISOString()
         });
       }
 
@@ -253,7 +282,18 @@ class SchedulerService {
       // Check global daily limit first
       const canSendGlobal = await this.canSendMoreEmailsToday(10);
       if (!canSendGlobal) {
-        logger.warning(`🚫 Cannot process campaign ${campaign.id}: Global daily limit of ${this.DAILY_EMAIL_LIMIT} emails reached`);
+        const limitMessage = `🚫 Cannot process campaign ${campaign.id}: Global daily limit of ${this.DAILY_EMAIL_LIMIT} emails reached`;
+        logger.warning(limitMessage);
+        
+        // Emit to client
+        if (this.socketHandler) {
+          this.socketHandler.emitGeneralNotification('serverLog', {
+            level: 'warning',
+            message: `⚠️ WARNING: ${limitMessage}`,
+            timestamp: new Date().toISOString()
+          });
+        }
+        
         return;
       }
 
@@ -266,7 +306,18 @@ class SchedulerService {
       ).length;
 
       if (sentToday >= dailyLimit) {
-        logger.info(`Daily limit reached for campaign ${campaign.id}: ${sentToday}/${dailyLimit}`);
+        const campaignLimitMessage = `Daily limit reached for campaign ${campaign.id}: ${sentToday}/${dailyLimit}`;
+        logger.info(campaignLimitMessage);
+        
+        // Emit to client
+        if (this.socketHandler) {
+          this.socketHandler.emitGeneralNotification('serverLog', {
+            level: 'info',
+            message: `ℹ️ INFO: ${campaignLimitMessage}`,
+            timestamp: new Date().toISOString()
+          });
+        }
+        
         return;
       }
 
@@ -277,11 +328,32 @@ class SchedulerService {
       const batchSize = Math.min(remainingForCampaign, remainingGlobal, 10);
 
       if (batchSize <= 0) {
-        logger.info(`No emails can be sent for campaign ${campaign.id} today (campaign: ${remainingForCampaign}, global: ${remainingGlobal})`);
+        const noBatchMessage = `No emails can be sent for campaign ${campaign.id} today (campaign: ${remainingForCampaign}, global: ${remainingGlobal})`;
+        logger.info(noBatchMessage);
+        
+        // Emit to client
+        if (this.socketHandler) {
+          this.socketHandler.emitGeneralNotification('serverLog', {
+            level: 'info',
+            message: `ℹ️ INFO: ${noBatchMessage}`,
+            timestamp: new Date().toISOString()
+          });
+        }
+        
         return;
       }
 
-      logger.info(`Processing batch for campaign ${campaign.id}: ${batchSize} emails (Respecting global limit: ${await this.getTodaysEmailCount()}/${this.DAILY_EMAIL_LIMIT})`);
+      const batchMessage = `Processing batch for campaign ${campaign.id}: ${batchSize} emails (Respecting global limit: ${await this.getTodaysEmailCount()}/${this.DAILY_EMAIL_LIMIT})`;
+      logger.info(batchMessage);
+      
+      // Emit to client
+      if (this.socketHandler) {
+        this.socketHandler.emitGeneralNotification('serverLog', {
+          level: 'info',
+          message: `ℹ️ INFO: ${batchMessage}`,
+          timestamp: new Date().toISOString()
+        });
+      }
 
       // Send batch of emails
       await this.emailService.sendCampaignBatch(campaign.id, batchSize, (progress) => {
@@ -310,7 +382,17 @@ class SchedulerService {
       });
 
     } catch (error) {
-      logger.error(`Error processing campaign batch ${campaign.id}: ${error.message}`);
+      const errorMessage = `Error processing campaign batch ${campaign.id}: ${error.message}`;
+      logger.error(errorMessage);
+      
+      // Emit to client
+      if (this.socketHandler) {
+        this.socketHandler.emitGeneralNotification('serverLog', {
+          level: 'error',
+          message: `❌ ERROR: ${errorMessage}`,
+          timestamp: new Date().toISOString()
+        });
+      }
     }
   }
 
@@ -700,12 +782,33 @@ class SchedulerService {
   // Process new campaign immediately (called when campaign is created)
   async processNewCampaignImmediately(campaignId) {
     try {
-      logger.info(`🚀 Processing new campaign immediately: ${campaignId}`);
+      const immediateMessage = `🚀 Processing new campaign immediately: ${campaignId}`;
+      logger.info(immediateMessage);
+      
+      // Emit to client
+      if (this.socketHandler) {
+        this.socketHandler.emitGeneralNotification('serverLog', {
+          level: 'info',
+          message: `ℹ️ INFO: ${immediateMessage}`,
+          timestamp: new Date().toISOString()
+        });
+      }
       
       // Check global daily limit first
       const canSend = await this.canSendMoreEmailsToday();
       if (!canSend) {
-        logger.warning(`🚫 Cannot process new campaign ${campaignId} immediately: Daily limit of ${this.DAILY_EMAIL_LIMIT} emails reached. Campaign will be processed tomorrow during business hours.`);
+        const limitMessage = `🚫 Cannot process new campaign ${campaignId} immediately: Daily limit of ${this.DAILY_EMAIL_LIMIT} emails reached. Campaign will be processed tomorrow during business hours.`;
+        logger.warning(limitMessage);
+        
+        // Emit to client
+        if (this.socketHandler) {
+          this.socketHandler.emitGeneralNotification('serverLog', {
+            level: 'warning',
+            message: `⚠️ WARNING: ${limitMessage}`,
+            timestamp: new Date().toISOString()
+          });
+        }
+        
         return false;
       }
       

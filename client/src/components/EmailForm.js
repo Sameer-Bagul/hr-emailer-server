@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { Send, Upload, FileSpreadsheet, Mail, Clock, Info, Eye, EyeOff, FileText, Link } from 'lucide-react';
-import axios from 'axios';
+import api from '../utils/api';
 import toast from 'react-hot-toast';
 
 const EmailForm = ({ onSendingStart, isSending }) => {
@@ -18,7 +18,7 @@ const EmailForm = ({ onSendingStart, isSending }) => {
   useEffect(() => {
     const loadFixedTemplate = async () => {
       try {
-        const response = await axios.get('/api/template');
+        const response = await api.get('/api/template');
         setFixedTemplate(response.data.template);
         setEmailSubject(response.data.subject);
       } catch (error) {
@@ -91,7 +91,7 @@ const EmailForm = ({ onSendingStart, isSending }) => {
       
       // Subject and template are both fixed on server side now
 
-      const response = await axios.post('/api/send-emails', formData, {
+      const response = await api.post('/api/send-emails', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
