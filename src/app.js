@@ -23,9 +23,18 @@ class App {
   constructor() {
     this.app = express();
     this.server = http.createServer(this.app);
+    
+    // Allow multiple origins for Socket.IO
+    const allowedOrigins = [
+      process.env.CLIENT_URL,
+      'http://localhost:3000',
+      'http://localhost:3001',
+      'https://hr-emailer-client.vercel.app'
+    ].filter(Boolean);
+    
     this.io = socketIo(this.server, {
       cors: {
-        origin: process.env.CLIENT_URL || "http://localhost:3000",
+        origin: allowedOrigins,
         methods: ["GET", "POST", "PUT", "DELETE"],
         credentials: true
       }
@@ -48,7 +57,8 @@ class App {
     const allowedOrigins = [
       process.env.CLIENT_URL,
       'http://localhost:3000',
-      'http://localhost:3001'
+      'http://localhost:3001',
+      'https://hr-emailer-client.vercel.app'
     ].filter(Boolean);
 
     const corsOptions = {
