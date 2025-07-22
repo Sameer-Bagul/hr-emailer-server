@@ -23,11 +23,18 @@ function App() {
     const newSocket = io(SOCKET_URL);
     
     newSocket.on('connect', () => {
+      console.log('✅ Socket connected to:', SOCKET_URL);
       setIsConnected(true);
     });
 
     newSocket.on('disconnect', () => {
+      console.log('❌ Socket disconnected');
       setIsConnected(false);
+    });
+
+    // Debug: Listen for ALL events
+    newSocket.onAny((eventName, ...args) => {
+      console.log(`🔍 Socket event received: ${eventName}`, args);
     });
 
     newSocket.on('emailStatus', (data) => {
@@ -149,11 +156,22 @@ function App() {
     // Listen for general notifications
     newSocket.on('notification', (data) => {
       console.log('🔔 Notification received:', data);
-      setEmailLogs(prev => [...prev, {
-        type: data.type || 'info',
-        message: data.message,
-        timestamp: data.timestamp || new Date().toISOString()
-      }]);
+      
+      // Handle serverLog notifications (though these should come via serverLog event now)
+      if (data.type === 'serverLog') {
+        setEmailLogs(prev => [...prev, {
+          type: data.level || 'info',
+          message: data.message,
+          timestamp: data.timestamp || new Date().toISOString()
+        }]);
+      } else {
+        // Handle other notifications
+        setEmailLogs(prev => [...prev, {
+          type: data.type || 'info',
+          message: data.message || JSON.stringify(data),
+          timestamp: data.timestamp || new Date().toISOString()
+        }]);
+      }
     });
 
     // Listen for server info logs (capture all server activity)

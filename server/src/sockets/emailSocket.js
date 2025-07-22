@@ -171,10 +171,16 @@ class EmailSocketHandler {
       const notification = {
         timestamp: new Date(),
         type,
-        data
+        ...data  // Spread the data instead of nesting it
       };
 
-      this.io.emit('notification', notification);
+      // For serverLog events, emit directly as serverLog
+      if (type === 'serverLog') {
+        this.io.emit('serverLog', notification);
+      } else {
+        this.io.emit('notification', notification);
+      }
+      
       logger.info(`Emitted general notification: ${type}`);
     } catch (error) {
       logger.error(`Error emitting general notification: ${error.message}`);
