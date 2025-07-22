@@ -26,6 +26,11 @@ class Logger {
   emitToSocket(level, message, emoji = '') {
     if (this.socketHandler && this.socketHandler.emitGeneralNotification) {
       try {
+        // Prevent infinite loops by not emitting socket notifications for socket-related logs
+        if (message.includes('Emitted general notification') || message.includes('serverLog')) {
+          return;
+        }
+        
         this.socketHandler.emitGeneralNotification('serverLog', {
           level: level.toLowerCase(),
           message: this.formatMessage(level, message, emoji),
