@@ -5,7 +5,7 @@ import axios from 'axios';
 import toast from 'react-hot-toast';
 
 const EmailForm = ({ onSendingStart, isSending }) => {
-  const { register, handleSubmit, reset, formState: { errors } } = useForm();
+  const { register, handleSubmit, formState: { errors } } = useForm();
   const [selectedFile, setSelectedFile] = useState(null);
   const [selectedResume, setSelectedResume] = useState(null);
   const [resumeDocLink, setResumeDocLink] = useState('');
@@ -77,7 +77,9 @@ const EmailForm = ({ onSendingStart, isSending }) => {
     try {
       const formData = new FormData();
       formData.append('file', selectedFile);
-      formData.append('delayMs', data.delayMs);
+      formData.append('delayMs', data.delayMs * 1000); // Convert seconds to milliseconds
+      formData.append('userEmail', data.userEmail);
+      formData.append('campaignType', data.campaignType);
       
       // Add resume data if provided
       if (selectedResume) {
@@ -89,13 +91,36 @@ const EmailForm = ({ onSendingStart, isSending }) => {
       
       // Subject and template are both fixed on server side now
 
-      const response = await axios.post('/send-emails', formData, {
+      const response = await axios.post('/api/send-emails', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
       });
 
-      toast.success(`Email sending started! Processing ${response.data.totalEmails} recipients.`);
+      if (response.data.type === 'campaign') {
+        toast.success(`Multi-day campaign created! Campaign ID: ${response.data.campaignId}`);
+        toast.success(`${response.data.totalEmails} emails will be sent over ${response.data.estimatedDays} days (300 per day)`);
+        
+        // Join the campaign room for real-time updates
+        if (response.data.campaignId) {
+          console.log(`🏷️ Subscribing to campaign: ${response.data.campaignId}`);
+          // The socket should be accessible through props or context
+          if (window.socket) {
+            window.socket.emit('subscribe-campaign', response.data.campaignId);
+          }
+        }
+      } else {
+        toast.success(`Email sending started! Processing ${response.data.totalEmails} recipients.`);
+      }
+      
+      // Show warnings for large files
+      if (response.data.warning) {
+        toast.warning(response.data.warning);
+      }
+      
+      if (response.data.emailLimitWarning) {
+        toast.warning(response.data.emailLimitWarning);
+      }
       
     } catch (error) {
       console.error('Error sending emails:', error);
@@ -144,7 +169,7 @@ const EmailForm = ({ onSendingStart, isSending }) => {
               <li><code>Company Name</code> or <code>Company</code></li>
               <li><code>Email</code> or <code>Email Address</code></li>
             </ul>
-            Maximum 300 emails will be processed per campaign.
+            <strong>File limits:</strong> Maximum 5MB size, 1000 rows processed, 300 emails sent per campaign.
           </div>
         </div>
 
@@ -200,6 +225,62 @@ const EmailForm = ({ onSendingStart, isSending }) => {
           </div>
         </div>
 
+        {/* User Email for Reports */}
+        <div className="form-group">
+          <label htmlFor="userEmail" className="form-label">
+            <Mail size={18} />
+            Your Email (for campaign reports)
+          </label>
+          <input
+            id="userEmail"
+            type="email"
+            className="form-input"
+            placeholder="your.email@example.com"
+            disabled={isSending}
+            {...register('userEmail', { 
+              required: 'Your email is required for campaign reports',
+              pattern: {
+                value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                message: 'Please enter a valid email address'
+              }
+            })}
+          />
+          {errors.userEmail && (
+            <span className="error-message">{errors.userEmail.message}</span>
+          )}
+          <div className="helper-text">
+            <Info size={16} />
+            We'll send daily reports and completion notifications to this email
+          </div>
+        </div>
+
+        {/* Campaign Type */}
+        <div className="form-group">
+          <label htmlFor="campaignType" className="form-label">
+            <Clock size={18} />
+            Campaign Type
+          </label>
+          <select
+            id="campaignType"
+            className="form-input"
+            disabled={isSending}
+            {...register('campaignType', { 
+              required: 'Please select a campaign type'
+            })}
+          >
+            <option value="">Select campaign type</option>
+            <option value="immediate">Immediate (up to 300 emails now)</option>
+            <option value="multi-day">Multi-day (300 emails per day)</option>
+          </select>
+          {errors.campaignType && (
+            <span className="error-message">{errors.campaignType.message}</span>
+          )}
+          <div className="helper-text">
+            <Info size={16} />
+            Choose immediate for small batches or multi-day for large campaigns
+          </div>
+        </div>
+
         {/* Delay Configuration */}
         <div className="form-group">
           <label htmlFor="delayMs" className="form-label">
@@ -218,8 +299,7 @@ const EmailForm = ({ onSendingStart, isSending }) => {
               required: 'Delay is required',
               min: { value: 5, message: 'Minimum delay is 5 seconds' },
               max: { value: 60, message: 'Maximum delay is 60 seconds' },
-              valueAsNumber: true,
-              transform: (value) => value * 1000 // Convert to milliseconds
+              valueAsNumber: true
             })}
           />
           {errors.delayMs && (

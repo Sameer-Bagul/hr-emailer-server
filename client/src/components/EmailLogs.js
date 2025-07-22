@@ -1,5 +1,5 @@
 import React from 'react';
-import { Activity, Trash2, CheckCircle, XCircle, Clock, BarChart3 } from 'lucide-react';
+import { Activity, Trash2, CheckCircle, XCircle, Clock, BarChart3, Info, Zap } from 'lucide-react';
 
 const EmailLogs = ({ logs, progress, onClearLogs }) => {
   const getLogIcon = (type) => {
@@ -10,9 +10,17 @@ const EmailLogs = ({ logs, progress, onClearLogs }) => {
         return <XCircle size={16} />;
       case 'complete':
         return <BarChart3 size={16} />;
+      case 'info':
+        return <Info size={16} />;
+      case 'daily':
+        return <Zap size={16} />;
       default:
         return <Clock size={16} />;
     }
+  };
+
+  const getLogClassName = (type) => {
+    return `log-item log-${type}`;
   };
 
   const formatLogMessage = (log) => {
@@ -91,7 +99,7 @@ const EmailLogs = ({ logs, progress, onClearLogs }) => {
           logs.map((log, index) => (
             <div 
               key={index} 
-              className={`log-entry ${log.type}`}
+              className={getLogClassName(log.type)}
             >
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                 {getLogIcon(log.type)}
