@@ -185,6 +185,9 @@ class App {
     // Store scheduler reference for routes
     this.app.set('schedulerService', this.schedulerService);
     
+    // Make scheduler globally available for campaign completion
+    global.schedulerService = this.schedulerService;
+    
     // Configure logger to emit logs to socket
     logger.setSocketHandler(this.emailSocketHandler);
     

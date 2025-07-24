@@ -359,7 +359,14 @@ class SchedulerService {
       await this.emailService.sendCampaignBatch(campaign.id, batchSize, (progress) => {
         // Emit progress updates
         if (this.socketHandler) {
-          this.socketHandler.emitCampaignProgress(campaign.id, progress);
+          // Map progress data to expected format
+          const progressData = {
+            sent: progress.successful || 0,
+            total: progress.total || 0,
+            failed: progress.failed || 0,
+            current: progress.current || 0
+          };
+          this.socketHandler.emitCampaignProgress(campaign.id, progressData);
           
           // Emit individual email status if current email result is available
           if (progress.currentEmail) {
@@ -428,7 +435,7 @@ class SchedulerService {
       const duration = campaign.startedAt ? 
         Math.ceil((completedAt - new Date(campaign.startedAt)) / (1000 * 60 * 60 * 24)) : 0;
 
-      await this.campaignService.updateCampaign(campaignId, {
+      const updatedCampaign = await this.campaignService.updateCampaign(campaignId, {
         status: 'completed',
         completedAt,
         duration
@@ -439,18 +446,26 @@ class SchedulerService {
       // Emit completion notification
       if (this.socketHandler) {
         this.socketHandler.emitCampaignComplete(campaignId, {
-          name: campaign.name,
+          name: updatedCampaign.name,
           duration,
-          completedAt
+          completedAt,
+          totalEmails: updatedCampaign.totalEmails,
+          sentEmails: updatedCampaign.sentEmails,
+          failedEmails: updatedCampaign.failedEmails
+        });
+        
+        // Also emit a general completion log
+        this.socketHandler.emitGeneralNotification('serverLog', {
+          level: 'info',
+          message: `🎉 Campaign "${campaign.name}" completed! ${campaign.sentEmails}/${campaign.totalEmails} emails sent in ${duration} days`,
+          timestamp: new Date().toISOString()
         });
       }
 
       // Send email notification to campaign creator
-      await this.notificationService.sendCampaignCompletionNotification(campaign);
+      await this.notificationService.sendCampaignCompletionNotification(updatedCampaign);
 
-      return { success: true, campaign };
-
-      return true;
+      return { success: true, campaign: updatedCampaign };
     } catch (error) {
       logger.error(`Error completing campaign ${campaignId}: ${error.message}`);
       throw error;

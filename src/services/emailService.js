@@ -271,9 +271,23 @@ class EmailService {
       const result = await this.sendEmailBatch(emails, campaign.delay, onProgress);
       
       // Update campaign progress
-      campaignService.updateCampaignProgress(campaignId, result.successful, result.failed);
+      const updatedCampaign = campaignService.updateCampaignProgress(campaignId, result.successful, result.failed);
       
       logger.email(`Campaign ${campaignId}: Sent ${result.successful}/${result.total} emails in batch`);
+      
+      // Check if campaign is now completed
+      if (updatedCampaign.status === 'completed') {
+        logger.info(`🎉 Campaign ${campaignId} completed after this batch!`);
+        
+        // Emit completion event through event system instead of direct call
+        if (global.schedulerService) {
+          try {
+            await global.schedulerService.completeCampaign(campaignId);
+          } catch (error) {
+            logger.error(`Error triggering campaign completion: ${error.message}`);
+          }
+        }
+      }
       
       return {
         success: true,

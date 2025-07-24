@@ -14,7 +14,11 @@ class NotificationService {
         return;
       }
 
-      const progress = campaign.getProgress ? campaign.getProgress() : { sent: 0, total: 0, failed: 0 };
+      const progress = {
+        sent: campaign.sentEmails || 0,
+        total: campaign.totalEmails || 0,
+        failed: campaign.failedEmails || 0
+      };
       const duration = campaign.startedAt ? 
         Math.ceil((new Date() - new Date(campaign.startedAt)) / (1000 * 60 * 60 * 24)) : 0;
 
