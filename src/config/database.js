@@ -149,9 +149,11 @@ class Database {
   }
 
   async addCampaign(campaign) {
+    console.log(`[DATABASE] Adding campaign with ID: ${campaign.id}`);
     const campaigns = this.readCampaigns();
     campaigns.push(campaign);
     await this.writeCampaigns(campaigns);
+    console.log(`[DATABASE] Campaign added successfully with ID: ${campaign.id}`);
     return campaign;
   }
 

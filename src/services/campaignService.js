@@ -35,7 +35,14 @@ class CampaignService {
   // Create a new campaign
   async createCampaign(campaignData) {
     try {
+      logger.info(`[CAMPAIGN SERVICE] Creating campaign from data: ${JSON.stringify({
+        hasContacts: campaignData.contacts?.length > 0,
+        hasTemplate: !!campaignData.template,
+        userEmail: campaignData.userEmail
+      })}`);
+      
       const campaign = new Campaign(campaignData);
+      logger.info(`[CAMPAIGN SERVICE] Campaign instance created with ID: ${campaign.id}`);
       
       // Validate campaign
       const validation = campaign.isValid();
@@ -44,15 +51,20 @@ class CampaignService {
       }
 
       // Save to database
-      const savedCampaign = await database.addCampaign(campaign.toJSON());
+      const campaignJson = campaign.toJSON();
+      logger.info(`[CAMPAIGN SERVICE] Campaign JSON ID before save: ${campaignJson.id}`);
+      
+      const savedCampaign = await database.addCampaign(campaignJson);
+      logger.info(`[CAMPAIGN SERVICE] Saved campaign ID: ${savedCampaign?.id}`);
       
       // Update cache
       const campaignInstance = new Campaign(savedCampaign);
+      logger.info(`[CAMPAIGN SERVICE] Final campaign instance ID: ${campaignInstance.id}`);
       this.updateCache(campaignInstance);
       
       logger.campaign(`Campaign created successfully: ${campaign.name} (${campaign.id})`);
       
-      return savedCampaign;
+      return campaignInstance; // Return the Campaign instance, not the raw data
     } catch (error) {
       logger.error(`Failed to create campaign: ${error.message}`);
       throw error;

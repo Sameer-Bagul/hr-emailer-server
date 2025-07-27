@@ -72,7 +72,19 @@ class EmailController {
           }] : []
         };
 
-        const campaign = this.campaignService.createCampaign(campaignData);
+        const campaign = await this.campaignService.createCampaign(campaignData);
+        
+        // Debug logging
+        logger.info(`Campaign object after creation: ${JSON.stringify({
+          id: campaign?.id,
+          name: campaign?.name,
+          hasContacts: campaign?.contacts?.length > 0
+        }, null, 2)}`);
+        
+        if (!campaign?.id) {
+          logger.error('Campaign ID is undefined after creation!');
+          return res.status(500).json({ error: 'Failed to create campaign - invalid ID' });
+        }
 
         // Emit initial log to socket
         const io = req.app.get('io');
@@ -87,9 +99,20 @@ class EmailController {
         const schedulerService = req.app.get('schedulerService');
         if (schedulerService) {
           try {
+            // Small delay to ensure database write is complete
+            await new Promise(resolve => setTimeout(resolve, 100));
+            
+            // Debug logging for campaign ID before immediate processing
+            logger.info(`About to process campaign immediately - ID: ${campaign.id}`);
+            
+            if (!campaign.id) {
+              logger.error('Campaign ID is null/undefined before immediate processing!');
+              throw new Error('Campaign ID is undefined');
+            }
+            
             // Process the new campaign immediately (regardless of business hours)
             await schedulerService.processNewCampaignImmediately(campaign.id);
-            logger.info(`🚀 New campaign ${campaign.id} processing started immediately`);
+            logger.info(`✅ New campaign ${campaign.id} processing started immediately`);
           } catch (error) {
             logger.error(`Error processing new campaign immediately: ${error.message}`);
             // Don't fail the response, campaign will be processed later

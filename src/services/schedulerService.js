@@ -808,6 +808,10 @@ class SchedulerService {
   // Process new campaign immediately (called when campaign is created)
   async processNewCampaignImmediately(campaignId) {
     try {
+      if (!campaignId) {
+        throw new Error('Campaign ID is required');
+      }
+      
       const immediateMessage = `🚀 Processing new campaign immediately: ${campaignId}`;
       logger.info(immediateMessage);
       
