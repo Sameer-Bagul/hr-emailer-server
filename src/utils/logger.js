@@ -18,9 +18,36 @@ class Logger {
     this.socketHandler = socketHandler;
   }
 
+  // Sanitize message to prevent sensitive data leakage
+  sanitizeMessage(message) {
+    if (typeof message !== 'string') {
+      return message;
+    }
+
+    // Remove potential sensitive patterns
+    const sensitivePatterns = [
+      /password[^a-zA-Z0-9]*[:=][^a-zA-Z0-9]*([^\s,;]{8,})/gi,
+      /token[^a-zA-Z0-9]*[:=][^a-zA-Z0-9]*([^\s,;]{20,})/gi,
+      /key[^a-zA-Z0-9]*[:=][^a-zA-Z0-9]*([^\s,;]{16,})/gi,
+      /secret[^a-zA-Z0-9]*[:=][^a-zA-Z0-9]*([^\s,;]{16,})/gi,
+      /api_key[^a-zA-Z0-9]*[:=][^a-zA-Z0-9]*([^\s,;]{16,})/gi,
+      /auth[^a-zA-Z0-9]*[:=][^a-zA-Z0-9]*([^\s,;]{16,})/gi
+    ];
+
+    let sanitized = message;
+    sensitivePatterns.forEach(pattern => {
+      sanitized = sanitized.replace(pattern, (match, captured) => {
+        return match.replace(captured, '***REDACTED***');
+      });
+    });
+
+    return sanitized;
+  }
+
   formatMessage(level, message, emoji = '') {
     const timestamp = new Date().toLocaleTimeString();
-    return `[${timestamp}] ${emoji} ${level}: ${message}`;
+    const sanitizedMessage = this.sanitizeMessage(message);
+    return `[${timestamp}] ${emoji} ${level}: ${sanitizedMessage}`;
   }
 
   emitToSocket(level, message, emoji = '') {

@@ -5,9 +5,60 @@ class EmailSocketHandler {
     this.io = io;
     this.connectedClients = new Map();
     this.campaignProgress = new Map();
+    this.maxClientHistory = 1000; // Limit client history to prevent memory leaks
+    this.maxProgressHistory = 100; // Limit progress history
     
     this.setupEventHandlers();
+    this.setupCleanupInterval();
     logger.info('Email socket handler initialized');
+  }
+
+  // Setup periodic cleanup to prevent memory leaks
+  setupCleanupInterval() {
+    setInterval(() => {
+      this.cleanupStaleConnections();
+      this.cleanupOldProgress();
+    }, 5 * 60 * 1000); // Cleanup every 5 minutes
+  }
+
+  // Clean up stale connections
+  cleanupStaleConnections() {
+    const now = Date.now();
+    const staleThreshold = 30 * 60 * 1000; // 30 minutes
+    
+    for (const [socketId, client] of this.connectedClients.entries()) {
+      if (now - client.connectedAt.getTime() > staleThreshold) {
+        // Check if socket is still connected
+        if (!client.socket.connected) {
+          this.connectedClients.delete(socketId);
+          logger.debug(`Cleaned up stale connection: ${socketId}`);
+        }
+      }
+    }
+
+    // Limit total client history
+    if (this.connectedClients.size > this.maxClientHistory) {
+      const sortedClients = Array.from(this.connectedClients.entries())
+        .sort((a, b) => a[1].connectedAt - b[1].connectedAt);
+      
+      const toRemove = sortedClients.slice(0, this.connectedClients.size - this.maxClientHistory);
+      toRemove.forEach(([socketId]) => {
+        this.connectedClients.delete(socketId);
+      });
+    }
+  }
+
+  // Clean up old progress data
+  cleanupOldProgress() {
+    if (this.campaignProgress.size > this.maxProgressHistory) {
+      const sortedProgress = Array.from(this.campaignProgress.entries())
+        .sort((a, b) => new Date(a[1].timestamp) - new Date(b[1].timestamp));
+      
+      const toRemove = sortedProgress.slice(0, this.campaignProgress.size - this.maxProgressHistory);
+      toRemove.forEach(([campaignId]) => {
+        this.campaignProgress.delete(campaignId);
+      });
+    }
   }
 
   setupEventHandlers() {
@@ -75,8 +126,24 @@ class EmailSocketHandler {
       });
 
       // Handle disconnect
-      socket.on('disconnect', () => {
-        logger.info(`Client disconnected: ${socket.id}`);
+      socket.on('disconnect', (reason) => {
+        logger.info(`Client disconnected: ${socket.id} (${reason})`);
+        
+        // Clean up client data
+        const client = this.connectedClients.get(socket.id);
+        if (client) {
+          // Leave all subscribed campaign rooms
+          client.subscribedCampaigns.forEach(campaignId => {
+            socket.leave(`campaign-${campaignId}`);
+          });
+        }
+        
+        this.connectedClients.delete(socket.id);
+      });
+
+      // Handle errors
+      socket.on('error', (error) => {
+        logger.error(`Socket error for ${socket.id}: ${error.message}`);
         this.connectedClients.delete(socket.id);
       });
 
@@ -184,6 +251,36 @@ class EmailSocketHandler {
       logger.info(`Emitted general notification: ${type}`);
     } catch (error) {
       logger.error(`Error emitting general notification: ${error.message}`);
+    }
+  }
+
+  // Close all connections gracefully
+  closeAllConnections() {
+    try {
+      logger.info('Closing all socket connections...');
+      
+      // Notify all clients about server shutdown
+      this.io.emit('server-shutdown', {
+        message: 'Server is shutting down',
+        timestamp: new Date()
+      });
+
+      // Disconnect all clients
+      this.connectedClients.forEach((client, socketId) => {
+        try {
+          client.socket.disconnect(true);
+        } catch (error) {
+          logger.error(`Error disconnecting client ${socketId}: ${error.message}`);
+        }
+      });
+
+      // Clear all data
+      this.connectedClients.clear();
+      this.campaignProgress.clear();
+      
+      logger.info('All socket connections closed');
+    } catch (error) {
+      logger.error(`Error closing socket connections: ${error.message}`);
     }
   }
 

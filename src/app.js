@@ -3,6 +3,8 @@ const cors = require('cors');
 const path = require('path');
 const http = require('http');
 const socketIo = require('socket.io');
+const rateLimit = require('express-rate-limit');
+const helmet = require('helmet');
 
 // Import middleware
 const { errorHandler, notFoundHandler, requestLogger } = require('./middleware/errorHandler');
@@ -53,6 +55,39 @@ class App {
   }
 
   setupMiddleware() {
+    // Security middleware
+    this.app.use(helmet({
+      contentSecurityPolicy: false, // Allow for development
+      crossOriginEmbedderPolicy: false
+    }));
+
+    // Rate limiting
+    const limiter = rateLimit({
+      windowMs: 15 * 60 * 1000, // 15 minutes
+      max: 100, // Limit each IP to 100 requests per windowMs
+      message: {
+        error: 'Too many requests',
+        message: 'Rate limit exceeded. Please try again later.'
+      },
+      standardHeaders: true,
+      legacyHeaders: false,
+    });
+
+    // Stricter rate limiting for upload endpoints
+    const uploadLimiter = rateLimit({
+      windowMs: 15 * 60 * 1000, // 15 minutes
+      max: 10, // Limit each IP to 10 uploads per windowMs
+      message: {
+        error: 'Upload rate limit exceeded',
+        message: 'Too many uploads. Please try again later.'
+      }
+    });
+
+    // Apply rate limiting
+    this.app.use('/api/', limiter);
+    this.app.use('/api/campaigns', uploadLimiter);
+    this.app.use('/api/send-emails', uploadLimiter);
+
     // CORS configuration for separate frontend/backend deployments
     const allowedOrigins = [
       process.env.CLIENT_URL,
@@ -271,6 +306,17 @@ class App {
     } catch (error) {
       logger.error(`Error during shutdown: ${error.message}`);
       process.exit(1);
+    }
+  }
+
+  // Close all connections gracefully
+  closeConnections() {
+    if (this.emailSocketHandler) {
+      this.emailSocketHandler.closeAllConnections();
+    }
+    
+    if (this.io) {
+      this.io.close();
     }
   }
 

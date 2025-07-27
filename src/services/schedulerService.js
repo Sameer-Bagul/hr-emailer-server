@@ -81,10 +81,21 @@ class SchedulerService {
       const job = cron.schedule(cronExpression, async () => {
         try {
           logger.info(`Executing scheduled job: ${name}`);
-          await task();
+          await Promise.resolve(task()); // Ensure promise handling
           logger.info(`Completed scheduled job: ${name}`);
         } catch (error) {
           logger.error(`Error in scheduled job ${name}: ${error.message}`);
+          
+          // Emit error to connected clients
+          if (this.socketHandler) {
+            this.socketHandler.emitGeneralNotification('serverLog', {
+              level: 'error',
+              message: `Scheduled job ${name} failed: ${error.message}`,
+              timestamp: new Date().toISOString()
+            });
+          }
+          
+          // Don't rethrow to prevent scheduler from stopping
         }
       }, {
         scheduled: true,

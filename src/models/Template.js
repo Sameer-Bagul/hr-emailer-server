@@ -43,28 +43,22 @@ class Template {
 
   // Load default HR template
   static loadDefaultTemplate() {
-    const defaultContent = `Dear Hiring Team at {{company_name}},
+    const defaultContent =
+      `Hi there,
 
-I hope this email finds you well. My name is Sameer Bagul, and I am a passionate and dedicated software developer with expertise in full-stack development, machine learning, and modern web technologies.
+I'm <strong>Sameer Bagul</strong>, a full-stack developer | freelance developer and final-year engineering student from Pune with experience building <strong>MERN & Next.js apps</strong>, <strong>React Native mobile apps</strong>, <strong>machine learning solutions</strong>, and creative <strong>UI/UX designs</strong>.
 
-I am excited to express my interest in software development opportunities at {{company_name}}. With a strong foundation in JavaScript, Python, React, Node.js, and cloud technologies, I am confident that my skills and enthusiasm would make me a valuable addition to your development team.
+I've delivered impactful freelance projects and won national-level hackathons like <strong>Smart India Hackathon</strong>, honing my problem-solving under pressure.
 
-Key highlights of my background:
-• Full-stack development experience with modern frameworks
-• Machine learning and AI implementation skills
-• Strong problem-solving abilities and passion for clean, efficient code
-• Experience with agile development methodologies
-• Continuous learning mindset and adaptability to new technologies
+<strong>Key skills:</strong> JavaScript, TypeScript, Python, C++, Java, MERN, Next.js, React Native, ML (PyTorch, TensorFlow, Hugging Face), AI APIs, SQL/MongoDB, Docker, Figma, Agentic AI.
 
-I have attached my resume for your review and would welcome the opportunity to discuss how my skills and passion for technology can contribute to {{company_name}}'s continued success.
-
-Thank you for considering my application. I look forward to hearing from you soon.
+I'd love to explore roles at {{company_name}} where I can contribute my skills and experience. Portfolio & resume:
+<a href="https://www.linkedin.com/in/sameer-bagul/">LinkedIn</a> | <a href="https://github.com/Sameer-Bagul">GitHub</a> | <a href="http://sameerbagul.me">Portfolio</a>
 
 Best regards,
-Sameer Bagul
-Software Developer
-Email: sameerbagul2004@gmail.com
-Phone: [Your Phone Number]`;
+<strong>Sameer Bagul</strong>
++91 7841941033
+<a href="mailto:sameerbagul2004@gmail.com">sameerbagul2004@gmail.com</a>`;
 
     const defaultSubject = `Software Developer Opportunity | {{company_name}}`;
 
@@ -105,8 +99,8 @@ Phone: [Your Phone Number]`;
       const renderedSubject = compiled.subject ? compiled.subject(variables) : this.subject;
 
       // Convert line breaks to HTML if type is html
-      const finalContent = this.type === 'html' ? 
-        renderedContent.replace(/\n/g, '<br>\n') : 
+      const finalContent = this.type === 'html' ?
+        renderedContent.replace(/\n/g, '<br>\n') :
         renderedContent;
 
       return {

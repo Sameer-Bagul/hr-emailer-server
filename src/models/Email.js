@@ -1,3 +1,4 @@
+const path = require('path');
 const FileUtils = require('../utils/fileUtils');
 const logger = require('../utils/logger');
 
@@ -13,11 +14,56 @@ class Email {
     this.templateVariables = data.templateVariables || {};
   }
 
+  // Enhanced email validation
+  static isValidEmailFormat(email) {
+    if (!email || typeof email !== 'string') {
+      return false;
+    }
+
+    // Basic format check
+    const basicRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!basicRegex.test(email)) {
+      return false;
+    }
+
+    // Additional security checks
+    const emailParts = email.split('@');
+    if (emailParts.length !== 2) {
+      return false;
+    }
+
+    const [localPart, domain] = emailParts;
+
+    // Local part validation
+    if (localPart.length === 0 || localPart.length > 64) {
+      return false;
+    }
+
+    // Domain validation
+    if (domain.length === 0 || domain.length > 253) {
+      return false;
+    }
+
+    // Check for dangerous characters
+    const dangerousChars = /[<>()[\]\\.,;:\s@"]/;
+    if (dangerousChars.test(localPart.replace(/[.]/g, ''))) {
+      return false;
+    }
+
+    // Domain must contain at least one dot and valid characters
+    const domainRegex = /^[a-zA-Z0-9.-]+$/;
+    if (!domainRegex.test(domain) || !domain.includes('.')) {
+      return false;
+    }
+
+    return true;
+  }
+
   // Validation
   isValid() {
     const errors = [];
 
-    if (!this.to || !FileUtils.isValidEmailFormat(this.to)) {
+    if (!this.to || !Email.isValidEmailFormat(this.to)) {
       errors.push('Valid recipient email is required');
     }
 
@@ -25,12 +71,41 @@ class Email {
       errors.push('Email subject is required');
     }
 
+    if (this.subject && this.subject.length > 200) {
+      errors.push('Email subject is too long (max 200 characters)');
+    }
+
     if (!this.html && !this.text) {
       errors.push('Email content (HTML or text) is required');
     }
 
-    if (!this.from || !FileUtils.isValidEmailFormat(this.from)) {
+    if (!this.from || !Email.isValidEmailFormat(this.from)) {
       errors.push('Valid sender email is required');
+    }
+
+    // Check for potential security issues in content
+    if (this.html) {
+      const dangerousPatterns = /<script|javascript:|vbscript:|onload=|onerror=/i;
+      if (dangerousPatterns.test(this.html)) {
+        errors.push('Email content contains potentially dangerous scripts');
+      }
+    }
+
+    // Validate attachments
+    if (this.attachments && this.attachments.length > 0) {
+      for (const attachment of this.attachments) {
+        if (!attachment.filename || !attachment.path) {
+          errors.push('Invalid attachment format');
+          break;
+        }
+        
+        // Check file extension
+        const allowedExtensions = ['.pdf', '.doc', '.docx', '.txt'];
+        const ext = path.extname(attachment.filename).toLowerCase();
+        if (!allowedExtensions.includes(ext)) {
+          errors.push(`Attachment type ${ext} not allowed`);
+        }
+      }
     }
 
     return {

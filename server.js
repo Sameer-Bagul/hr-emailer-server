@@ -47,13 +47,54 @@ async function startServer() {
 // Handle startup errors
 process.on('uncaughtException', (error) => {
   logger.error(`💥 Uncaught Exception during startup: ${error.message}`);
-  process.exit(1);
+  gracefulShutdown('uncaughtException');
 });
 
 process.on('unhandledRejection', (reason, promise) => {
   logger.error(`💥 Unhandled Rejection during startup: ${reason}`);
-  process.exit(1);
+  gracefulShutdown('unhandledRejection');
 });
+
+// Graceful shutdown
+async function gracefulShutdown(signal) {
+  logger.info(`🛑 Received ${signal}. Starting graceful shutdown...`);
+  
+  try {
+    // Stop accepting new connections
+    server.close(() => {
+      logger.info('✅ HTTP server closed');
+    });
+
+    // Stop scheduler
+    if (appInstance && appInstance.stopScheduler) {
+      appInstance.stopScheduler();
+      logger.info('✅ Scheduler stopped');
+    }
+
+    // Close email connections
+    const emailConfig = require('./src/config/email');
+    if (emailConfig && emailConfig.close) {
+      emailConfig.close();
+      logger.info('✅ Email connections closed');
+    }
+
+    // Close socket connections
+    if (appInstance && appInstance.closeConnections) {
+      appInstance.closeConnections();
+      logger.info('✅ Socket connections closed');
+    }
+
+    logger.info('✅ Graceful shutdown completed');
+    process.exit(0);
+  } catch (error) {
+    logger.error(`❌ Error during graceful shutdown: ${error.message}`);
+    process.exit(1);
+  }
+}
+
+// Handle process signals
+process.on('SIGTERM', () => gracefulShutdown('SIGTERM'));
+process.on('SIGINT', () => gracefulShutdown('SIGINT'));
 
 // Start the server
 startServer();

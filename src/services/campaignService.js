@@ -4,8 +4,36 @@ const logger = require('../utils/logger');
 const DateUtils = require('../utils/dateUtils');
 
 class CampaignService {
+  constructor() {
+    this.cache = new Map(); // In-memory cache for recently accessed campaigns
+    this.cacheTimeout = 5 * 60 * 1000; // 5 minutes cache timeout
+  }
+
+  // Get campaign from cache or database
+  getCampaignFromCache(campaignId) {
+    const cached = this.cache.get(campaignId);
+    if (cached && (Date.now() - cached.timestamp) < this.cacheTimeout) {
+      return cached.campaign;
+    }
+    return null;
+  }
+
+  // Update cache
+  updateCache(campaign) {
+    this.cache.set(campaign.id, {
+      campaign: campaign,
+      timestamp: Date.now()
+    });
+
+    // Cleanup old cache entries
+    if (this.cache.size > 50) { // Limit cache size
+      const oldestKey = this.cache.keys().next().value;
+      this.cache.delete(oldestKey);
+    }
+  }
+
   // Create a new campaign
-  createCampaign(campaignData) {
+  async createCampaign(campaignData) {
     try {
       const campaign = new Campaign(campaignData);
       
@@ -16,7 +44,12 @@ class CampaignService {
       }
 
       // Save to database
-      const savedCampaign = database.addCampaign(campaign.toJSON());
+      const savedCampaign = await database.addCampaign(campaign.toJSON());
+      
+      // Update cache
+      const campaignInstance = new Campaign(savedCampaign);
+      this.updateCache(campaignInstance);
+      
       logger.campaign(`Campaign created successfully: ${campaign.name} (${campaign.id})`);
       
       return savedCampaign;
@@ -26,22 +59,55 @@ class CampaignService {
     }
   }
 
-  // Get campaign by ID
+  // Get campaign by ID with caching
   getCampaignById(campaignId) {
     try {
+      // Try cache first
+      const cached = this.getCampaignFromCache(campaignId);
+      if (cached) {
+        return cached;
+      }
+
+      // Load from database
       const campaignData = database.findCampaignById(campaignId);
       if (!campaignData) {
         return null;
       }
 
-      return new Campaign(campaignData);
+      const campaign = new Campaign(campaignData);
+      this.updateCache(campaign);
+      return campaign;
     } catch (error) {
       logger.error(`Failed to get campaign ${campaignId}: ${error.message}`);
       return null;
     }
   }
 
-  // Get all active campaigns
+  // Update campaign with cache invalidation
+  async updateCampaign(campaignId, updates) {
+    try {
+      const updatedData = await database.updateCampaign(campaignId, {
+        ...updates,
+        updatedAt: DateUtils.getCurrentTimestamp()
+      });
+
+      if (!updatedData) {
+        throw new Error(`Campaign not found: ${campaignId}`);
+      }
+
+      // Update cache
+      const campaign = new Campaign(updatedData);
+      this.updateCache(campaign);
+
+      logger.campaign(`Campaign updated: ${campaignId}`);
+      return campaign;
+    } catch (error) {
+      logger.error(`Failed to update campaign ${campaignId}: ${error.message}`);
+      throw error;
+    }
+  }
+
+  // Get all active campaigns (no caching for list operations)
   getActiveCampaigns() {
     try {
       const activeCampaignsData = database.getActiveCampaigns();
@@ -52,7 +118,7 @@ class CampaignService {
     }
   }
 
-  // Get all campaigns
+  // Get all campaigns (no caching for list operations)  
   getAllCampaigns() {
     try {
       const campaignsData = database.getAllCampaigns();
@@ -60,26 +126,6 @@ class CampaignService {
     } catch (error) {
       logger.error(`Failed to get all campaigns: ${error.message}`);
       return [];
-    }
-  }
-
-  // Update campaign
-  updateCampaign(campaignId, updates) {
-    try {
-      const updatedData = database.updateCampaign(campaignId, {
-        ...updates,
-        updatedAt: DateUtils.getCurrentTimestamp()
-      });
-
-      if (!updatedData) {
-        throw new Error(`Campaign not found: ${campaignId}`);
-      }
-
-      logger.campaign(`Campaign updated: ${campaignId}`);
-      return new Campaign(updatedData);
-    } catch (error) {
-      logger.error(`Failed to update campaign ${campaignId}: ${error.message}`);
-      throw error;
     }
   }
 

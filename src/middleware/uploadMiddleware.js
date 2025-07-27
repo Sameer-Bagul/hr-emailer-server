@@ -16,10 +16,19 @@ const storage = multer.diskStorage({
     cb(null, uploadsDir);
   },
   filename: (req, file, cb) => {
-    // Create unique filename with timestamp
+    // Create unique filename with timestamp and sanitize original name
     const timestamp = Date.now();
-    const originalName = file.originalname.replace(/\s+/g, '-');
-    const filename = `${timestamp}-${originalName}`;
+    const originalName = path.basename(file.originalname); // Prevent path traversal
+    const sanitizedName = originalName.replace(/[^a-zA-Z0-9.-]/g, '_'); // Sanitize filename
+    const ext = path.extname(sanitizedName);
+    const name = path.basename(sanitizedName, ext);
+    const filename = `${timestamp}-${name}${ext}`;
+    
+    // Additional security check
+    if (filename.includes('..') || filename.includes('/') || filename.includes('\\')) {
+      return cb(new Error('Invalid filename detected'));
+    }
+    
     cb(null, filename);
   }
 });
@@ -81,7 +90,9 @@ const upload = multer({
   storage,
   fileFilter: excelFileFilter,
   limits: {
-    fileSize: 5 * 1024 * 1024 // 5MB limit
+    fileSize: 5 * 1024 * 1024, // 5MB limit
+    files: 2, // Maximum 2 files
+    fields: 10 // Maximum 10 fields
   }
 });
 
@@ -90,7 +101,9 @@ const legacyUpload = multer({
   storage,
   fileFilter: legacyFileFilter,
   limits: {
-    fileSize: 5 * 1024 * 1024 // 5MB limit
+    fileSize: 5 * 1024 * 1024, // 5MB limit
+    files: 2, // Maximum 2 files
+    fields: 10 // Maximum 10 fields
   }
 });
 
