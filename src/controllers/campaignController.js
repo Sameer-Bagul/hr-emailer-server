@@ -202,6 +202,31 @@ class CampaignController {
     }
   }
 
+  // POST /api/campaigns/:id/continue - Continue processing a specific campaign
+  async continueCampaignProcessing(req, res) {
+    try {
+      const { id } = req.params;
+      const { maxBatches = 10 } = req.body;
+      
+      const schedulerService = req.app.get('schedulerService');
+      if (!schedulerService) {
+        return res.status(500).json({ error: 'Scheduler service not available' });
+      }
+
+      logger.info(`Manually continuing campaign processing for ${id}...`);
+      const result = await schedulerService.continueCampaignProcessing(id, maxBatches);
+      
+      res.json({
+        success: true,
+        message: `Campaign processing continued successfully`,
+        result: result
+      });
+    } catch (error) {
+      logger.error(`Error continuing campaign processing: ${error.message}`);
+      res.status(500).json({ error: error.message });
+    }
+  }
+
   // POST /api/campaigns/trigger-summary - Manually trigger daily summary (for testing)
   async triggerDailySummary(req, res) {
     try {

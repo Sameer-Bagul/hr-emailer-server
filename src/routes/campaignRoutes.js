@@ -15,6 +15,9 @@ router.get('/summary', campaignController.getCampaignsSummary.bind(campaignContr
 // POST /api/campaigns/trigger - Manually trigger campaign processing
 router.post('/trigger', campaignController.triggerCampaignProcessing.bind(campaignController));
 
+// POST /api/campaigns/:id/continue - Continue processing a specific campaign
+router.post('/:id/continue', campaignController.continueCampaignProcessing.bind(campaignController));
+
 // POST /api/campaigns/trigger-summary - Manually trigger daily summary
 router.post('/trigger-summary', campaignController.triggerDailySummary.bind(campaignController));
 

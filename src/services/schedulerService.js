@@ -336,7 +336,7 @@ class SchedulerService {
       const remainingGlobal = canSendGlobal;
       
       // Use the smaller of campaign limit or global limit
-      const batchSize = Math.min(remainingForCampaign, remainingGlobal, 10);
+      const batchSize = Math.min(remainingForCampaign, remainingGlobal, 50); // Increased from 10 to 50
 
       if (batchSize <= 0) {
         const noBatchMessage = `No emails can be sent for campaign ${campaign.id} today (campaign: ${remainingForCampaign}, global: ${remainingGlobal})`;
@@ -850,13 +850,39 @@ class SchedulerService {
       // Start the campaign immediately
       await this.startCampaign(campaignId);
       
-      // Process first batch immediately (respecting global limit)
-      const updatedCampaign = await this.campaignService.getCampaignById(campaignId);
-      if (updatedCampaign && updatedCampaign.status === 'active') {
+      // Process multiple batches immediately (respecting global limit)
+      let updatedCampaign = await this.campaignService.getCampaignById(campaignId);
+      let batchCount = 0;
+      const maxImmediateBatches = 5; // Process up to 5 batches (50 emails) immediately
+      
+      while (updatedCampaign && 
+             updatedCampaign.status === 'active' && 
+             batchCount < maxImmediateBatches &&
+             await this.canSendMoreEmailsToday()) {
+        
+        const beforeSent = updatedCampaign.sentEmails;
         await this.processCampaignBatch(updatedCampaign);
+        
+        // Get updated campaign to check progress
+        updatedCampaign = await this.campaignService.getCampaignById(campaignId);
+        const afterSent = updatedCampaign.sentEmails;
+        
+        batchCount++;
+        
+        // If no new emails were sent, break to avoid infinite loop
+        if (afterSent <= beforeSent) {
+          break;
+        }
+        
+        logger.info(`📧 Processed immediate batch ${batchCount}/${maxImmediateBatches} for campaign ${campaignId}: ${afterSent}/${updatedCampaign.totalEmails} emails sent`);
+        
+        // Small delay between batches to prevent overwhelming the system
+        if (batchCount < maxImmediateBatches) {
+          await new Promise(resolve => setTimeout(resolve, 2000)); // 2 second delay between batches
+        }
       }
 
-      logger.info(`✅ New campaign ${campaignId} processed successfully`);
+      logger.info(`✅ New campaign ${campaignId} processed successfully - ${batchCount} immediate batches completed`);
       return true;
     } catch (error) {
       logger.error(`Error processing new campaign immediately: ${error.message}`);
@@ -879,6 +905,66 @@ class SchedulerService {
   async triggerEveningReport() {
     logger.info('Manually triggering evening report');
     await this.sendEveningStatusReport();
+  }
+
+  // Manually continue processing a specific campaign
+  async continueCampaignProcessing(campaignId, maxBatches = 10) {
+    try {
+      logger.info(`📧 Manually continuing campaign processing: ${campaignId}`);
+      
+      const campaign = await this.campaignService.getCampaignById(campaignId);
+      if (!campaign) {
+        throw new Error(`Campaign ${campaignId} not found`);
+      }
+
+      if (campaign.status !== 'active') {
+        throw new Error(`Campaign ${campaignId} is not active (status: ${campaign.status})`);
+      }
+
+      let batchCount = 0;
+      let updatedCampaign = campaign;
+      
+      while (updatedCampaign && 
+             updatedCampaign.status === 'active' && 
+             batchCount < maxBatches &&
+             updatedCampaign.sentEmails < updatedCampaign.totalEmails &&
+             await this.canSendMoreEmailsToday()) {
+        
+        const beforeSent = updatedCampaign.sentEmails;
+        await this.processCampaignBatch(updatedCampaign);
+        
+        // Get updated campaign to check progress
+        updatedCampaign = await this.campaignService.getCampaignById(campaignId);
+        const afterSent = updatedCampaign.sentEmails;
+        
+        batchCount++;
+        
+        // If no new emails were sent, break to avoid infinite loop
+        if (afterSent <= beforeSent) {
+          break;
+        }
+        
+        logger.info(`📧 Manual batch ${batchCount}/${maxBatches} for campaign ${campaignId}: ${afterSent}/${updatedCampaign.totalEmails} emails sent`);
+        
+        // Small delay between batches
+        if (batchCount < maxBatches && afterSent < updatedCampaign.totalEmails) {
+          await new Promise(resolve => setTimeout(resolve, 1000)); // 1 second delay
+        }
+      }
+
+      const finalCampaign = await this.campaignService.getCampaignById(campaignId);
+      logger.info(`✅ Manual processing completed for campaign ${campaignId}: ${batchCount} batches, ${finalCampaign.sentEmails}/${finalCampaign.totalEmails} emails sent`);
+      
+      return {
+        batchesProcessed: batchCount,
+        emailsSent: finalCampaign.sentEmails,
+        totalEmails: finalCampaign.totalEmails,
+        completed: finalCampaign.sentEmails >= finalCampaign.totalEmails
+      };
+    } catch (error) {
+      logger.error(`Error in manual campaign processing: ${error.message}`);
+      throw error;
+    }
   }
 }
 
