@@ -291,7 +291,7 @@ class SchedulerService {
   async processCampaignBatch(campaign) {
     try {
       // Check global daily limit first
-      const canSendGlobal = await this.canSendMoreEmailsToday(10);
+      const canSendGlobal = await this.canSendMoreEmailsToday(50);
       if (!canSendGlobal) {
         const limitMessage = `🚫 Cannot process campaign ${campaign.id}: Global daily limit of ${this.DAILY_EMAIL_LIMIT} emails reached`;
         logger.warning(limitMessage);
@@ -805,7 +805,7 @@ class SchedulerService {
     await this.processDailyCampaigns(forceProcessing);
   }
 
-  // Process new campaign immediately (called when campaign is created)
+  // Process new campaign immediately (called when campaign is created) - Send ALL emails with user delay
   async processNewCampaignImmediately(campaignId) {
     try {
       if (!campaignId) {
@@ -824,24 +824,6 @@ class SchedulerService {
         });
       }
       
-      // Check global daily limit first
-      const canSend = await this.canSendMoreEmailsToday();
-      if (!canSend) {
-        const limitMessage = `🚫 Cannot process new campaign ${campaignId} immediately: Daily limit of ${this.DAILY_EMAIL_LIMIT} emails reached. Campaign will be processed tomorrow during business hours.`;
-        logger.warning(limitMessage);
-        
-        // Emit to client
-        if (this.socketHandler) {
-          this.socketHandler.emitGeneralNotification('serverLog', {
-            level: 'warning',
-            message: `⚠️ WARNING: ${limitMessage}`,
-            timestamp: new Date().toISOString()
-          });
-        }
-        
-        return false;
-      }
-      
       const campaign = await this.campaignService.getCampaignById(campaignId);
       if (!campaign) {
         throw new Error(`Campaign ${campaignId} not found`);
@@ -850,39 +832,64 @@ class SchedulerService {
       // Start the campaign immediately
       await this.startCampaign(campaignId);
       
-      // Process multiple batches immediately (respecting global limit)
-      let updatedCampaign = await this.campaignService.getCampaignById(campaignId);
-      let batchCount = 0;
-      const maxImmediateBatches = 5; // Process up to 5 batches (50 emails) immediately
+      // Process ALL emails in one session (up to daily limit of 300)
+      const totalEmails = Math.min(campaign.totalEmails, this.DAILY_EMAIL_LIMIT);
+      const emailsToSend = totalEmails - (campaign.sentEmails || 0);
       
-      while (updatedCampaign && 
-             updatedCampaign.status === 'active' && 
-             batchCount < maxImmediateBatches &&
-             await this.canSendMoreEmailsToday()) {
-        
-        const beforeSent = updatedCampaign.sentEmails;
-        await this.processCampaignBatch(updatedCampaign);
-        
-        // Get updated campaign to check progress
-        updatedCampaign = await this.campaignService.getCampaignById(campaignId);
-        const afterSent = updatedCampaign.sentEmails;
-        
-        batchCount++;
-        
-        // If no new emails were sent, break to avoid infinite loop
-        if (afterSent <= beforeSent) {
-          break;
-        }
-        
-        logger.info(`📧 Processed immediate batch ${batchCount}/${maxImmediateBatches} for campaign ${campaignId}: ${afterSent}/${updatedCampaign.totalEmails} emails sent`);
-        
-        // Small delay between batches to prevent overwhelming the system
-        if (batchCount < maxImmediateBatches) {
-          await new Promise(resolve => setTimeout(resolve, 2000)); // 2 second delay between batches
-        }
+      if (emailsToSend <= 0) {
+        logger.info(`Campaign ${campaignId} has no emails to send`);
+        return true;
       }
+      
+      const processingMessage = `📧 Processing ALL emails for campaign ${campaignId}: ${emailsToSend} emails with ${campaign.delay || 10000}ms delay`;
+      logger.info(processingMessage);
+      
+      // Emit to client
+      if (this.socketHandler) {
+        this.socketHandler.emitGeneralNotification('serverLog', {
+          level: 'info',
+          message: `ℹ️ INFO: ${processingMessage}`,
+          timestamp: new Date().toISOString()
+        });
+      }
+      
+      // Send all emails in one continuous batch with user-specified delay
+      await this.emailService.sendCampaignBatch(campaignId, emailsToSend, (progress) => {
+        // Emit progress updates
+        if (this.socketHandler) {
+          // Map progress data to expected format
+          const progressData = {
+            sent: progress.successful || 0,
+            total: progress.total || 0,
+            failed: progress.failed || 0,
+            current: progress.current || 0
+          };
+          this.socketHandler.emitCampaignProgress(campaignId, progressData);
+          
+          // Emit individual email status if current email result is available
+          if (progress.currentEmail) {
+            const emailResult = progress.currentEmail;
+            if (emailResult.success) {
+              this.socketHandler.emitEmailSent(campaignId, {
+                recipient: emailResult.recipient,
+                companyName: emailResult.companyName,
+                messageId: emailResult.messageId
+              });
+            } else {
+              this.socketHandler.emitEmailError(campaignId, {
+                recipient: emailResult.recipient,
+                companyName: emailResult.companyName,
+                message: emailResult.error
+              });
+            }
+          }
+        }
+      });
 
-      logger.info(`✅ New campaign ${campaignId} processed successfully - ${batchCount} immediate batches completed`);
+      // Get final campaign status
+      const finalCampaign = await this.campaignService.getCampaignById(campaignId);
+      logger.info(`✅ New campaign ${campaignId} processing completed - ${finalCampaign.sentEmails}/${finalCampaign.totalEmails} emails sent`);
+      
       return true;
     } catch (error) {
       logger.error(`Error processing new campaign immediately: ${error.message}`);
@@ -907,8 +914,8 @@ class SchedulerService {
     await this.sendEveningStatusReport();
   }
 
-  // Manually continue processing a specific campaign
-  async continueCampaignProcessing(campaignId, maxBatches = 10) {
+  // Manually continue processing a specific campaign - Send ALL remaining emails
+  async continueCampaignProcessing(campaignId, maxBatches = null) {
     try {
       logger.info(`📧 Manually continuing campaign processing: ${campaignId}`);
       
@@ -921,42 +928,71 @@ class SchedulerService {
         throw new Error(`Campaign ${campaignId} is not active (status: ${campaign.status})`);
       }
 
-      let batchCount = 0;
-      let updatedCampaign = campaign;
+      // Calculate remaining emails to send
+      const remainingEmails = campaign.totalEmails - (campaign.sentEmails || 0);
+      const emailsToSend = Math.min(remainingEmails, this.DAILY_EMAIL_LIMIT - await this.getTodaysEmailCount());
       
-      while (updatedCampaign && 
-             updatedCampaign.status === 'active' && 
-             batchCount < maxBatches &&
-             updatedCampaign.sentEmails < updatedCampaign.totalEmails &&
-             await this.canSendMoreEmailsToday()) {
-        
-        const beforeSent = updatedCampaign.sentEmails;
-        await this.processCampaignBatch(updatedCampaign);
-        
-        // Get updated campaign to check progress
-        updatedCampaign = await this.campaignService.getCampaignById(campaignId);
-        const afterSent = updatedCampaign.sentEmails;
-        
-        batchCount++;
-        
-        // If no new emails were sent, break to avoid infinite loop
-        if (afterSent <= beforeSent) {
-          break;
-        }
-        
-        logger.info(`📧 Manual batch ${batchCount}/${maxBatches} for campaign ${campaignId}: ${afterSent}/${updatedCampaign.totalEmails} emails sent`);
-        
-        // Small delay between batches
-        if (batchCount < maxBatches && afterSent < updatedCampaign.totalEmails) {
-          await new Promise(resolve => setTimeout(resolve, 1000)); // 1 second delay
-        }
+      if (emailsToSend <= 0) {
+        logger.info(`No emails remaining to send for campaign ${campaignId}`);
+        return {
+          batchesProcessed: 0,
+          emailsSent: campaign.sentEmails,
+          totalEmails: campaign.totalEmails,
+          completed: campaign.sentEmails >= campaign.totalEmails,
+          message: 'No emails remaining or daily limit reached'
+        };
       }
+      
+      const processingMessage = `📧 Continuing processing for campaign ${campaignId}: ${emailsToSend} remaining emails with ${campaign.delay || 10000}ms delay`;
+      logger.info(processingMessage);
+      
+      // Emit to client
+      if (this.socketHandler) {
+        this.socketHandler.emitGeneralNotification('serverLog', {
+          level: 'info',
+          message: `ℹ️ INFO: ${processingMessage}`,
+          timestamp: new Date().toISOString()
+        });
+      }
+      
+      // Send all remaining emails in one continuous batch
+      await this.emailService.sendCampaignBatch(campaignId, emailsToSend, (progress) => {
+        // Emit progress updates
+        if (this.socketHandler) {
+          // Map progress data to expected format
+          const progressData = {
+            sent: progress.successful || 0,
+            total: progress.total || 0,
+            failed: progress.failed || 0,
+            current: progress.current || 0
+          };
+          this.socketHandler.emitCampaignProgress(campaignId, progressData);
+          
+          // Emit individual email status if current email result is available
+          if (progress.currentEmail) {
+            const emailResult = progress.currentEmail;
+            if (emailResult.success) {
+              this.socketHandler.emitEmailSent(campaignId, {
+                recipient: emailResult.recipient,
+                companyName: emailResult.companyName,
+                messageId: emailResult.messageId
+              });
+            } else {
+              this.socketHandler.emitEmailError(campaignId, {
+                recipient: emailResult.recipient,
+                companyName: emailResult.companyName,
+                message: emailResult.error
+              });
+            }
+          }
+        }
+      });
 
       const finalCampaign = await this.campaignService.getCampaignById(campaignId);
-      logger.info(`✅ Manual processing completed for campaign ${campaignId}: ${batchCount} batches, ${finalCampaign.sentEmails}/${finalCampaign.totalEmails} emails sent`);
+      logger.info(`✅ Manual processing completed for campaign ${campaignId}: ${finalCampaign.sentEmails}/${finalCampaign.totalEmails} emails sent`);
       
       return {
-        batchesProcessed: batchCount,
+        batchesProcessed: 1,
         emailsSent: finalCampaign.sentEmails,
         totalEmails: finalCampaign.totalEmails,
         completed: finalCampaign.sentEmails >= finalCampaign.totalEmails
