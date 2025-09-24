@@ -43,6 +43,7 @@ class Template {
 
   // Load default HR template
   static loadDefaultTemplate() {
+    const defaultSubject = `Software Developer Opportunity | {{company_name}}`;
     const defaultContent = `Hi there,
 
 I'm <strong>Sameer Bagul</strong>, a full-stack developer and final-year Computer Engineering student from the College of Engineering, Pune.
@@ -66,8 +67,6 @@ Best regards,
 <strong>Sameer Bagul</strong>
 +91 7841941033
 <a href="mailto:sameerbagul2004@gmail.com">sameerbagul2004@gmail.com</a>`;
-
-    const defaultSubject = `Software Developer Opportunity | {{company_name}}`;
 
     return new Template({
       name: "default-hr-template",
