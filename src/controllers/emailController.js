@@ -14,19 +14,31 @@ class EmailController {
   async sendEmails(req, res) {
     try {
       logger.email('Email sending endpoint called');
-      
+
+      console.log('Request body:', req.body);
+      console.log('Request files:', req.files);
+
       const { delayMs, resumeDocLink, userEmail, campaignType } = req.body;
       const files = req.files;
       const excelFile = files?.file?.[0];
       const resumeFile = files?.resume?.[0];
 
+      console.log('Parsed data:', { delayMs, resumeDocLink, userEmail, campaignType, excelFile: excelFile?.filename, resumeFile: resumeFile?.filename });
+
       // Validate Excel file
       if (!excelFile) {
+        console.log('No Excel file uploaded');
         return res.status(400).json({ error: 'No Excel file uploaded' });
       }
 
+      console.log('Excel file path:', excelFile.path);
+      console.log('Excel file size:', excelFile.size);
+      console.log('About to parse Excel file:', excelFile.path);
+
       // Parse Excel file
       const parseResult = await this.fileService.parseExcelFile(excelFile.path);
+
+      console.log('Parse result:', parseResult);
       if (!parseResult.success) {
         return res.status(400).json({ error: parseResult.error });
       }
