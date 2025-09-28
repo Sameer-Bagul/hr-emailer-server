@@ -2,6 +2,7 @@ require('dotenv').config();
 const App = require('./src/app');
 const logger = require('./src/utils/logger');
 const securityCheck = require('./src/utils/securityCheck');
+const mongodb = require('./src/config/mongodb');
 
 // Server configuration
 const PORT = process.env.PORT || 5000;
@@ -20,11 +21,20 @@ const server = appInstance.getServer();
 // Start server
 async function startServer() {
   try {
+    // Connect to MongoDB first (optional - falls back to JSON storage if unavailable)
+    logger.info('🔌 Connecting to MongoDB...');
+    const mongoConnection = await mongodb.connect();
+    if (mongoConnection) {
+      logger.info('✅ MongoDB connected successfully');
+    } else {
+      logger.info('ℹ️ Using JSON file storage (MongoDB not available)');
+    }
+
     // Start HTTP server
     server.listen(PORT, () => {
       logger.info(`🚀 Server running on port ${PORT} in ${NODE_ENV} mode`);
       logger.info(`📱 Socket.IO enabled for real-time communication`);
-      
+
       if (NODE_ENV === 'development') {
         logger.info(`📖 API Documentation: http://localhost:${PORT}/`);
         logger.info(`💻 Client URL: ${process.env.CLIENT_URL || 'http://localhost:3000'}`);
@@ -37,7 +47,7 @@ async function startServer() {
 
     // Log startup completion
     logger.info('✅ HR Outreach Emailer server started successfully');
-    
+
   } catch (error) {
     logger.error(`❌ Failed to start server: ${error.message}`);
     process.exit(1);
@@ -76,6 +86,12 @@ async function gracefulShutdown(signal) {
     if (emailConfig && emailConfig.close) {
       emailConfig.close();
       logger.info('✅ Email connections closed');
+    }
+
+    // Close MongoDB connection
+    if (mongodb && mongodb.close) {
+      await mongodb.close();
+      logger.info('✅ MongoDB connection closed');
     }
 
     // Close socket connections

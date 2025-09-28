@@ -1,222 +1,240 @@
-const path = require('path');
-const FileUtils = require('../utils/fileUtils');
-const logger = require('../utils/logger');
+const mongoose = require('mongoose');
 
-class Email {
-  constructor(data) {
-    this.to = data.to;
-    this.subject = data.subject;
-    this.html = data.html;
-    this.text = data.text;
-    this.attachments = data.attachments || [];
-    this.from = data.from || process.env.EMAIL;
-    this.companyName = data.companyName;
-    this.templateVariables = data.templateVariables || {};
+const emailSchema = new mongoose.Schema({
+  campaignId: {
+    type: String,
+    required: true,
+    index: true
+  },
+  recipient: {
+    email: {
+      type: String,
+      required: true
+    },
+    companyName: {
+      type: String,
+      default: ''
+    }
+  },
+  template: {
+    id: {
+      type: String,
+      required: true
+    },
+    name: {
+      type: String,
+      required: true
+    },
+    category: {
+      type: String,
+      required: true
+    }
+  },
+  subject: {
+    type: String,
+    required: true
+  },
+  content: {
+    type: String,
+    required: true
+  },
+  status: {
+    type: String,
+    enum: ['sent', 'failed', 'pending', 'bounced', 'complained'],
+    default: 'pending'
+  },
+  sentAt: {
+    type: Date,
+    default: null
+  },
+  deliveredAt: {
+    type: Date,
+    default: null
+  },
+  failedAt: {
+    type: Date,
+    default: null
+  },
+  error: {
+    type: String,
+    default: null
+  },
+  retryCount: {
+    type: Number,
+    default: 0
+  },
+  maxRetries: {
+    type: Number,
+    default: 3
+  },
+  attachments: [{
+    filename: {
+      type: String,
+      required: true
+    },
+    path: {
+      type: String,
+      required: true
+    },
+    size: {
+      type: Number,
+      default: 0
+    },
+    contentType: {
+      type: String,
+      default: 'application/octet-stream'
+    }
+  }],
+  metadata: {
+    userAgent: String,
+    ipAddress: String,
+    userEmail: String,
+    batchId: String,
+    smtpResponse: String,
+    messageId: String
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now
+  },
+  updatedAt: {
+    type: Date,
+    default: Date.now
+  }
+});
+
+// Indexes for performance
+emailSchema.index({ campaignId: 1, status: 1 });
+emailSchema.index({ 'recipient.email': 1 });
+emailSchema.index({ status: 1, sentAt: -1 });
+emailSchema.index({ createdAt: -1 });
+emailSchema.index({ sentAt: -1 });
+
+// Pre-save middleware to update updatedAt
+emailSchema.pre('save', function(next) {
+  this.updatedAt = new Date();
+  next();
+});
+
+// Instance methods
+emailSchema.methods.markAsSent = function(messageId = null, smtpResponse = null) {
+  this.status = 'sent';
+  this.sentAt = new Date();
+  if (messageId) {
+    this.metadata.messageId = messageId;
+  }
+  if (smtpResponse) {
+    this.metadata.smtpResponse = smtpResponse;
+  }
+  return this.save();
+};
+
+emailSchema.methods.markAsFailed = function(error, incrementRetry = true) {
+  if (incrementRetry) {
+    this.retryCount += 1;
   }
 
-  // Enhanced email validation
-  static isValidEmailFormat(email) {
-    if (!email || typeof email !== 'string') {
-      return false;
-    }
-
-    // Basic format check
-    const basicRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!basicRegex.test(email)) {
-      return false;
-    }
-
-    // Additional security checks
-    const emailParts = email.split('@');
-    if (emailParts.length !== 2) {
-      return false;
-    }
-
-    const [localPart, domain] = emailParts;
-
-    // Local part validation
-    if (localPart.length === 0 || localPart.length > 64) {
-      return false;
-    }
-
-    // Domain validation
-    if (domain.length === 0 || domain.length > 253) {
-      return false;
-    }
-
-    // Check for dangerous characters
-    const dangerousChars = /[<>()[\]\\.,;:\s@"]/;
-    if (dangerousChars.test(localPart.replace(/[.]/g, ''))) {
-      return false;
-    }
-
-    // Domain must contain at least one dot and valid characters
-    const domainRegex = /^[a-zA-Z0-9.-]+$/;
-    if (!domainRegex.test(domain) || !domain.includes('.')) {
-      return false;
-    }
-
-    return true;
+  if (this.retryCount >= this.maxRetries) {
+    this.status = 'failed';
+    this.failedAt = new Date();
   }
 
-  // Validation
-  isValid() {
-    const errors = [];
+  this.error = error;
+  return this.save();
+};
 
-    if (!this.to || !Email.isValidEmailFormat(this.to)) {
-      errors.push('Valid recipient email is required');
-    }
+emailSchema.methods.markAsDelivered = function() {
+  this.status = 'sent'; // Keep as sent, but mark delivery
+  this.deliveredAt = new Date();
+  return this.save();
+};
 
-    if (!this.subject || this.subject.trim().length === 0) {
-      errors.push('Email subject is required');
-    }
+emailSchema.methods.canRetry = function() {
+  return this.retryCount < this.maxRetries && this.status !== 'sent';
+};
 
-    if (this.subject && this.subject.length > 200) {
-      errors.push('Email subject is too long (max 200 characters)');
-    }
+emailSchema.methods.getTimeToSend = function() {
+  if (!this.sentAt) return null;
+  return this.sentAt - this.createdAt;
+};
 
-    if (!this.html && !this.text) {
-      errors.push('Email content (HTML or text) is required');
-    }
+// Static methods
+emailSchema.statics.findByCampaign = function(campaignId) {
+  return this.find({ campaignId }).sort({ createdAt: -1 });
+};
 
-    if (!this.from || !Email.isValidEmailFormat(this.from)) {
-      errors.push('Valid sender email is required');
-    }
+emailSchema.statics.findByRecipient = function(email) {
+  return this.find({ 'recipient.email': email }).sort({ createdAt: -1 });
+};
 
-    // Check for potential security issues in content
-    if (this.html) {
-      const dangerousPatterns = /<script|javascript:|vbscript:|onload=|onerror=/i;
-      if (dangerousPatterns.test(this.html)) {
-        errors.push('Email content contains potentially dangerous scripts');
+emailSchema.statics.findByStatus = function(status) {
+  return this.find({ status }).sort({ createdAt: -1 });
+};
+
+emailSchema.statics.getSentEmails = function(campaignId = null) {
+  const query = { status: 'sent' };
+  if (campaignId) {
+    query.campaignId = campaignId;
+  }
+  return this.find(query).sort({ sentAt: -1 });
+};
+
+emailSchema.statics.getFailedEmails = function(campaignId = null) {
+  const query = { status: 'failed' };
+  if (campaignId) {
+    query.campaignId = campaignId;
+  }
+  return this.find(query).sort({ failedAt: -1 });
+};
+
+emailSchema.statics.getPendingEmails = function(campaignId = null) {
+  const query = { status: 'pending' };
+  if (campaignId) {
+    query.campaignId = campaignId;
+  }
+  return this.find(query).sort({ createdAt: -1 });
+};
+
+emailSchema.statics.getEmailStats = function(campaignId = null) {
+  const matchStage = campaignId ? { campaignId } : {};
+
+  return this.aggregate([
+    { $match: matchStage },
+    {
+      $group: {
+        _id: '$status',
+        count: { $sum: 1 },
+        totalRetries: { $sum: '$retryCount' }
       }
     }
+  ]);
+};
 
-    // Validate attachments
-    if (this.attachments && this.attachments.length > 0) {
-      for (const attachment of this.attachments) {
-        if (!attachment.filename || !attachment.path) {
-          errors.push('Invalid attachment format');
-          break;
-        }
-        
-        // Check file extension
-        const allowedExtensions = ['.pdf', '.doc', '.docx', '.txt'];
-        const ext = path.extname(attachment.filename).toLowerCase();
-        if (!allowedExtensions.includes(ext)) {
-          errors.push(`Attachment type ${ext} not allowed`);
-        }
-      }
+emailSchema.statics.getEmailsByDateRange = function(startDate, endDate, campaignId = null) {
+  const matchStage = {
+    createdAt: {
+      $gte: new Date(startDate),
+      $lte: new Date(endDate)
     }
+  };
 
-    return {
-      valid: errors.length === 0,
-      errors
-    };
+  if (campaignId) {
+    matchStage.campaignId = campaignId;
   }
 
-  // Add attachment
-  addAttachment(attachment) {
-    if (attachment && attachment.filename && attachment.path) {
-      this.attachments.push(attachment);
-      logger.email(`Attachment added: ${attachment.filename}`);
-    } else {
-      logger.warning('Invalid attachment format');
-    }
-  }
+  return this.find(matchStage).sort({ createdAt: -1 });
+};
 
-  // Remove attachment
-  removeAttachment(filename) {
-    const index = this.attachments.findIndex(att => att.filename === filename);
-    if (index !== -1) {
-      this.attachments.splice(index, 1);
-      logger.email(`Attachment removed: ${filename}`);
-    }
-  }
+emailSchema.statics.cleanupOldEmails = function(daysOld = 90) {
+  const cutoffDate = new Date();
+  cutoffDate.setDate(cutoffDate.getDate() - daysOld);
 
-  // Set template variables
-  setTemplateVariable(key, value) {
-    this.templateVariables[key] = value;
-  }
+  return this.deleteMany({
+    createdAt: { $lt: cutoffDate },
+    status: { $in: ['sent', 'failed'] }
+  });
+};
 
-  setTemplateVariables(variables) {
-    this.templateVariables = { ...this.templateVariables, ...variables };
-  }
-
-  // Get email size estimate
-  getEstimatedSize() {
-    let size = 0;
-    
-    // Calculate text content size
-    size += Buffer.byteLength(this.subject || '', 'utf8');
-    size += Buffer.byteLength(this.html || '', 'utf8');
-    size += Buffer.byteLength(this.text || '', 'utf8');
-    
-    // Calculate attachments size
-    this.attachments.forEach(att => {
-      if (att.path) {
-        size += FileUtils.getFileSize(att.path);
-      }
-    });
-
-    return {
-      bytes: size,
-      formatted: FileUtils.formatFileSize(size)
-    };
-  }
-
-  // Convert to nodemailer format
-  toNodemailerFormat() {
-    const mailOptions = {
-      from: this.from,
-      to: this.to,
-      subject: this.subject
-    };
-
-    if (this.html) {
-      mailOptions.html = this.html;
-    }
-
-    if (this.text) {
-      mailOptions.text = this.text;
-    }
-
-    if (this.attachments && this.attachments.length > 0) {
-      mailOptions.attachments = this.attachments.map(att => ({
-        filename: att.filename,
-        path: att.path,
-        contentType: att.contentType || 'application/octet-stream'
-      }));
-    }
-
-    return mailOptions;
-  }
-
-  // Create log entry
-  createLogEntry(result) {
-    return {
-      to: this.to,
-      companyName: this.companyName,
-      subject: this.subject,
-      timestamp: new Date().toISOString(),
-      success: result.success,
-      messageId: result.messageId,
-      error: result.error,
-      estimatedSize: this.getEstimatedSize()
-    };
-  }
-
-  toJSON() {
-    return {
-      to: this.to,
-      subject: this.subject,
-      html: this.html,
-      text: this.text,
-      attachments: this.attachments,
-      from: this.from,
-      companyName: this.companyName,
-      templateVariables: this.templateVariables
-    };
-  }
-}
+const Email = mongoose.model('Email', emailSchema);
 
 module.exports = Email;

@@ -1,12 +1,20 @@
 const Campaign = require('../models/Campaign');
-const database = require('../config/database');
+const Email = require('../models/Email');
+const Log = require('../models/Log');
 const logger = require('../utils/logger');
 const DateUtils = require('../utils/dateUtils');
+const database = require('../config/database');
+const mongodb = require('../config/mongodb');
 
 class CampaignService {
   constructor() {
     this.cache = new Map(); // In-memory cache for recently accessed campaigns
     this.cacheTimeout = 5 * 60 * 1000; // 5 minutes cache timeout
+  }
+
+  // Check if MongoDB is available
+  isMongoDBAvailable() {
+    return mongodb && mongodb.isConnected;
   }
 
   // Get campaign from cache or database
@@ -40,31 +48,42 @@ class CampaignService {
         hasTemplate: !!campaignData.template,
         userEmail: campaignData.userEmail
       })}`);
-      
+
       const campaign = new Campaign(campaignData);
       logger.info(`[CAMPAIGN SERVICE] Campaign instance created with ID: ${campaign.id}`);
-      
+
       // Validate campaign
       const validation = campaign.isValid();
       if (!validation.valid) {
         throw new Error(`Campaign validation failed: ${validation.errors.join(', ')}`);
       }
 
-      // Save to database
-      const campaignJson = campaign.toJSON();
-      logger.info(`[CAMPAIGN SERVICE] Campaign JSON ID before save: ${campaignJson.id}`);
-      
-      const savedCampaign = await database.addCampaign(campaignJson);
-      logger.info(`[CAMPAIGN SERVICE] Saved campaign ID: ${savedCampaign?.id}`);
-      
+      let savedCampaign;
+
+      if (this.isMongoDBAvailable()) {
+        // Save to MongoDB
+        savedCampaign = await campaign.save();
+        logger.info(`[CAMPAIGN SERVICE] Saved campaign to MongoDB with ID: ${savedCampaign.id}`);
+
+        // Log campaign creation
+        await Log.logCampaignEvent(savedCampaign.id, 'created', {
+          name: savedCampaign.name,
+          totalEmails: savedCampaign.totalEmails,
+          userEmail: savedCampaign.userEmail
+        });
+      } else {
+        // Fall back to JSON file storage
+        const campaignJson = campaign.toJSON();
+        savedCampaign = database.addCampaign(campaignJson);
+        logger.info(`[CAMPAIGN SERVICE] Saved campaign to JSON storage with ID: ${savedCampaign.id}`);
+      }
+
       // Update cache
-      const campaignInstance = new Campaign(savedCampaign);
-      logger.info(`[CAMPAIGN SERVICE] Final campaign instance ID: ${campaignInstance.id}`);
-      this.updateCache(campaignInstance);
-      
+      this.updateCache(savedCampaign);
+
       logger.campaign(`Campaign created successfully: ${campaign.name} (${campaign.id})`);
-      
-      return campaignInstance; // Return the Campaign instance, not the raw data
+
+      return savedCampaign;
     } catch (error) {
       logger.error(`Failed to create campaign: ${error.message}`);
       throw error;
@@ -72,7 +91,7 @@ class CampaignService {
   }
 
   // Get campaign by ID with caching
-  getCampaignById(campaignId) {
+  async getCampaignById(campaignId) {
     try {
       // Try cache first
       const cached = this.getCampaignFromCache(campaignId);
@@ -81,12 +100,11 @@ class CampaignService {
       }
 
       // Load from database
-      const campaignData = database.findCampaignById(campaignId);
-      if (!campaignData) {
+      const campaign = await Campaign.findOne({ id: campaignId });
+      if (!campaign) {
         return null;
       }
 
-      const campaign = new Campaign(campaignData);
       this.updateCache(campaign);
       return campaign;
     } catch (error) {
@@ -98,21 +116,27 @@ class CampaignService {
   // Update campaign with cache invalidation
   async updateCampaign(campaignId, updates) {
     try {
-      const updatedData = await database.updateCampaign(campaignId, {
-        ...updates,
-        updatedAt: DateUtils.getCurrentTimestamp()
-      });
+      const updatedCampaign = await Campaign.findOneAndUpdate(
+        { id: campaignId },
+        {
+          ...updates,
+          updatedAt: new Date()
+        },
+        { new: true }
+      );
 
-      if (!updatedData) {
+      if (!updatedCampaign) {
         throw new Error(`Campaign not found: ${campaignId}`);
       }
 
       // Update cache
-      const campaign = new Campaign(updatedData);
-      this.updateCache(campaign);
+      this.updateCache(updatedCampaign);
+
+      // Log campaign update
+      await Log.logCampaignEvent(campaignId, 'updated', updates);
 
       logger.campaign(`Campaign updated: ${campaignId}`);
-      return campaign;
+      return updatedCampaign;
     } catch (error) {
       logger.error(`Failed to update campaign ${campaignId}: ${error.message}`);
       throw error;
@@ -120,21 +144,19 @@ class CampaignService {
   }
 
   // Get all active campaigns (no caching for list operations)
-  getActiveCampaigns() {
+  async getActiveCampaigns() {
     try {
-      const activeCampaignsData = database.getActiveCampaigns();
-      return activeCampaignsData.map(data => new Campaign(data));
+      return await Campaign.getActiveCampaigns();
     } catch (error) {
       logger.error(`Failed to get active campaigns: ${error.message}`);
       return [];
     }
   }
 
-  // Get all campaigns (no caching for list operations)  
-  getAllCampaigns() {
+  // Get all campaigns (no caching for list operations)
+  async getAllCampaigns() {
     try {
-      const campaignsData = database.getAllCampaigns();
-      return campaignsData.map(data => new Campaign(data));
+      return await Campaign.find({}).sort({ createdAt: -1 });
     } catch (error) {
       logger.error(`Failed to get all campaigns: ${error.message}`);
       return [];
@@ -142,9 +164,9 @@ class CampaignService {
   }
 
   // Update campaign progress
-  updateCampaignProgress(campaignId, successCount, failedCount, logData = null) {
+  async updateCampaignProgress(campaignId, successCount, failedCount, logData = null) {
     try {
-      const campaign = this.getCampaignById(campaignId);
+      const campaign = await this.getCampaignById(campaignId);
       if (!campaign) {
         throw new Error(`Campaign not found: ${campaignId}`);
       }
@@ -158,10 +180,18 @@ class CampaignService {
       }
 
       // Save to database
-      const updatedCampaign = database.updateCampaign(campaignId, campaign.toJSON());
+      const updatedCampaign = await campaign.save();
+
+      // Log progress update
+      await Log.logCampaignEvent(campaignId, 'progress_updated', {
+        sentEmails: updatedCampaign.sentEmails,
+        failedEmails: updatedCampaign.failedEmails,
+        totalEmails: updatedCampaign.totalEmails
+      });
+
       logger.campaign(`Campaign progress updated: ${campaign.name} - ${campaign.sentEmails}/${campaign.totalEmails} emails sent`);
 
-      return new Campaign(updatedCampaign);
+      return updatedCampaign;
     } catch (error) {
       logger.error(`Failed to update campaign progress: ${error.message}`);
       throw error;
@@ -169,14 +199,23 @@ class CampaignService {
   }
 
   // Complete campaign
-  completeCampaign(campaignId) {
+  async completeCampaign(campaignId) {
     try {
       const updates = {
         status: 'completed',
-        completedAt: DateUtils.getCurrentTimestamp()
+        completedAt: new Date()
       };
 
-      return this.updateCampaign(campaignId, updates);
+      const completedCampaign = await this.updateCampaign(campaignId, updates);
+
+      // Log campaign completion
+      await Log.logCampaignEvent(campaignId, 'completed', {
+        totalEmails: completedCampaign.totalEmails,
+        sentEmails: completedCampaign.sentEmails,
+        failedEmails: completedCampaign.failedEmails
+      });
+
+      return completedCampaign;
     } catch (error) {
       logger.error(`Failed to complete campaign ${campaignId}: ${error.message}`);
       throw error;
@@ -184,9 +223,9 @@ class CampaignService {
   }
 
   // Get next batch for campaign
-  getNextBatch(campaignId) {
+  async getNextBatch(campaignId) {
     try {
-      const campaign = this.getCampaignById(campaignId);
+      const campaign = await this.getCampaignById(campaignId);
       if (!campaign) {
         throw new Error(`Campaign not found: ${campaignId}`);
       }
@@ -199,12 +238,15 @@ class CampaignService {
   }
 
   // Get campaign statistics
-  getCampaignStats(campaignId) {
+  async getCampaignStats(campaignId) {
     try {
-      const campaign = this.getCampaignById(campaignId);
+      const campaign = await this.getCampaignById(campaignId);
       if (!campaign) {
-        throw new Error(`Campaign not found: ${campaignId}`);
+        return null;
       }
+
+      // Get email statistics from Email collection
+      const emailStats = await Email.getEmailStats(campaignId);
 
       const stats = {
         id: campaign.id,
@@ -217,7 +259,8 @@ class CampaignService {
         progress: campaign.getProgress(),
         duration: campaign.completedAt ? DateUtils.calculateDuration(campaign.createdAt, campaign.completedAt) : null,
         estimatedCompletion: campaign.getEstimatedCompletion(),
-        dailyLogs: campaign.dailyLogs
+        dailyLogs: campaign.dailyLogs,
+        emailStats: emailStats
       };
 
       return stats;
@@ -228,10 +271,10 @@ class CampaignService {
   }
 
   // Get campaigns summary
-  getCampaignsSummary() {
+  async getCampaignsSummary() {
     try {
-      const campaigns = this.getAllCampaigns();
-      
+      const campaigns = await this.getAllCampaigns();
+
       const summary = {
         total: campaigns.length,
         active: campaigns.filter(c => c.status === 'active').length,
@@ -250,9 +293,14 @@ class CampaignService {
   }
 
   // Pause campaign
-  pauseCampaign(campaignId) {
+  async pauseCampaign(campaignId) {
     try {
-      return this.updateCampaign(campaignId, { status: 'paused' });
+      const pausedCampaign = await this.updateCampaign(campaignId, { status: 'paused' });
+
+      // Log campaign pause
+      await Log.logCampaignEvent(campaignId, 'paused');
+
+      return pausedCampaign;
     } catch (error) {
       logger.error(`Failed to pause campaign ${campaignId}: ${error.message}`);
       throw error;
@@ -260,9 +308,14 @@ class CampaignService {
   }
 
   // Resume campaign
-  resumeCampaign(campaignId) {
+  async resumeCampaign(campaignId) {
     try {
-      return this.updateCampaign(campaignId, { status: 'active' });
+      const resumedCampaign = await this.updateCampaign(campaignId, { status: 'active' });
+
+      // Log campaign resume
+      await Log.logCampaignEvent(campaignId, 'resumed');
+
+      return resumedCampaign;
     } catch (error) {
       logger.error(`Failed to resume campaign ${campaignId}: ${error.message}`);
       throw error;
@@ -270,11 +323,15 @@ class CampaignService {
   }
 
   // Delete campaign
-  deleteCampaign(campaignId) {
+  async deleteCampaign(campaignId) {
     try {
-      // In a real implementation, you'd want to implement database.deleteCampaign()
-      // For now, we'll mark it as deleted
-      return this.updateCampaign(campaignId, { status: 'deleted' });
+      // Soft delete - mark as deleted
+      const deletedCampaign = await this.updateCampaign(campaignId, { status: 'deleted' });
+
+      // Log campaign deletion
+      await Log.logCampaignEvent(campaignId, 'deleted');
+
+      return deletedCampaign;
     } catch (error) {
       logger.error(`Failed to delete campaign ${campaignId}: ${error.message}`);
       throw error;

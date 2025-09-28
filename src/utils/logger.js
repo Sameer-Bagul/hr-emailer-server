@@ -1,3 +1,6 @@
+const Log = require('../models/Log');
+const mongodb = require('../config/mongodb');
+
 class Logger {
   constructor() {
     this.colors = {
@@ -11,11 +14,44 @@ class Logger {
       cyan: '\x1b[36m'
     };
     this.socketHandler = null;
+    this.dbLoggingEnabled = process.env.DB_LOGGING_ENABLED !== 'false';
   }
 
   // Set socket handler for real-time log emission
   setSocketHandler(socketHandler) {
     this.socketHandler = socketHandler;
+  }
+
+  // Save log to database
+  async saveLogToDB(level, message, category = 'system', data = {}) {
+    if (!this.dbLoggingEnabled || !mongodb.isConnected) {
+      return;
+    }
+
+    try {
+      const logData = {
+        level: level.toLowerCase(),
+        message: this.sanitizeMessage(message),
+        category,
+        data,
+        timestamp: new Date()
+      };
+
+      // Add memory usage for performance monitoring
+      if (process.memoryUsage) {
+        logData.memoryUsage = {
+          rss: Math.round(process.memoryUsage().rss / 1024 / 1024), // MB
+          heapTotal: Math.round(process.memoryUsage().heapTotal / 1024 / 1024),
+          heapUsed: Math.round(process.memoryUsage().heapUsed / 1024 / 1024),
+          external: Math.round(process.memoryUsage().external / 1024 / 1024)
+        };
+      }
+
+      await Log.create(logData);
+    } catch (error) {
+      // Prevent infinite logging loops - don't log DB errors
+      console.error('Failed to save log to database:', error.message);
+    }
   }
 
   // Sanitize message to prevent sensitive data leakage
@@ -72,43 +108,55 @@ class Logger {
   info(message, emoji = 'ℹ️') {
     console.log(this.colors.blue + this.formatMessage('INFO', message, emoji) + this.colors.reset);
     this.emitToSocket('INFO', message, emoji);
+    this.saveLogToDB('info', message, 'system');
   }
 
   success(message, emoji = '✅') {
     console.log(this.colors.green + this.formatMessage('SUCCESS', message, emoji) + this.colors.reset);
     this.emitToSocket('SUCCESS', message, emoji);
+    this.saveLogToDB('info', message, 'system');
+  }
+
+  warn(message, emoji = '⚠️') {
+    console.log(this.colors.yellow + this.formatMessage('WARNING', message, emoji) + this.colors.reset);
+    this.emitToSocket('WARNING', message, emoji);
+    this.saveLogToDB('warn', message, 'system');
   }
 
   warning(message, emoji = '⚠️') {
-    console.log(this.colors.yellow + this.formatMessage('WARNING', message, emoji) + this.colors.reset);
-    this.emitToSocket('WARNING', message, emoji);
+    this.warn(message, emoji);
   }
 
   error(message, emoji = '❌') {
     console.error(this.colors.red + this.formatMessage('ERROR', message, emoji) + this.colors.reset);
     this.emitToSocket('ERROR', message, emoji);
+    this.saveLogToDB('error', message, 'system');
   }
 
   debug(message, emoji = '🐛') {
     if (process.env.NODE_ENV === 'development' || process.env.DEBUG === 'true') {
       console.log(this.colors.magenta + this.formatMessage('DEBUG', message, emoji) + this.colors.reset);
       this.emitToSocket('DEBUG', message, emoji);
+      this.saveLogToDB('debug', message, 'system');
     }
   }
 
   campaign(message, emoji = '📧') {
     console.log(this.colors.cyan + this.formatMessage('CAMPAIGN', message, emoji) + this.colors.reset);
     this.emitToSocket('CAMPAIGN', message, emoji);
+    this.saveLogToDB('info', message, 'campaign');
   }
 
   email(message, emoji = '📨') {
     console.log(this.colors.green + this.formatMessage('EMAIL', message, emoji) + this.colors.reset);
     this.emitToSocket('EMAIL', message, emoji);
+    this.saveLogToDB('info', message, 'email');
   }
 
   file(message, emoji = '📁') {
     console.log(this.colors.blue + this.formatMessage('FILE', message, emoji) + this.colors.reset);
     this.emitToSocket('FILE', message, emoji);
+    this.saveLogToDB('info', message, 'system');
   }
 }
 

@@ -2,6 +2,7 @@ const emailConfig = require('../config/email');
 const logger = require('../utils/logger');
 const successfulEmailLogger = require('../utils/successfulEmailLogger');
 const Email = require('../models/Email');
+const Log = require('../models/Log');
 const FileUtils = require('../utils/fileUtils');
 
 /**
@@ -258,16 +259,44 @@ class EmailService {
 
       logger.email(`Email sent successfully to ${email.to} - MessageID: ${result.messageId}`);
 
-      // Log successful email to dedicated log file
-      successfulEmailLogger.info('Email sent successfully', {
-        recipient: email.to,
-        companyName: email.companyName,
-        subject: email.subject,
-        messageId: result.messageId,
-        campaignId: campaignId,
-        estimatedSize: email.getEstimatedSize(),
-        timestamp: new Date().toISOString()
-      });
+      // Create email record in MongoDB
+      try {
+        const emailRecord = new Email({
+          campaignId: campaignId,
+          recipient: {
+            email: email.to,
+            companyName: email.companyName
+          },
+          template: {
+            id: email.templateId,
+            name: email.templateName || 'Unknown',
+            category: email.templateCategory || 'unknown'
+          },
+          subject: email.subject,
+          content: email.html,
+          status: 'sent',
+          sentAt: new Date(),
+          deliveredAt: new Date(), // Assume delivered for now
+          metadata: {
+            messageId: result.messageId,
+            userEmail: emailData.userEmail,
+            batchId: emailData.batchId,
+            smtpResponse: result.response
+          }
+        });
+
+        await emailRecord.save();
+
+        // Log successful email event
+        await Log.logEmailEvent(campaignId, email.to, 'sent', {
+          messageId: result.messageId,
+          templateId: email.templateId
+        });
+
+      } catch (dbError) {
+        logger.error(`Failed to save email record to database: ${dbError.message}`);
+        // Continue execution even if DB save fails
+      }
 
       return {
         success: true,
@@ -293,6 +322,46 @@ class EmailService {
         return this.sendEmail(emailData, retryCount + 1, campaignId);
       }
 
+      // Create email record for failed email in MongoDB
+      try {
+        const failedEmailRecord = new Email({
+          campaignId: campaignId,
+          recipient: {
+            email: emailData.to,
+            companyName: emailData.companyName
+          },
+          template: {
+            id: emailData.templateId,
+            name: emailData.templateName || 'Unknown',
+            category: emailData.templateCategory || 'unknown'
+          },
+          subject: emailData.subject,
+          content: emailData.html,
+          status: 'failed',
+          failedAt: new Date(),
+          error: this.getSafeErrorMessage(errorCategory, error),
+          retryCount: retryCount,
+          metadata: {
+            userEmail: emailData.userEmail,
+            batchId: emailData.batchId,
+            errorCategory: errorCategory
+          }
+        });
+
+        await failedEmailRecord.save();
+
+        // Log failed email event
+        await Log.logEmailEvent(campaignId, emailData.to, 'failed', {
+          error: this.getSafeErrorMessage(errorCategory, error),
+          errorCategory,
+          retryCount
+        });
+
+      } catch (dbError) {
+        logger.error(`Failed to save failed email record to database: ${dbError.message}`);
+        // Continue execution even if DB save fails
+      }
+
       // Return appropriate error response based on category
       const errorResponse = {
         success: false,
@@ -301,11 +370,11 @@ class EmailService {
         recipient: emailData.to,
         companyName: emailData.companyName,
         retryCount,
-        logEntry: new Email(emailData).createLogEntry({
+        logEntry: {
           success: false,
           error: this.getSafeErrorMessage(errorCategory, error),
           errorCategory
-        })
+        }
       };
 
       return errorResponse;
