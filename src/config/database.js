@@ -9,7 +9,6 @@ class Database {
     this.cache = null; // In-memory cache
     this.cacheTimeout = 5000; // Cache timeout in ms
     this.lastCacheUpdate = 0;
-    
     this.initDatabase();
   }
 
