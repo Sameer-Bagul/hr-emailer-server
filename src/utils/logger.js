@@ -1,5 +1,4 @@
 const Log = require('../models/Log');
-const mongodb = require('../config/mongodb');
 
 class Logger {
   constructor() {
@@ -15,6 +14,20 @@ class Logger {
     };
     this.socketHandler = null;
     this.dbLoggingEnabled = process.env.DB_LOGGING_ENABLED !== 'false';
+    this._mongodb = null;
+  }
+
+  // Lazy load MongoDB connection to avoid circular dependency
+  get mongodb() {
+    if (!this._mongodb) {
+      try {
+        this._mongodb = require('../config/mongodb');
+      } catch (error) {
+        // Fallback if MongoDB is not available
+        this._mongodb = { isConnected: false };
+      }
+    }
+    return this._mongodb;
   }
 
   // Set socket handler for real-time log emission
@@ -24,7 +37,7 @@ class Logger {
 
   // Save log to database
   async saveLogToDB(level, message, category = 'system', data = {}) {
-    if (!this.dbLoggingEnabled || !mongodb.isConnected) {
+    if (!this.dbLoggingEnabled || !this.mongodb.isConnected) {
       return;
     }
 

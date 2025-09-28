@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-const logger = require('../utils/logger');
 
 class MongoDBConnection {
   constructor() {
@@ -11,48 +10,48 @@ class MongoDBConnection {
     try {
       const mongoURI = process.env.MONGODB_URI || 'mongodb://localhost:27017/hr-emailer';
 
-      logger.info('🔄 Connecting to MongoDB...');
+      console.log('🔄 Connecting to MongoDB...');
 
       // Connection options with shorter timeout for faster fallback
       const options = {
         maxPoolSize: 10,
         serverSelectionTimeoutMS: 3000, // Reduced timeout for faster fallback
         socketTimeoutMS: 45000,
-        family: 4,
-        bufferCommands: false, // Disable mongoose buffering when disconnected
-        bufferMaxEntries: 0
+        family: 4
       };
+
+      // Set mongoose options separately to avoid deprecated warnings
+      mongoose.set('bufferCommands', false);
 
       this.connection = await mongoose.connect(mongoURI, options);
 
       this.isConnected = true;
-      logger.info('✅ MongoDB connected successfully');
+      console.log('✅ MongoDB connected successfully');
 
       // Handle connection events
       mongoose.connection.on('error', (err) => {
-        logger.error('❌ MongoDB connection error:', err);
+        console.error('❌ MongoDB connection error:', err);
         this.isConnected = false;
       });
 
       mongoose.connection.on('disconnected', () => {
-        logger.warn('⚠️ MongoDB disconnected');
+        console.warn('⚠️ MongoDB disconnected');
         this.isConnected = false;
       });
 
       mongoose.connection.on('reconnected', () => {
-        logger.info('🔄 MongoDB reconnected');
+        console.log('🔄 MongoDB reconnected');
         this.isConnected = true;
       });
 
       return this.connection;
     } catch (error) {
-      logger.warn('⚠️ MongoDB connection failed, falling back to JSON file storage:', error.message);
-      logger.info('ℹ️ Application will continue with JSON file storage for data persistence');
+      console.warn('⚠️ MongoDB connection failed, falling back to JSON file storage:', error.message);
+      console.log('ℹ️ Application will continue with JSON file storage for data persistence');
       this.isConnected = false;
 
       // Ensure mongoose doesn't try to buffer operations
       mongoose.set('bufferCommands', false);
-      mongoose.set('bufferMaxEntries', 0);
 
       return null;
     }
@@ -63,10 +62,10 @@ class MongoDBConnection {
       if (this.connection) {
         await mongoose.disconnect();
         this.isConnected = false;
-        logger.info('✅ MongoDB disconnected successfully');
+        console.log('✅ MongoDB disconnected successfully');
       }
     } catch (error) {
-      logger.error('❌ Error disconnecting from MongoDB:', error);
+      console.error('❌ Error disconnecting from MongoDB:', error);
       throw error;
     }
   }
@@ -96,7 +95,7 @@ class MongoDBConnection {
         fileSize: stats.fileSize
       };
     } catch (error) {
-      logger.error('❌ Error getting MongoDB stats:', error);
+      console.error('❌ Error getting MongoDB stats:', error);
       return null;
     }
   }
