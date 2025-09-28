@@ -6,19 +6,17 @@ const router = express.Router();
 // Create controller instance
 const templateController = new TemplateController();
 
-// GET /api/template - Get default template
-router.get('/', templateController.getDefaultTemplate.bind(templateController));
+// Modern API routes
+router.get('/', templateController.getAllTemplates.bind(templateController));
+router.get('/:id', templateController.getTemplateById.bind(templateController));
 
-// GET /api/template/preview - Preview template with sample data
-router.get('/preview', templateController.previewTemplate.bind(templateController));
+// Legacy routes for backward compatibility
+router.get('/template', templateController.getDefaultTemplate.bind(templateController));
+router.get('/template/preview', templateController.previewTemplate.bind(templateController));
+router.get('/template/variables', templateController.getTemplateVariables.bind(templateController));
 
-// GET /api/template/variables - Get template variables
-router.get('/variables', templateController.getTemplateVariables.bind(templateController));
-
-// POST /api/template/validate - Validate template syntax
-router.post('/validate', templateController.validateTemplate.bind(templateController));
-
-// POST /api/template/render - Render template with custom data
-router.post('/render', templateController.renderTemplate.bind(templateController));
+// Template operations
+router.post('/template/validate', templateController.validateTemplate.bind(templateController));
+router.post('/template/render', templateController.renderTemplate.bind(templateController));
 
 module.exports = router;

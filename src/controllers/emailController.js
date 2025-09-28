@@ -1,63 +1,191 @@
 const EmailService = require('../services/emailService');
 const CampaignService = require('../services/campaignService');
 const FileService = require('../services/fileService');
-const logger = require('../utils/logger');
 const Template = require('../models/Template');
+const logger = require('../utils/logger');
 
+/**
+ * Email Controller
+ *
+ * Handles HTTP requests related to email operations including sending emails,
+ * campaign management, email verification, and logging. This controller
+ * serves as the main interface between the API endpoints and the business
+ * logic services.
+ *
+ * Key Responsibilities:
+ * - Process email sending requests (immediate and campaign-based)
+ * - Handle file uploads and validation
+ * - Manage campaign creation and execution
+ * - Provide email verification and estimation services
+ * - Retrieve and filter email logs
+ * - Implement rate limiting and security measures
+ *
+ * @class EmailController
+ */
 class EmailController {
+  /**
+   * Initialize the Email Controller with required services
+   *
+   * @constructor
+   */
   constructor() {
+    /**
+     * Email service for sending emails and managing email operations
+     * @type {EmailService}
+     */
     this.emailService = new EmailService();
+
+    /**
+     * Campaign service for managing multi-day email campaigns
+     * @type {CampaignService}
+     */
     this.campaignService = new CampaignService();
+
+    /**
+     * File service for handling file uploads and processing
+     * @type {FileService}
+     */
     this.fileService = new FileService();
   }
-  // POST /api/send-emails - Send emails (immediate or campaign)
+  /**
+   * Send emails endpoint - handles both immediate sending and campaign creation
+   *
+   * This is the main endpoint for email operations. It supports:
+   * - Immediate email sending (up to 300 emails at once)
+   * - Multi-day campaign creation (spreads emails over days)
+   * - File upload processing (Excel/CSV with recipient data)
+   * - Resume attachment handling
+   * - Template selection and rendering
+   * - Real-time progress updates via Socket.IO
+   *
+   * @param {Object} req - Express request object
+   * @param {Object} req.body - Request body parameters
+   * @param {string} req.body.delayMs - Delay between emails in milliseconds
+   * @param {string} req.body.resumeDocLink - Link to resume document
+   * @param {string} req.body.userEmail - Sender email address
+   * @param {string} req.body.campaignType - 'immediate' or 'multi-day'
+   * @param {string} req.body.templateId - Template ID to use
+   * @param {Array} req.files - Uploaded files (Excel and resume)
+   * @param {Object} res - Express response object
+   *
+   * @returns {Promise<void>} Sends JSON response with operation result
+   */
   async sendEmails(req, res) {
     try {
       logger.email('Email sending endpoint called');
 
+      // Debug logging for development
       console.log('Request body:', req.body);
       console.log('Request files:', req.files);
 
-      const { delayMs, resumeDocLink, userEmail, campaignType } = req.body;
+      // Response safety mechanism to prevent double responses
+      // This ensures we don't try to send response headers twice
+      let responseSent = false;
+
+      /**
+       * Safely send JSON response, preventing double responses
+       * @param {Object} data - Response data to send
+       */
+      const safeJson = (data) => {
+        if (!responseSent) {
+          responseSent = true;
+          res.json(data);
+        }
+      };
+
+      /**
+       * Safely send error response, preventing double responses
+       * @param {Error|string} error - Error to send
+       * @param {number} status - HTTP status code
+       */
+      const safeError = (error, status = 500) => {
+        if (!responseSent) {
+          responseSent = true;
+          // Sanitize error messages to prevent information leakage
+          const sanitizedError = this.sanitizeErrorForResponse(error);
+          res.status(status).json({ error: sanitizedError });
+        }
+      };
+
+      const { delayMs, resumeDocLink, userEmail, campaignType, templateId, manualRecipients } = req.body;
       const files = req.files;
       const excelFile = files?.file?.[0];
       const resumeFile = files?.resume?.[0];
 
-      console.log('Parsed data:', { delayMs, resumeDocLink, userEmail, campaignType, excelFile: excelFile?.filename, resumeFile: resumeFile?.filename });
+      console.log('Parsed data:', { delayMs, resumeDocLink, userEmail, campaignType, excelFile: excelFile?.filename, resumeFile: resumeFile?.filename, manualRecipients });
 
-      // Validate Excel file
-      if (!excelFile) {
-        console.log('No Excel file uploaded');
-        return res.status(400).json({ error: 'No Excel file uploaded' });
+      // Validate that we have either a file or manual recipients
+      let recipients = [];
+      let hasValidRecipients = false;
+
+      if (excelFile) {
+        // Handle CSV/Excel file upload
+        console.log('File path:', excelFile.path);
+        console.log('File size:', excelFile.size);
+        console.log('About to parse file:', excelFile.path);
+
+        // Determine file type and parse accordingly
+        const fileExtension = excelFile.originalname.split('.').pop().toLowerCase();
+        let parseResult;
+
+        if (fileExtension === 'csv') {
+          console.log('Parsing as CSV file');
+          parseResult = await this.fileService.parseCsvFile(excelFile.path);
+        } else {
+          console.log('Parsing as Excel file');
+          parseResult = await this.fileService.parseExcelFile(excelFile.path);
+        }
+
+        console.log('Parse result:', parseResult);
+        if (!parseResult.success) {
+          return safeError(parseResult.error, 400);
+        }
+
+        recipients = parseResult.recipients;
+        if (recipients.length === 0) {
+          return safeError('No valid recipients found in Excel file', 400);
+        }
+        hasValidRecipients = true;
+      } else if (manualRecipients) {
+        // Handle manual recipients
+        try {
+          const parsedRecipients = JSON.parse(manualRecipients);
+          if (Array.isArray(parsedRecipients) && parsedRecipients.length > 0) {
+            recipients = parsedRecipients.map(r => ({
+              email: r.email,
+              company_name: r.companyName
+            }));
+            hasValidRecipients = true;
+          }
+        } catch (error) {
+          return safeError('Invalid manual recipients format', 400);
+        }
       }
 
-      console.log('Excel file path:', excelFile.path);
-      console.log('Excel file size:', excelFile.size);
-      console.log('About to parse Excel file:', excelFile.path);
-
-      // Parse Excel file
-      const parseResult = await this.fileService.parseExcelFile(excelFile.path);
-
-      console.log('Parse result:', parseResult);
-      if (!parseResult.success) {
-        return res.status(400).json({ error: parseResult.error });
+      if (!hasValidRecipients) {
+        return safeError('No recipients provided. Please upload a CSV file or add manual recipients.', 400);
       }
 
-      const recipients = parseResult.recipients;
-      if (recipients.length === 0) {
-        return res.status(400).json({ error: 'No valid recipients found in Excel file' });
+
+      // Load template based on templateId or use default
+      let template;
+      if (templateId) {
+        template = Template.getTemplateById(templateId);
+        if (!template) {
+          return safeError(`Template ${templateId} not found`, 400);
+        }
+      } else {
+        template = Template.loadDefaultTemplate();
       }
 
-      // Load template
-      const template = Template.loadDefaultTemplate();
       if (!template) {
-        return res.status(500).json({ error: 'Failed to load email template' });
+        return safeError('Failed to load email template', 500);
       }
 
       // Convert recipients to campaign format
       const contacts = recipients.map(r => ({
         email: r.email,
-        company_name: r.company_name
+        company_name: r.company_name || r.companyName
       }));
 
       // Check if this should be a multi-day campaign
@@ -65,14 +193,15 @@ class EmailController {
         logger.campaign('Creating multi-day campaign...');
         
         if (!userEmail) {
-          return res.status(400).json({ error: 'User email is required for multi-day campaigns' });
+          return safeError('User email is required for multi-day campaigns', 400);
         }
 
         // Create campaign
         const campaignData = {
-          name: `HR Outreach Campaign - ${new Date().toLocaleDateString()}`,
+          name: `${template.category === 'freelancing' ? 'Freelancing' : 'Job Application'} Campaign - ${new Date().toLocaleDateString()}`,
           contacts,
           template: template.content,
+          templateId: template.id,
           subject: template.subject,
           resumeDocLink,
           userEmail,
@@ -95,17 +224,9 @@ class EmailController {
         
         if (!campaign?.id) {
           logger.error('Campaign ID is undefined after creation!');
-          return res.status(500).json({ error: 'Failed to create campaign - invalid ID' });
+          return safeError('Failed to create campaign - invalid ID', 500);
         }
 
-        // Emit initial log to socket
-        const io = req.app.get('io');
-        if (io) {
-          io.emit('emailLog', {
-            type: 'info',
-            message: `🚀 Campaign "${campaign.name}" created with ${contacts.length} recipients`
-          });
-        }
 
         // Trigger immediate processing of the new campaign
         const schedulerService = req.app.get('schedulerService');
@@ -131,17 +252,20 @@ class EmailController {
           }
         }
 
-        // Clean up Excel file
-        this.fileService.deleteFile(excelFile.path);
+        // Clean up Excel file if it exists
+        if (excelFile) {
+          this.fileService.deleteFile(excelFile.path);
+        }
 
-        res.json({
+        safeJson({
           success: true,
           message: 'Multi-day campaign created successfully',
           campaignId: campaign.id,
           totalEmails: contacts.length,
           dailyBatches: Math.ceil(contacts.length / 300),
           estimatedDays: Math.ceil(contacts.length / 300),
-          type: 'campaign'
+          type: 'campaign',
+          templateUsed: template.name
         });
 
         return;
@@ -151,6 +275,7 @@ class EmailController {
       const emails = this.emailService.prepareEmailsFromCampaign({
         template: template.content,
         subject: template.subject,
+        templateId: template.id,
         contacts,
         resumeDocLink,
         attachments: resumeFile ? [{
@@ -161,86 +286,50 @@ class EmailController {
       });
 
       // Send response immediately
-      res.json({
+      safeJson({
         message: 'Email sending started',
         totalEmails: emails.length,
-        recipients: emails.map(e => ({ 
-          company: e.companyName, 
-          email: e.to 
+        recipients: emails.map(e => ({
+          company: e.companyName,
+          email: e.to
         })),
-        type: 'immediate'
+        type: 'immediate',
+        templateUsed: template.name
       });
 
       // Start sending emails asynchronously
-      this.sendEmailsAsync(emails, parseInt(delayMs) || 10000, req.io);
+      this.sendEmailsAsync(emails, parseInt(delayMs) || 10000);
 
       // Clean up files
-      this.fileService.deleteFile(excelFile.path);
+      if (excelFile) {
+        this.fileService.deleteFile(excelFile.path);
+      }
     } catch (error) {
       logger.error(`Error in send emails: ${error.message}`);
-      res.status(500).json({ error: error.message });
+      safeError(error.message || error, 500);
     }
   }
 
-  // Send emails asynchronously with progress updates
-  async sendEmailsAsync(emails, delayMs, io) {
+  // Send emails asynchronously with progress updates and memory optimization
+  async sendEmailsAsync(emails, delayMs) {
     try {
-      const results = await this.emailService.sendEmailBatch(emails, delayMs, (progress) => {
-        // Emit progress via socket
-        if (io) {
-          const emailResult = progress.currentEmail;
-          
-          if (emailResult.success) {
-            io.emit('emailStatus', {
-              type: 'success',
-              message: `✅ Email sent to ${emailResult.companyName} (${emailResult.recipient})`,
-              progress: {
-                current: progress.current,
-                total: progress.total,
-                successCount: progress.successful,
-                failureCount: progress.failed
-              }
-            });
-          } else {
-            io.emit('emailStatus', {
-              type: 'error',
-              message: `❌ Failed to send to ${emailResult.companyName} (${emailResult.recipient}): ${emailResult.error}`,
-              progress: {
-                current: progress.current,
-                total: progress.total,
-                successCount: progress.successful,
-                failureCount: progress.failed
-              }
-            });
-          }
-        }
+      // Use memory-efficient processing for large lists
+      const results = await this.emailService.processLargeEmailList(emails, {
+        delayMs: delayMs,
+        batchSize: this.emailService.batchConfig.defaultBatchSize
+      }, (progress) => {
+        // Progress callback - no socket emissions needed
       });
 
-      // Send completion message
-      if (io) {
-        io.emit('emailStatus', {
-          type: 'complete',
-          message: `🎉 Email campaign completed! Success: ${results.successful}, Failed: ${results.failed}`,
-          progress: {
-            current: results.total,
-            total: results.total,
-            successCount: results.successful,
-            failureCount: results.failed
-          }
-        });
-      }
+      // Generate comprehensive report
+      const report = this.emailService.generateBatchReport(results);
 
       // Clean up attachments
       this.emailService.cleanupAttachments(emails);
+
+      logger.info(`Email campaign completed with report: ${JSON.stringify(report.summary)}`);
     } catch (error) {
       logger.error(`Error in async email sending: ${error.message}`);
-      
-      if (io) {
-        io.emit('emailStatus', {
-          type: 'error',
-          message: `❌ Email campaign failed: ${error.message}`
-        });
-      }
     }
   }
 
@@ -251,7 +340,7 @@ class EmailController {
       res.json(verification);
     } catch (error) {
       logger.error(`Error verifying email config: ${error.message}`);
-      res.status(500).json({ error: error.message });
+      res.status(500).json({ error: this.sanitizeErrorForResponse(error) });
     }
   }
 
@@ -259,7 +348,7 @@ class EmailController {
   async estimateSendingTime(req, res) {
     try {
       const { emailCount, delayMs } = req.body;
-      
+
       if (!emailCount || emailCount < 1) {
         return res.status(400).json({ error: 'Valid email count is required' });
       }
@@ -268,8 +357,205 @@ class EmailController {
       res.json(estimate);
     } catch (error) {
       logger.error(`Error estimating sending time: ${error.message}`);
-      res.status(500).json({ error: error.message });
+      res.status(500).json({ error: this.sanitizeErrorForResponse(error) });
     }
+  }
+
+  // GET /api/email/rate-limit - Get current rate limit status
+  async getRateLimitStatus(req, res) {
+    try {
+      const rateLimitStatus = this.emailService.getRateLimitStatus();
+      res.json(rateLimitStatus);
+    } catch (error) {
+      logger.error(`Error getting rate limit status: ${error.message}`);
+      res.status(500).json({ error: this.sanitizeErrorForResponse(error) });
+    }
+  }
+
+  // GET /api/email/batch-config - Get batch processing configuration
+  async getBatchConfig(req, res) {
+    try {
+      const batchConfig = this.emailService.getBatchConfig();
+      const smtpCapabilities = await this.emailService.getSMTPCapabilities();
+      const memoryStats = this.emailService.getMemoryStats();
+
+      res.json({
+        batchConfig,
+        smtpCapabilities,
+        memoryStats,
+        recommendations: {
+          optimalBatchSize: await this.emailService.optimizeBatchSize(),
+          memoryEfficient: batchConfig.enableMemoryOptimization
+        }
+      });
+    } catch (error) {
+      logger.error(`Error getting batch config: ${error.message}`);
+      res.status(500).json({ error: this.sanitizeErrorForResponse(error) });
+    }
+  }
+
+  // GET /api/emails/logs - Get email logs
+  async getLogs(req, res) {
+    try {
+      logger.email('Email logs endpoint called');
+
+      // Get all campaigns with their logs
+      const campaigns = await this.campaignService.getAllCampaigns();
+      const emailLogs = [];
+
+      campaigns.forEach(campaign => {
+        // Extract logs from daily logs
+        if (campaign.dailyLogs && campaign.dailyLogs.length > 0) {
+          campaign.dailyLogs.forEach(dailyLog => {
+            if (dailyLog.recipients && dailyLog.recipients.length > 0) {
+              dailyLog.recipients.forEach(recipient => {
+                emailLogs.push({
+                  id: `${campaign.id}_${recipient.email}_${dailyLog.date}`,
+                  campaignId: campaign.id,
+                  recipient: recipient.email,
+                  company: recipient.companyName || recipient.company_name || 'Unknown',
+                  status: recipient.success ? 'sent' : 'failed',
+                  sentAt: recipient.timestamp || dailyLog.date,
+                  error: recipient.error || null
+                });
+              });
+            }
+          });
+        }
+
+        // Also check for any recent email results from campaign progress
+        if (campaign.contacts && campaign.sentEmails > 0) {
+          // For campaigns that have been processed, create mock logs based on progress
+          const processed = campaign.contacts.slice(0, campaign.sentEmails);
+          processed.forEach((contact, index) => {
+            const logId = `${campaign.id}_${contact.email}_${Date.now()}_${index}`;
+            if (!emailLogs.find(log => log.recipient === contact.email && log.campaignId === campaign.id)) {
+              emailLogs.push({
+                id: logId,
+                campaignId: campaign.id,
+                recipient: contact.email,
+                company: contact.company_name || 'Unknown',
+                status: 'sent', // Assume sent if it's in sentEmails count
+                sentAt: campaign.lastProcessedAt || campaign.createdAt,
+                error: null
+              });
+            }
+          });
+        }
+
+        // Add failed emails
+        if (campaign.contacts && campaign.failedEmails > 0) {
+          const failedCount = campaign.failedEmails;
+          const totalProcessed = campaign.sentEmails + campaign.failedEmails;
+          const failed = campaign.contacts.slice(campaign.sentEmails, totalProcessed);
+          
+          failed.forEach((contact, index) => {
+            const logId = `${campaign.id}_${contact.email}_failed_${Date.now()}_${index}`;
+            if (!emailLogs.find(log => log.recipient === contact.email && log.campaignId === campaign.id)) {
+              emailLogs.push({
+                id: logId,
+                campaignId: campaign.id,
+                recipient: contact.email,
+                company: contact.company_name || 'Unknown',
+                status: 'failed',
+                sentAt: campaign.lastProcessedAt || campaign.createdAt,
+                error: 'Email sending failed'
+              });
+            }
+          });
+        }
+
+        // Add pending emails
+        if (campaign.contacts && campaign.status !== 'completed') {
+          const totalProcessed = campaign.sentEmails + campaign.failedEmails;
+          const pending = campaign.contacts.slice(totalProcessed);
+          
+          pending.forEach((contact, index) => {
+            const logId = `${campaign.id}_${contact.email}_pending_${Date.now()}_${index}`;
+            emailLogs.push({
+              id: logId,
+              campaignId: campaign.id,
+              recipient: contact.email,
+              company: contact.company_name || 'Unknown',
+              status: 'pending',
+              sentAt: null,
+              error: null
+            });
+          });
+        }
+      });
+
+      // Sort by most recent first
+      emailLogs.sort((a, b) => {
+        const aTime = a.sentAt ? new Date(a.sentAt).getTime() : 0;
+        const bTime = b.sentAt ? new Date(b.sentAt).getTime() : 0;
+        return bTime - aTime;
+      });
+
+      // Apply pagination (optional query params)
+      const page = parseInt(req.query.page) || 1;
+      const limit = parseInt(req.query.limit) || 100;
+      const startIndex = (page - 1) * limit;
+      const endIndex = startIndex + limit;
+      
+      const paginatedLogs = emailLogs.slice(startIndex, endIndex);
+
+      logger.email(`Returning ${paginatedLogs.length} email logs (total: ${emailLogs.length})`);
+
+      res.json({
+        logs: paginatedLogs,
+        pagination: {
+          page,
+          limit,
+          total: emailLogs.length,
+          pages: Math.ceil(emailLogs.length / limit)
+        }
+      });
+
+    } catch (error) {
+      logger.error(`Error getting email logs: ${error.message}`);
+      res.status(500).json({ error: this.sanitizeErrorForResponse(error) });
+    }
+  }
+
+  // Sanitize error messages for API responses
+  sanitizeErrorForResponse(error) {
+    if (!error) return 'An unexpected error occurred';
+
+    const errorMessage = error.message || error.toString();
+
+    // Remove sensitive information
+    let sanitized = errorMessage
+      .replace(/password[^a-zA-Z0-9]*[:=][^a-zA-Z0-9]*([^\s,;]{8,})/gi, 'password=***REDACTED***')
+      .replace(/token[^a-zA-Z0-9]*[:=][^a-zA-Z0-9]*([^\s,;]{20,})/gi, 'token=***REDACTED***')
+      .replace(/key[^a-zA-Z0-9]*[:=][^a-zA-Z0-9]*([^\s,;]{16,})/gi, 'key=***REDACTED***')
+      .replace(/secret[^a-zA-Z0-9]*[:=][^a-zA-Z0-9]*([^\s,;]{16,})/gi, 'secret=***REDACTED***')
+      .replace(/auth[^a-zA-Z0-9]*[:=][^a-zA-Z0-9]*([^\s,;]{16,})/gi, 'auth=***REDACTED***')
+      .replace(/email[^a-zA-Z0-9]*[:=][^a-zA-Z0-9]*([^\s@]+@[^\s@]+\.[^\s@]+)/gi, 'email=***REDACTED***');
+
+    // Categorize common errors
+    if (sanitized.includes('authentication') || sanitized.includes('credentials')) {
+      return 'Authentication failed. Please check your email configuration.';
+    }
+
+    if (sanitized.includes('rate limit') || sanitized.includes('too many')) {
+      return 'Rate limit exceeded. Please wait before sending more emails.';
+    }
+
+    if (sanitized.includes('network') || sanitized.includes('connection')) {
+      return 'Network error. Please check your internet connection and try again.';
+    }
+
+    if (sanitized.includes('validation') || sanitized.includes('invalid')) {
+      return sanitized; // Validation errors are generally safe to show
+    }
+
+    // For unknown errors, provide a generic message
+    if (sanitized.length > 100) {
+      return 'An error occurred while processing your request.';
+    }
+
+    return sanitized;
   }
 }
 

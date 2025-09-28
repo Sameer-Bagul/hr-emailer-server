@@ -2,7 +2,38 @@ const Template = require('../models/Template');
 const logger = require('../utils/logger');
 
 class TemplateController {
-  // GET /api/template - Get default template
+  // GET /api/templates - Get all templates
+  async getAllTemplates(req, res) {
+    try {
+      const templates = Template.getAllTemplates();
+      res.json({
+        templates: templates.map(t => t.toJSON()),
+        count: templates.length
+      });
+    } catch (error) {
+      logger.error(`Error getting all templates: ${error.message}`);
+      res.status(500).json({ error: 'Failed to get templates' });
+    }
+  }
+
+  // GET /api/templates/:id - Get template by ID
+  async getTemplateById(req, res) {
+    try {
+      const { id } = req.params;
+      const template = Template.getTemplateById(id);
+      
+      if (!template) {
+        return res.status(404).json({ error: 'Template not found' });
+      }
+
+      res.json(template.toJSON());
+    } catch (error) {
+      logger.error(`Error getting template by ID: ${error.message}`);
+      res.status(500).json({ error: 'Failed to get template' });
+    }
+  }
+
+  // GET /api/template - Get default template (legacy support)
   async getDefaultTemplate(req, res) {
     try {
       const template = Template.loadDefaultTemplate();
@@ -11,13 +42,9 @@ class TemplateController {
         return res.status(500).json({ error: 'Failed to load template' });
       }
 
-      // Return template for preview (remove subject line from content for display)
-      const templateContent = template.content;
-      const subject = template.subject;
-
       res.json({
-        template: templateContent,
-        subject: subject
+        template: template.content,
+        subject: template.subject
       });
     } catch (error) {
       logger.error(`Error loading template: ${error.message}`);
@@ -28,10 +55,11 @@ class TemplateController {
   // GET /api/template/preview - Preview template with sample data
   async previewTemplate(req, res) {
     try {
-      const template = Template.loadDefaultTemplate();
+      const templateId = req.query.templateId || 'job-application';
+      const template = Template.getTemplateById(templateId);
       
       if (!template) {
-        return res.status(500).json({ error: 'Failed to load template' });
+        return res.status(404).json({ error: 'Template not found' });
       }
 
       const sampleData = {
@@ -48,7 +76,8 @@ class TemplateController {
       res.json({
         preview: preview.content,
         subject: preview.subject,
-        sampleData
+        sampleData,
+        template: template.toJSON()
       });
     } catch (error) {
       logger.error(`Error previewing template: ${error.message}`);
@@ -59,10 +88,11 @@ class TemplateController {
   // GET /api/template/variables - Get template variables
   async getTemplateVariables(req, res) {
     try {
-      const template = Template.loadDefaultTemplate();
+      const templateId = req.query.templateId || 'job-application';
+      const template = Template.getTemplateById(templateId);
       
       if (!template) {
-        return res.status(500).json({ error: 'Failed to load template' });
+        return res.status(404).json({ error: 'Template not found' });
       }
 
       const variables = template.extractVariables();
@@ -72,7 +102,8 @@ class TemplateController {
         description: {
           company_name: 'Company name from Excel file',
           email: 'Recipient email address'
-        }
+        },
+        template: template.toJSON()
       });
     } catch (error) {
       logger.error(`Error getting template variables: ${error.message}`);
@@ -111,17 +142,26 @@ class TemplateController {
   // POST /api/template/render - Render template with custom data
   async renderTemplate(req, res) {
     try {
-      const { content, subject, variables } = req.body;
+      const { content, subject, variables, templateId } = req.body;
       
-      if (!content) {
-        return res.status(400).json({ error: 'Template content is required' });
+      let template;
+      
+      if (templateId) {
+        template = Template.getTemplateById(templateId);
+        if (!template) {
+          return res.status(404).json({ error: 'Template not found' });
+        }
+      } else {
+        if (!content) {
+          return res.status(400).json({ error: 'Template content is required' });
+        }
+        
+        template = new Template({
+          name: 'custom',
+          content,
+          subject: subject || ''
+        });
       }
-
-      const template = new Template({
-        name: 'custom',
-        content,
-        subject: subject || ''
-      });
 
       const rendered = template.render(variables || {});
       
@@ -132,7 +172,8 @@ class TemplateController {
       res.json({
         content: rendered.content,
         subject: rendered.subject,
-        variables: template.extractVariables()
+        variables: template.extractVariables(),
+        template: template.toJSON()
       });
     } catch (error) {
       logger.error(`Error rendering template: ${error.message}`);

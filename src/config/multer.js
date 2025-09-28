@@ -14,13 +14,13 @@ const storage = multer.diskStorage({
 
 const fileFilter = (req, file, cb) => {
   if (file.fieldname === 'file') {
-    // Excel files for contact list
-    const allowedTypes = ['.xlsx', '.xls'];
+    // Excel, ODS, and CSV files for contact list
+    const allowedTypes = ['.xlsx', '.xls', '.ods', '.csv'];
     const fileExt = path.extname(file.originalname).toLowerCase();
     if (allowedTypes.includes(fileExt)) {
       cb(null, true);
     } else {
-      cb(new Error('Only Excel files are allowed for contact list'), false);
+      cb(new Error('Only Excel (.xlsx, .xls), OpenDocument (.ods), and CSV (.csv) files are allowed for contact list'), false);
     }
   } else if (file.fieldname === 'resume') {
     // PDF files for resume

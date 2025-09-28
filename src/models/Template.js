@@ -6,13 +6,16 @@ const logger = require("../utils/logger");
 
 class Template {
   constructor(data) {
-    this.name = data.name;
-    this.content = data.content;
-    this.subject = data.subject;
+    this.id = data.id || null;
+    this.name = data.name || "Untitled Template";
+    this.content = data.content || "";
+    this.subject = data.subject || "";
     this.variables = data.variables || [];
-    this.type = data.type || "html"; // html, text, or both
+    this.type = data.type || "html";
+    this.category = data.category || "job-application";
     this.createdAt = data.createdAt || new Date().toISOString();
     this.updatedAt = data.updatedAt || new Date().toISOString();
+    this.description = data.description || "";
   }
 
   // Load template from file
@@ -41,10 +44,24 @@ class Template {
     }
   }
 
-  // Load default HR template
-  static loadDefaultTemplate() {
-    const defaultSubject = `Software Developer Opportunity | {{company_name}}`;
-    const defaultContent = `Hi there,
+  // Get all available templates
+  static getAllTemplates() {
+    return [
+      Template.getJobSearchTemplate(),
+      Template.getLeadSearchTemplate()
+    ];
+  }
+
+  // Get template by ID
+  static getTemplateById(id) {
+    const templates = Template.getAllTemplates();
+    return templates.find(template => template.id === id) || null;
+  }
+
+  // Job Search Template
+  static getJobSearchTemplate() {
+    const subject = `Software Developer Opportunity | {{company_name}}`;
+    const content = `Hi there,
 
 I'm <strong>Sameer Bagul</strong>, a full-stack developer and final-year Computer Engineering student from the College of Engineering, Pune.
 
@@ -69,58 +86,106 @@ Best regards,
 <a href="mailto:sameerbagul2004@gmail.com">sameerbagul2004@gmail.com</a>`;
 
     return new Template({
-      name: "default-hr-template",
-      content: defaultContent,
-      subject: defaultSubject,
+      id: "job-search",
+      name: "Job Search",
+      content: content,
+      subject: subject,
       variables: ["company_name"],
-      type: "html",
+      category: "job-search",
+      description: "Professional template for job applications and internship opportunities"
     });
+  }
+
+  // Lead Search Template
+  static getLeadSearchTemplate() {
+    const subject = `Partnership Opportunity - Full-Stack Development Services | {{company_name}}`;
+    const content = `Hello,
+
+I'm <strong>Sameer Bagul</strong>, a skilled full-stack developer specializing in modern web technologies and AI automation solutions.
+
+I noticed {{company_name}} and believe there might be an opportunity for us to collaborate. I offer comprehensive development services including:
+
+<strong>🚀 Full-Stack Development</strong>
+• MERN Stack (MongoDB, Express.js, React, Node.js)
+• Next.js & TypeScript applications
+• Real-time applications with Socket.IO
+
+<strong>📱 Mobile Development</strong>
+• React Native cross-platform apps
+• Progressive Web Applications (PWA)
+• Responsive mobile-first design
+
+<strong>🤖 AI & Automation</strong>
+• AI-powered chatbots and automation
+• Machine Learning integrations
+• Process automation solutions
+
+<strong>☁️ DevOps & Deployment</strong>
+• Docker containerization
+• CI/CD pipeline setup
+• Cloud deployment (AWS, Vercel, Render)
+
+<strong>Recent Project Highlights:</strong>
+• Automated lead generation system processing 100,000+ leads
+• AI-powered skill development platform with 1,000+ active users
+• E-commerce solutions with payment gateway integrations
+
+I'd love to discuss how I can help {{company_name}} with your development needs. Whether it's building a new application, optimizing existing systems, or implementing automation solutions, I'm here to deliver high-quality results.
+
+Portfolio: <a href="http://sameerbagul.me">sameerbagul.me</a>
+GitHub: <a href="https://github.com/Sameer-Bagul">github.com/Sameer-Bagul</a>
+
+Let's schedule a call to explore potential collaboration opportunities.
+
+Best regards,
+<strong>Sameer Bagul</strong>
+Full-Stack Developer & AI Specialist
++91 7841941033
+<a href="mailto:sameerbagul2004@gmail.com">sameerbagul2004@gmail.com</a>`;
+
+    return new Template({
+      id: "lead-search",
+      name: "Lead Search",
+      content: content,
+      subject: subject,
+      variables: ["company_name"],
+      category: "lead-search",
+      description: "Professional template for freelancing opportunities and business partnerships"
+    });
+  }
+
+  // Load default template (fallback to job search)
+  static loadDefaultTemplate() {
+    return Template.getJobSearchTemplate();
   }
 
   // Compile template with Handlebars
   compile() {
     try {
-      const compiledTemplate = Handlebars.compile(this.content);
-      const compiledSubject = this.subject
-        ? Handlebars.compile(this.subject)
-        : null;
-
-      return {
-        template: compiledTemplate,
-        subject: compiledSubject,
-      };
+      this.compiledContent = Handlebars.compile(this.content);
+      this.compiledSubject = Handlebars.compile(this.subject);
+      return true;
     } catch (error) {
-      logger.error(`Failed to compile template: ${error.message}`);
-      return null;
+      logger.error(`Template compilation failed: ${error.message}`);
+      return false;
     }
   }
 
   // Render template with variables
   render(variables = {}) {
     try {
-      const compiled = this.compile();
-      if (!compiled) {
-        throw new Error("Failed to compile template");
+      if (!this.compiledContent || !this.compiledSubject) {
+        if (!this.compile()) {
+          return null;
+        }
       }
 
-      const renderedContent = compiled.template(variables);
-      const renderedSubject = compiled.subject
-        ? compiled.subject(variables)
-        : this.subject;
-
-      // Convert line breaks to HTML if type is html
-      const finalContent =
-        this.type === "html"
-          ? renderedContent.replace(/\n/g, "<br>\n")
-          : renderedContent;
-
       return {
-        content: finalContent,
-        subject: renderedSubject,
-        type: this.type,
+        content: this.compiledContent(variables),
+        subject: this.compiledSubject(variables)
       };
     } catch (error) {
-      logger.error(`Failed to render template: ${error.message}`);
+      logger.error(`Template rendering failed: ${error.message}`);
       return null;
     }
   }
@@ -129,27 +194,25 @@ Best regards,
   isValid() {
     const errors = [];
 
-    if (!this.name || this.name.trim().length === 0) {
-      errors.push("Template name is required");
-    }
-
     if (!this.content || this.content.trim().length === 0) {
-      errors.push("Template content is required");
+      errors.push('Template content is required');
     }
 
-    // Try to compile template to check for syntax errors
+    if (!this.subject || this.subject.trim().length === 0) {
+      errors.push('Template subject is required');
+    }
+
+    // Test compilation
     try {
       Handlebars.compile(this.content);
-      if (this.subject) {
-        Handlebars.compile(this.subject);
-      }
+      Handlebars.compile(this.subject);
     } catch (error) {
-      errors.push(`Template syntax error: ${error.message}`);
+      errors.push(`Invalid Handlebars syntax: ${error.message}`);
     }
 
     return {
       valid: errors.length === 0,
-      errors,
+      errors
     };
   }
 
@@ -208,23 +271,26 @@ Best regards,
   // Clone template
   clone(newName) {
     return new Template({
-      name: newName || `${this.name} (Copy)`,
-      content: this.content,
-      subject: this.subject,
-      variables: [...this.variables],
-      type: this.type,
+      ...this.toJSON(),
+      id: null,
+      name: newName,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
     });
   }
 
   toJSON() {
     return {
+      id: this.id,
       name: this.name,
       content: this.content,
       subject: this.subject,
       variables: this.variables,
       type: this.type,
+      category: this.category,
       createdAt: this.createdAt,
       updatedAt: this.updatedAt,
+      description: this.description
     };
   }
 }

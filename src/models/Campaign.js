@@ -8,6 +8,7 @@ class Campaign {
     this.userEmail = data.userEmail;
     this.contacts = data.contacts || [];
     this.template = data.template;
+    this.templateId = data.templateId || 'job-application'; // Add template ID support
     this.subject = data.subject;
     this.resumeDocLink = data.resumeDocLink;
     this.attachments = data.attachments || [];
@@ -159,6 +160,7 @@ class Campaign {
       userEmail: this.userEmail,
       contacts: this.contacts,
       template: this.template,
+      templateId: this.templateId,
       subject: this.subject,
       resumeDocLink: this.resumeDocLink,
       attachments: this.attachments,

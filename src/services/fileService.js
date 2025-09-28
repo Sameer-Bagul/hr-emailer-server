@@ -1,18 +1,20 @@
 const XLSX = require('xlsx');
+const csv = require('csv-parser');
+const fs = require('fs');
 const FileUtils = require('../utils/fileUtils');
 const logger = require('../utils/logger');
 
 class FileService {
-  // Parse Excel file and extract recipients
+  // Parse Excel/ODS file and extract recipients
   async parseExcelFile(filePath) {
     try {
-      logger.file(`Parsing Excel file: ${filePath}`);
+      logger.file(`Parsing spreadsheet file: ${filePath}`);
       
       if (!FileUtils.readFile(filePath)) {
         throw new Error('File not found or cannot be read');
       }
 
-      // Read the Excel file
+      // Read the Excel/ODS file
       const workbook = XLSX.readFile(filePath);
       const sheetName = workbook.SheetNames[0];
       const worksheet = workbook.Sheets[sheetName];
@@ -21,7 +23,7 @@ class FileService {
       const data = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
       
       if (data.length === 0) {
-        throw new Error('Excel file is empty');
+        throw new Error('Spreadsheet file is empty');
       }
 
       // Get headers
@@ -62,7 +64,7 @@ class FileService {
       // Remove duplicates based on email
       const uniqueRecipients = this.removeDuplicateEmails(recipients);
 
-      logger.file(`Successfully parsed ${uniqueRecipients.length} unique recipients from Excel file`);
+      logger.file(`Successfully parsed ${uniqueRecipients.length} unique recipients from spreadsheet file`);
 
       return {
         success: true,
@@ -72,7 +74,7 @@ class FileService {
         wasLimited: rows.length > 1000
       };
     } catch (error) {
-      logger.error(`Failed to parse Excel file: ${error.message}`);
+      logger.error(`Failed to parse spreadsheet file: ${error.message}`);
       return {
         success: false,
         error: error.message,
@@ -81,11 +83,194 @@ class FileService {
     }
   }
 
+  // Parse CSV file and extract recipients
+  async parseCsvFile(filePath) {
+    try {
+      logger.file(`Parsing CSV file: ${filePath}`);
+
+      if (!FileUtils.readFile(filePath)) {
+        throw new Error('File not found or cannot be read');
+      }
+
+      const results = [];
+      const delimiters = [',', ';', '\t']; // Try different delimiters
+      let parsedSuccessfully = false;
+      let headers = [];
+      let delimiterUsed = ',';
+
+      // Try parsing with different delimiters
+      for (const delimiter of delimiters) {
+        try {
+          const tempResults = [];
+          let tempHeaders = [];
+
+          await new Promise((resolve, reject) => {
+            fs.createReadStream(filePath)
+              .pipe(csv({
+                separator: delimiter,
+                skipEmptyLines: true,
+                mapHeaders: ({ header }) => header.trim().toLowerCase()
+              }))
+              .on('headers', (headerList) => {
+                tempHeaders = headerList;
+              })
+              .on('data', (data) => tempResults.push(data))
+              .on('end', () => {
+                if (tempResults.length > 0) {
+                  results.length = 0; // Clear previous attempts
+                  results.push(...tempResults);
+                  headers = tempHeaders;
+                  delimiterUsed = delimiter;
+                  parsedSuccessfully = true;
+                  resolve();
+                } else {
+                  reject(new Error('No data found'));
+                }
+              })
+              .on('error', reject);
+          });
+
+          if (parsedSuccessfully) break;
+        } catch (error) {
+          logger.debug(`Failed to parse with delimiter '${delimiter}': ${error.message}`);
+          continue;
+        }
+      }
+
+      if (!parsedSuccessfully || results.length === 0) {
+        throw new Error('CSV file is empty or could not be parsed with supported delimiters');
+      }
+
+      logger.debug(`CSV file contains ${results.length} rows with headers: ${headers.join(', ')} (delimiter: '${delimiterUsed}')`);
+
+      // Process rows (limit to 1000 for performance)
+      const maxRowsToProcess = Math.min(1000, results.length);
+      const recipients = [];
+
+      for (let i = 0; i < maxRowsToProcess; i++) {
+        const row = results[i];
+        if (!row || Object.keys(row).length === 0) continue;
+
+        // Sanitize row data
+        const sanitizedRow = this.sanitizeCsvRow(row);
+
+        // Extract required fields
+        const companyName = this.extractCompanyName(sanitizedRow);
+        const email = this.extractEmail(sanitizedRow);
+
+        // Validate and add recipient
+        if (companyName && email && FileUtils.isValidEmailFormat(email)) {
+          const recipient = {
+            company_name: companyName.trim(),
+            email: email.trim().toLowerCase()
+          };
+
+          // Add optional fields
+          const subject = this.extractSubject(sanitizedRow);
+          if (subject) recipient.subject = subject.trim();
+
+          const messageBody = this.extractMessageBody(sanitizedRow);
+          if (messageBody) recipient.message_body = messageBody.trim();
+
+          const name = this.extractName(sanitizedRow);
+          if (name) recipient.name = name.trim();
+
+          recipients.push(recipient);
+        }
+      }
+
+      // Remove duplicates based on email
+      const uniqueRecipients = this.removeDuplicateEmails(recipients);
+
+      logger.file(`Successfully parsed ${uniqueRecipients.length} unique recipients from CSV file`);
+
+      return {
+        success: true,
+        recipients: uniqueRecipients,
+        totalRowsInFile: results.length,
+        rowsProcessed: maxRowsToProcess,
+        wasLimited: results.length > 1000,
+        delimiterUsed
+      };
+    } catch (error) {
+      logger.error(`Failed to parse CSV file: ${error.message}`);
+      return {
+        success: false,
+        error: error.message,
+        recipients: []
+      };
+    }
+  }
+
+  // Sanitize CSV row data
+  sanitizeCsvRow(row) {
+    const sanitized = {};
+    for (const [key, value] of Object.entries(row)) {
+      if (value !== null && value !== undefined) {
+        // Remove extra whitespace, control characters, and potential XSS
+        sanitized[key] = String(value)
+          .trim()
+          .replace(/[\x00-\x1F\x7F-\x9F]/g, '') // Remove control characters
+          .replace(/[<>]/g, ''); // Basic XSS prevention
+      }
+    }
+    return sanitized;
+  }
+
+  // Extract name from row object
+  extractName(row) {
+    const nameFields = [
+      'Name', 'name', 'Full Name', 'full_name', 'First Name', 'first_name',
+      'Contact Name', 'contact_name', 'Person', 'person'
+    ];
+
+    for (const field of nameFields) {
+      if (row[field] && row[field].toString().trim()) {
+        return row[field].toString().trim();
+      }
+    }
+
+    return null;
+  }
+
+  // Extract subject from row object
+  extractSubject(row) {
+    const subjectFields = [
+      'Subject', 'subject', 'Email Subject', 'email_subject',
+      'Message Subject', 'message_subject'
+    ];
+
+    for (const field of subjectFields) {
+      if (row[field] && row[field].toString().trim()) {
+        return row[field].toString().trim();
+      }
+    }
+
+    return null;
+  }
+
+  // Extract message body from row object
+  extractMessageBody(row) {
+    const messageFields = [
+      'Message', 'message', 'Message Body', 'message_body',
+      'Body', 'body', 'Content', 'content', 'Email Body', 'email_body'
+    ];
+
+    for (const field of messageFields) {
+      if (row[field] && row[field].toString().trim()) {
+        return row[field].toString().trim();
+      }
+    }
+
+    return null;
+  }
+
   // Extract company name from row object
   extractCompanyName(row) {
     const companyFields = [
       'Company Name', 'Company', 'company_name', 'company',
-      'Organization', 'Org', 'Employer', 'Business'
+      'company name', 'Organization', 'Org', 'Employer', 'Business',
+      'organization', 'org', 'employer', 'business'
     ];
 
     for (const field of companyFields) {
@@ -140,11 +325,11 @@ class FileService {
     }
 
     // Check file extension
-    const allowedExtensions = ['.xlsx', '.xls'];
+    const allowedExtensions = ['.xlsx', '.xls', '.csv'];
     const fileExtension = FileUtils.getFileExtension(file.originalname);
-    
+
     if (!allowedExtensions.includes(fileExtension)) {
-      errors.push('Only Excel files (.xlsx, .xls) are allowed');
+      errors.push('Only Excel files (.xlsx, .xls) and CSV files (.csv) are allowed');
     }
 
     return {

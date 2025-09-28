@@ -15,11 +15,22 @@ class EmailConfig {
 
   initializeTransporter() {
     try {
+      // Validate required environment variables
+      if (!process.env.EMAIL || !process.env.EMAIL_PASS) {
+        throw new Error('EMAIL and EMAIL_PASS environment variables are required');
+      }
+
+      // Validate email format
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(process.env.EMAIL)) {
+        throw new Error('Invalid EMAIL environment variable format');
+      }
+
       // Use explicit SMTP configuration for better reliability with connection pooling
       this.transporter = nodemailer.createTransport({
-        host: 'smtp.gmail.com',
-        port: 587,
-        secure: false, // true for 465, false for other ports
+        host: process.env.SMTP_HOST || 'smtp.gmail.com',
+        port: parseInt(process.env.SMTP_PORT) || 587,
+        secure: process.env.SMTP_SECURE === 'true', // true for 465, false for other ports
         pool: this.connectionPool, // Enable connection pooling
         maxConnections: this.maxConnections,
         maxMessages: this.maxMessages,
@@ -30,17 +41,21 @@ class EmailConfig {
           pass: process.env.EMAIL_PASS
         },
         tls: {
-          rejectUnauthorized: false
+          rejectUnauthorized: true, // Enforce certificate validation
+          minVersion: 'TLSv1.2', // Minimum TLS version
+          ciphers: 'HIGH:!aNULL:!eNULL:!EXPORT:!DES:!RC4:!MD5:!PSK:!SRP:!CAMELLIA' // Secure cipher suites
         },
         connectionTimeout: 60000, // 60 seconds
         greetingTimeout: 30000, // 30 seconds
         socketTimeout: 60000 // 60 seconds
       });
 
-      console.log('📧 Email transporter initialized with SMTP configuration');
-      console.log('📧 Using email:', process.env.EMAIL ? 'Configured' : 'Not configured');
-      console.log('📧 Using password:', process.env.EMAIL_PASS ? 'Configured' : 'Not configured');
+      console.log('📧 Email transporter initialized with secure SMTP configuration');
+      console.log('📧 SMTP Host:', process.env.SMTP_HOST || 'smtp.gmail.com');
+      console.log('📧 SMTP Port:', process.env.SMTP_PORT || 587);
+      console.log('📧 Using email: ***REDACTED***');
       console.log('📧 Connection pooling:', this.connectionPool ? 'Enabled' : 'Disabled');
+      console.log('📧 TLS Security: Enforced with TLSv1.2+');
     } catch (error) {
       console.error('❌ Error initializing email transporter:', error);
     }
@@ -56,25 +71,60 @@ class EmailConfig {
   async verifyConnection() {
     try {
       const now = Date.now();
-      
+
       // Check if we need to re-verify
       if (this.isVerified && (now - this.lastVerification) < this.verificationInterval) {
-        return true;
+        return { success: true, message: 'Connection already verified' };
       }
-      
+
       await this.transporter.verify();
       console.log('✅ Email connection verified');
-      
+
       this.isVerified = true;
       this.lastVerification = now;
-      return true;
+      return { success: true, message: 'Email connection verified successfully' };
     } catch (error) {
-      console.error('❌ Email connection verification failed:', error);
+      console.error('❌ Email connection verification failed:', error.message);
       this.isVerified = false;
-      
+
+      // Categorize verification errors
+      let errorType = 'UNKNOWN';
+      const errorMsg = error.message.toLowerCase();
+
+      if (errorMsg.includes('authentication') || errorMsg.includes('credentials')) {
+        errorType = 'AUTHENTICATION';
+      } else if (errorMsg.includes('connection') || errorMsg.includes('network')) {
+        errorType = 'NETWORK';
+      } else if (errorMsg.includes('tls') || errorMsg.includes('certificate')) {
+        errorType = 'TLS';
+      }
+
       // Reinitialize transporter on verification failure
-      this.initializeTransporter();
-      return false;
+      try {
+        this.initializeTransporter();
+      } catch (initError) {
+        console.error('❌ Failed to reinitialize transporter:', initError.message);
+      }
+
+      return {
+        success: false,
+        error: this.getSafeVerificationError(errorType, error),
+        errorType
+      };
+    }
+  }
+
+  // Get safe verification error messages
+  getSafeVerificationError(errorType, originalError) {
+    switch (errorType) {
+      case 'AUTHENTICATION':
+        return 'Authentication failed. Please check your email credentials.';
+      case 'NETWORK':
+        return 'Network connection failed. Please check your internet connection.';
+      case 'TLS':
+        return 'TLS/SSL connection failed. Please check your security settings.';
+      default:
+        return 'Connection verification failed. Please check your email configuration.';
     }
   }
 

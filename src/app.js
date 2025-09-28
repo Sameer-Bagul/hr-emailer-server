@@ -2,7 +2,6 @@ const express = require('express');
 const cors = require('cors');
 const path = require('path');
 const http = require('http');
-const socketIo = require('socket.io');
 const rateLimit = require('express-rate-limit');
 const helmet = require('helmet');
 
@@ -17,7 +16,6 @@ const templateRoutes = require('./routes/templateRoutes');
 const testRoutes = require('./routes/testRoutes');
 
 // Import services and handlers
-const EmailSocketHandler = require('./sockets/emailSocket');
 const SchedulerService = require('./services/schedulerService');
 const logger = require('./utils/logger');
 
@@ -25,30 +23,11 @@ class App {
   constructor() {
     this.app = express();
     this.server = http.createServer(this.app);
-    
-    // Allow multiple origins for Socket.IO
-    const allowedOrigins = [
-      process.env.CLIENT_URL,
-      'http://localhost:3000',
-      'http://localhost:3001',
-      'http://localhost:5173',
-      'https://hr-emailer-client.vercel.app'
-    ].filter(Boolean);
-    
-    this.io = socketIo(this.server, {
-      cors: {
-        origin: allowedOrigins,
-        methods: ["GET", "POST", "PUT", "DELETE"],
-        credentials: true
-      }
-    });
-    
-    this.emailSocketHandler = null;
+
     this.schedulerService = null;
     
     this.setupMiddleware();
     this.setupRoutes();
-    this.setupSocketHandlers();
     this.setupServices();
     this.setupErrorHandling();
     
@@ -74,10 +53,10 @@ class App {
       legacyHeaders: false,
     });
 
-    // Stricter rate limiting for upload endpoints
+    // Stricter rate limiting for upload endpoints (relaxed for development)
     const uploadLimiter = rateLimit({
-      windowMs: 15 * 60 * 1000, // 15 minutes
-      max: 10, // Limit each IP to 10 uploads per windowMs
+      windowMs: 60 * 60 * 1000, // 1 hour for development
+      max: 50, // Allow more requests during development
       message: {
         error: 'Upload rate limit exceeded',
         message: 'Too many uploads. Please try again later.'
@@ -87,7 +66,8 @@ class App {
     // Apply rate limiting
     this.app.use('/api/', limiter);
     this.app.use('/api/campaigns', uploadLimiter);
-    this.app.use('/api/send-emails', uploadLimiter);
+    // Temporarily disable strict rate limiting for send-emails during development
+    // this.app.use('/api/send-emails', uploadLimiter);
 
     // CORS configuration for separate frontend/backend deployments
     const allowedOrigins = [
@@ -95,6 +75,7 @@ class App {
       'http://localhost:3000',
       'http://localhost:3001',
       'http://localhost:5173',
+      'http://localhost:5174',
       'https://hr-emailer-client.vercel.app'
     ].filter(Boolean);
 
@@ -145,11 +126,6 @@ class App {
           environment: process.env.NODE_ENV || 'development'
         }
       };
-
-      // Add socket statistics if available
-      if (this.emailSocketHandler) {
-        stats.sockets = this.emailSocketHandler.getStatistics();
-      }
 
       // Add scheduler statistics if available
       if (this.schedulerService) {
@@ -205,29 +181,17 @@ class App {
     logger.info('Routes configured');
   }
 
-  setupSocketHandlers() {
-    // Initialize email socket handler
-    this.emailSocketHandler = new EmailSocketHandler(this.io);
-    
-    // Store socket handler reference for services
-    this.app.set('socketHandler', this.emailSocketHandler);
-    
-    logger.info('Socket handlers configured');
-  }
 
   setupServices() {
-    // Initialize scheduler service with socket handler
-    this.schedulerService = new SchedulerService(this.emailSocketHandler);
-    
+    // Initialize scheduler service
+    this.schedulerService = new SchedulerService();
+
     // Store scheduler reference for routes
     this.app.set('schedulerService', this.schedulerService);
-    
+
     // Make scheduler globally available for campaign completion
     global.schedulerService = this.schedulerService;
-    
-    // Configure logger to emit logs to socket
-    logger.setSocketHandler(this.emailSocketHandler);
-    
+
     logger.info('Services configured');
   }
 
@@ -286,12 +250,6 @@ class App {
       // Stop scheduler
       this.stopScheduler();
 
-      // Close socket connections
-      if (this.io) {
-        this.io.close();
-        logger.info('Socket.IO server closed');
-      }
-
       // Close HTTP server
       if (this.server) {
         this.server.close(() => {
@@ -311,17 +269,6 @@ class App {
     }
   }
 
-  // Close all connections gracefully
-  closeConnections() {
-    if (this.emailSocketHandler) {
-      this.emailSocketHandler.closeAllConnections();
-    }
-    
-    if (this.io) {
-      this.io.close();
-    }
-  }
-
   // Get Express app instance
   getApp() {
     return this.app;
@@ -330,16 +277,6 @@ class App {
   // Get HTTP server instance
   getServer() {
     return this.server;
-  }
-
-  // Get Socket.IO instance
-  getSocketIO() {
-    return this.io;
-  }
-
-  // Get email socket handler
-  getEmailSocketHandler() {
-    return this.emailSocketHandler;
   }
 
   // Get scheduler service
