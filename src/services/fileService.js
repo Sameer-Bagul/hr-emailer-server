@@ -269,8 +269,8 @@ class FileService {
   extractCompanyName(row) {
     const companyFields = [
       'Company Name', 'Company', 'company_name', 'company',
-      'company name', 'Organization', 'Org', 'Employer', 'Business',
-      'organization', 'org', 'employer', 'business'
+      'company name', 'Organization', 'organization', 'Org', 'org', 
+      'Employer', 'employer', 'Business', 'business'
     ];
 
     for (const field of companyFields) {
@@ -285,8 +285,8 @@ class FileService {
   // Extract email from row object
   extractEmail(row) {
     const emailFields = [
-      'Email', 'email', 'Email Address', 'email_address',
-      'Contact Email', 'E-mail', 'Mail'
+      'Email', 'email', 'Email Address', 'email_address', 'email address',
+      'Contact Email', 'contact email', 'E-mail', 'e-mail', 'Mail', 'mail'
     ];
 
     for (const field of emailFields) {

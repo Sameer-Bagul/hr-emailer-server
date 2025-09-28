@@ -71,17 +71,28 @@ const excelFileFilter = (req, file, cb) => {
 
 // Legacy file filter for backward compatibility
 const legacyFileFilter = (req, file, cb) => {
+  logger.debug(`File upload - Field: ${file.fieldname}, MIME: ${file.mimetype}, Name: ${file.originalname}`);
+  
   if (file.fieldname === 'file') {
-    // Allow Excel files only
+    // Allow Excel and CSV files with multiple MIME types
     const allowedTypes = [
       'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', // .xlsx
-      'application/vnd.ms-excel' // .xls
+      'application/vnd.ms-excel', // .xls
+      'text/csv', // .csv
+      'application/csv', // .csv (alternative)
+      'text/plain', // Sometimes CSV files are detected as plain text
+      'application/octet-stream' // Sometimes files are detected as binary
     ];
-    
-    if (allowedTypes.includes(file.mimetype)) {
+
+    // Also check file extension as fallback
+    const fileExt = file.originalname.toLowerCase().split('.').pop();
+    const allowedExtensions = ['xlsx', 'xls', 'csv'];
+
+    if (allowedTypes.includes(file.mimetype) || allowedExtensions.includes(fileExt)) {
       cb(null, true);
     } else {
-      cb(new Error('Only Excel files are allowed for contact list'));
+      logger.error(`File rejected - MIME: ${file.mimetype}, Extension: ${fileExt}`);
+      cb(new Error('Only Excel and CSV files are allowed for contact list'));
     }
   } else if (file.fieldname === 'resume') {
     // Allow PDF files only
