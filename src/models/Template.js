@@ -63,27 +63,39 @@ class Template {
     const subject = `Software Developer Opportunity | {{company_name}}`;
     const content = `Hi there,
 
-I'm <strong>Sameer Bagul</strong>, a full-stack developer and final-year Computer Engineering student from the College of Engineering, Pune.
+I'm Sameer Bagul, a full-stack developer and final-year Computer Engineering student from the College of Engineering, Pune.
 
-With over 40+ MERN projects and 2 years of freelance experience, I have developed scalable web applications, AI-driven platforms, and DevOps pipelines. My recent experience includes:
+With over 40+ MERN projects and 2 years of freelance experience, I have developed scalable web applications, AI-driven platforms, and DevOps pipelines.
 
-<strong>LabsCheck, Pune</strong> – Built full-stack systems and automated lead operations for 100,000+ leads using AI agents.
+🚀 RECENT EXPERIENCE:
 
-<strong>Walnut Solutions</strong> – Improved SEO and engagement by 30% through responsive web applications in Next.js.
+• LabsCheck, Pune – Built full-stack systems and automated lead operations for 100,000+ leads using AI agents
 
-<strong>Smart India Hackathon Winner</strong> – Developed HireMe | Skillify, an AI-powered skill development platform serving 1,000+ users.
+• Walnut Solutions – Improved SEO and engagement by 30% through responsive web applications in Next.js
 
-I am particularly skilled in MERN Stack, Next.js, AI/ML (PyTorch, LangChain, Hugging Face), and DevOps tools (Docker, Nginx, CI/CD). My portfolio and projects can be viewed here: <a href="http://sameerbagul.me">Portfolio</a> | <a href="https://github.com/Sameer-Bagul">GitHub</a>.
+• Smart India Hackathon Winner – Developed HireMe | Skillify, an AI-powered skill development platform serving 1,000+ users
 
-I am seeking internship or entry-level opportunities at {{company_name}} where I can contribute my technical skills, problem-solving mindset, and passion for innovation. I would love the chance to discuss how I can add value to your team.
+💻 TECHNICAL SKILLS:
+MERN Stack | Next.js | AI/ML (PyTorch, LangChain, Hugging Face) | DevOps (Docker, Nginx, CI/CD)
+
+📂 PORTFOLIO & PROJECTS:
+Portfolio: http://sameerbagul.me
+GitHub: https://github.com/Sameer-Bagul
+
+I am seeking internship or entry-level opportunities at {{company_name}} where I can contribute my technical skills, problem-solving mindset, and passion for innovation.
+
+I would love the chance to discuss how I can add value to your team.
 
 Please find my resume attached for your reference.
+
 Looking forward to your response.
 
+---
+
 Best regards,
-<strong>Sameer Bagul</strong>
-+91 7841941033
-<a href="mailto:sameerbagul2004@gmail.com">sameerbagul2004@gmail.com</a>`;
+Sameer Bagul
+📱 +91 7841941033
+✉️ sameerbagul2004@gmail.com`;
 
     return new Template({
       id: "job-search",
@@ -101,47 +113,48 @@ Best regards,
     const subject = `Partnership Opportunity - Full-Stack Development Services | {{company_name}}`;
     const content = `Hello,
 
-I'm <strong>Sameer Bagul</strong>, a skilled full-stack developer specializing in modern web technologies and AI automation solutions.
+I'm Sameer Bagul, a skilled full-stack developer specializing in modern web technologies and AI automation solutions.
 
-I noticed {{company_name}} and believe there might be an opportunity for us to collaborate. I offer comprehensive development services including:
+I noticed {{company_name}} and believe there might be an opportunity for us to collaborate.
 
-<strong>🚀 Full-Stack Development</strong>
+🚀 DEVELOPMENT SERVICES I OFFER:
+
+Full-Stack Development:
 • MERN Stack (MongoDB, Express.js, React, Node.js)
 • Next.js & TypeScript applications
 • Real-time applications with Socket.IO
 
-<strong>📱 Mobile Development</strong>
-• React Native cross-platform apps
-• Progressive Web Applications (PWA)
-• Responsive mobile-first design
-
-<strong>🤖 AI & Automation</strong>
+AI & Automation:
 • AI-powered chatbots and automation
 • Machine Learning integrations
 • Process automation solutions
 
-<strong>☁️ DevOps & Deployment</strong>
+DevOps & Deployment:
 • Docker containerization
 • CI/CD pipeline setup
 • Cloud deployment (AWS, Vercel, Render)
 
-<strong>Recent Project Highlights:</strong>
+🏆 RECENT PROJECT HIGHLIGHTS:
+
 • Automated lead generation system processing 100,000+ leads
 • AI-powered skill development platform with 1,000+ active users
 • E-commerce solutions with payment gateway integrations
 
 I'd love to discuss how I can help {{company_name}} with your development needs. Whether it's building a new application, optimizing existing systems, or implementing automation solutions, I'm here to deliver high-quality results.
 
-Portfolio: <a href="http://sameerbagul.me">sameerbagul.me</a>
-GitHub: <a href="https://github.com/Sameer-Bagul">github.com/Sameer-Bagul</a>
+📂 PORTFOLIO & WORK:
+Portfolio: http://sameerbagul.me
+GitHub: https://github.com/Sameer-Bagul
 
 Let's schedule a call to explore potential collaboration opportunities.
 
+---
+
 Best regards,
-<strong>Sameer Bagul</strong>
+Sameer Bagul
 Full-Stack Developer & AI Specialist
-+91 7841941033
-<a href="mailto:sameerbagul2004@gmail.com">sameerbagul2004@gmail.com</a>`;
+📱 +91 7841941033
+✉️ sameerbagul2004@gmail.com`;
 
     return new Template({
       id: "lead-search",

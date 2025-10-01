@@ -2584,5 +2584,2175 @@
     },
     "createdAt": "2025-10-01T10:54:13.820Z",
     "updatedAt": "2025-10-01T10:54:13.821Z"
+  },
+  {
+    "id": "549e9071-fbec-437a-92af-0f0282b9bfcc",
+    "campaignId": "",
+    "recipient": {
+      "email": "annie.manoj@grasko.com",
+      "companyName": "Grasko Solutions"
+    },
+    "template": {
+      "id": "csv-template",
+      "name": "CSV Import Template",
+      "category": "job-application"
+    },
+    "subject": "Job Opportunity - Software Developer Position",
+    "content": "\n        <div style=\"font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;\">\n          <h2 style=\"color: #333;\">Job Opportunity at Grasko Solutions</h2>\n\n          <p>Dear Hiring Team,</p>\n\n          <p>I hope this email finds you well. I'm writing to express my interest in software development opportunities at Grasko Solutions.</p>\n\n          <p>With several years of experience in full-stack development, I specialize in modern web technologies including Node.js, React, and cloud platforms. I'm particularly interested in contributing to innovative projects that make a real impact.</p>\n\n          <p>I've attached my resume for your review, which highlights my technical skills and previous accomplishments. I'd welcome the opportunity to discuss how my background and enthusiasm align with your team's needs.</p>\n\n          <p>Thank you for considering my application. I look forward to the possibility of contributing to Grasko Solutions's success.</p>\n\n          <p>Best regards,<br>\n          Sameer Bagul<br>\n          Software Developer<br>\n          <a href=\"mailto:sameer@example.com\">sameer@example.com</a></p>\n        </div>\n      ",
+    "to": "",
+    "html": "",
+    "companyName": "",
+    "templateId": "",
+    "templateName": "",
+    "templateCategory": "",
+    "userEmail": "",
+    "batchId": "",
+    "status": "failed",
+    "sentAt": null,
+    "deliveredAt": null,
+    "failedAt": "2025-10-01T10:54:30.842Z",
+    "error": "Rate limit exceeded. Please wait before sending more emails.",
+    "retryCount": 3,
+    "maxRetries": 3,
+    "attachments": [],
+    "metadata": {
+      "userEmail": "sameer@example.com",
+      "batchId": "csv-import-1759315036607",
+      "errorCategory": "RATE_LIMIT"
+    },
+    "createdAt": "2025-10-01T10:54:30.842Z",
+    "updatedAt": "2025-10-01T10:54:30.843Z"
+  },
+  {
+    "id": "5e04c3d3-68f5-42dc-874f-e148fddd2034",
+    "campaignId": "",
+    "recipient": {
+      "email": "anoob.abraham@arcadia.com",
+      "companyName": "Arcadia"
+    },
+    "template": {
+      "id": "csv-template",
+      "name": "CSV Import Template",
+      "category": "job-application"
+    },
+    "subject": "Job Opportunity - Software Developer Position",
+    "content": "\n        <div style=\"font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;\">\n          <h2 style=\"color: #333;\">Job Opportunity at Arcadia</h2>\n\n          <p>Dear Hiring Team,</p>\n\n          <p>I hope this email finds you well. I'm writing to express my interest in software development opportunities at Arcadia.</p>\n\n          <p>With several years of experience in full-stack development, I specialize in modern web technologies including Node.js, React, and cloud platforms. I'm particularly interested in contributing to innovative projects that make a real impact.</p>\n\n          <p>I've attached my resume for your review, which highlights my technical skills and previous accomplishments. I'd welcome the opportunity to discuss how my background and enthusiasm align with your team's needs.</p>\n\n          <p>Thank you for considering my application. I look forward to the possibility of contributing to Arcadia's success.</p>\n\n          <p>Best regards,<br>\n          Sameer Bagul<br>\n          Software Developer<br>\n          <a href=\"mailto:sameer@example.com\">sameer@example.com</a></p>\n        </div>\n      ",
+    "to": "",
+    "html": "",
+    "companyName": "",
+    "templateId": "",
+    "templateName": "",
+    "templateCategory": "",
+    "userEmail": "",
+    "batchId": "",
+    "status": "failed",
+    "sentAt": null,
+    "deliveredAt": null,
+    "failedAt": "2025-10-01T10:54:47.858Z",
+    "error": "Rate limit exceeded. Please wait before sending more emails.",
+    "retryCount": 3,
+    "maxRetries": 3,
+    "attachments": [],
+    "metadata": {
+      "userEmail": "sameer@example.com",
+      "batchId": "csv-import-1759315036607",
+      "errorCategory": "RATE_LIMIT"
+    },
+    "createdAt": "2025-10-01T10:54:47.858Z",
+    "updatedAt": "2025-10-01T10:54:47.859Z"
+  },
+  {
+    "id": "1e2efc88-6ece-4399-b25a-7473101d61ba",
+    "campaignId": "",
+    "recipient": {
+      "email": "anshika.khaitan@getvymo.com",
+      "companyName": "Vymo"
+    },
+    "template": {
+      "id": "csv-template",
+      "name": "CSV Import Template",
+      "category": "job-application"
+    },
+    "subject": "Job Opportunity - Software Developer Position",
+    "content": "\n        <div style=\"font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;\">\n          <h2 style=\"color: #333;\">Job Opportunity at Vymo</h2>\n\n          <p>Dear Hiring Team,</p>\n\n          <p>I hope this email finds you well. I'm writing to express my interest in software development opportunities at Vymo.</p>\n\n          <p>With several years of experience in full-stack development, I specialize in modern web technologies including Node.js, React, and cloud platforms. I'm particularly interested in contributing to innovative projects that make a real impact.</p>\n\n          <p>I've attached my resume for your review, which highlights my technical skills and previous accomplishments. I'd welcome the opportunity to discuss how my background and enthusiasm align with your team's needs.</p>\n\n          <p>Thank you for considering my application. I look forward to the possibility of contributing to Vymo's success.</p>\n\n          <p>Best regards,<br>\n          Sameer Bagul<br>\n          Software Developer<br>\n          <a href=\"mailto:sameer@example.com\">sameer@example.com</a></p>\n        </div>\n      ",
+    "to": "",
+    "html": "",
+    "companyName": "",
+    "templateId": "",
+    "templateName": "",
+    "templateCategory": "",
+    "userEmail": "",
+    "batchId": "",
+    "status": "failed",
+    "sentAt": null,
+    "deliveredAt": null,
+    "failedAt": "2025-10-01T10:55:04.879Z",
+    "error": "Rate limit exceeded. Please wait before sending more emails.",
+    "retryCount": 3,
+    "maxRetries": 3,
+    "attachments": [],
+    "metadata": {
+      "userEmail": "sameer@example.com",
+      "batchId": "csv-import-1759315036607",
+      "errorCategory": "RATE_LIMIT"
+    },
+    "createdAt": "2025-10-01T10:55:04.879Z",
+    "updatedAt": "2025-10-01T10:55:04.880Z"
+  },
+  {
+    "id": "79e9f0fe-fa0d-47ee-88ec-1fce0b5bd39e",
+    "campaignId": "",
+    "recipient": {
+      "email": "ansumans@mindfiresolutions.com",
+      "companyName": "Mindfire Solutions"
+    },
+    "template": {
+      "id": "csv-template",
+      "name": "CSV Import Template",
+      "category": "job-application"
+    },
+    "subject": "Job Opportunity - Software Developer Position",
+    "content": "\n        <div style=\"font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;\">\n          <h2 style=\"color: #333;\">Job Opportunity at Mindfire Solutions</h2>\n\n          <p>Dear Hiring Team,</p>\n\n          <p>I hope this email finds you well. I'm writing to express my interest in software development opportunities at Mindfire Solutions.</p>\n\n          <p>With several years of experience in full-stack development, I specialize in modern web technologies including Node.js, React, and cloud platforms. I'm particularly interested in contributing to innovative projects that make a real impact.</p>\n\n          <p>I've attached my resume for your review, which highlights my technical skills and previous accomplishments. I'd welcome the opportunity to discuss how my background and enthusiasm align with your team's needs.</p>\n\n          <p>Thank you for considering my application. I look forward to the possibility of contributing to Mindfire Solutions's success.</p>\n\n          <p>Best regards,<br>\n          Sameer Bagul<br>\n          Software Developer<br>\n          <a href=\"mailto:sameer@example.com\">sameer@example.com</a></p>\n        </div>\n      ",
+    "to": "",
+    "html": "",
+    "companyName": "",
+    "templateId": "",
+    "templateName": "",
+    "templateCategory": "",
+    "userEmail": "",
+    "batchId": "",
+    "status": "failed",
+    "sentAt": null,
+    "deliveredAt": null,
+    "failedAt": "2025-10-01T10:55:21.901Z",
+    "error": "Rate limit exceeded. Please wait before sending more emails.",
+    "retryCount": 3,
+    "maxRetries": 3,
+    "attachments": [],
+    "metadata": {
+      "userEmail": "sameer@example.com",
+      "batchId": "csv-import-1759315036607",
+      "errorCategory": "RATE_LIMIT"
+    },
+    "createdAt": "2025-10-01T10:55:21.901Z",
+    "updatedAt": "2025-10-01T10:55:21.902Z"
+  },
+  {
+    "id": "d979914f-3839-412f-8b73-8f01ac6bd4c2",
+    "campaignId": "",
+    "recipient": {
+      "email": "anuj@deskera.com",
+      "companyName": "Deskera"
+    },
+    "template": {
+      "id": "csv-template",
+      "name": "CSV Import Template",
+      "category": "job-application"
+    },
+    "subject": "Job Opportunity - Software Developer Position",
+    "content": "\n        <div style=\"font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;\">\n          <h2 style=\"color: #333;\">Job Opportunity at Deskera</h2>\n\n          <p>Dear Hiring Team,</p>\n\n          <p>I hope this email finds you well. I'm writing to express my interest in software development opportunities at Deskera.</p>\n\n          <p>With several years of experience in full-stack development, I specialize in modern web technologies including Node.js, React, and cloud platforms. I'm particularly interested in contributing to innovative projects that make a real impact.</p>\n\n          <p>I've attached my resume for your review, which highlights my technical skills and previous accomplishments. I'd welcome the opportunity to discuss how my background and enthusiasm align with your team's needs.</p>\n\n          <p>Thank you for considering my application. I look forward to the possibility of contributing to Deskera's success.</p>\n\n          <p>Best regards,<br>\n          Sameer Bagul<br>\n          Software Developer<br>\n          <a href=\"mailto:sameer@example.com\">sameer@example.com</a></p>\n        </div>\n      ",
+    "to": "",
+    "html": "",
+    "companyName": "",
+    "templateId": "",
+    "templateName": "",
+    "templateCategory": "",
+    "userEmail": "",
+    "batchId": "",
+    "status": "failed",
+    "sentAt": null,
+    "deliveredAt": null,
+    "failedAt": "2025-10-01T10:55:38.921Z",
+    "error": "Rate limit exceeded. Please wait before sending more emails.",
+    "retryCount": 3,
+    "maxRetries": 3,
+    "attachments": [],
+    "metadata": {
+      "userEmail": "sameer@example.com",
+      "batchId": "csv-import-1759315036607",
+      "errorCategory": "RATE_LIMIT"
+    },
+    "createdAt": "2025-10-01T10:55:38.921Z",
+    "updatedAt": "2025-10-01T10:55:38.922Z"
+  },
+  {
+    "id": "3795c40e-90ef-4c4a-839f-3f1d0334bf15",
+    "campaignId": "",
+    "recipient": {
+      "email": "anuja@codenation.co.in",
+      "companyName": "Trilogy Innovations"
+    },
+    "template": {
+      "id": "csv-template",
+      "name": "CSV Import Template",
+      "category": "job-application"
+    },
+    "subject": "Job Opportunity - Software Developer Position",
+    "content": "\n        <div style=\"font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;\">\n          <h2 style=\"color: #333;\">Job Opportunity at Trilogy Innovations</h2>\n\n          <p>Dear Hiring Team,</p>\n\n          <p>I hope this email finds you well. I'm writing to express my interest in software development opportunities at Trilogy Innovations.</p>\n\n          <p>With several years of experience in full-stack development, I specialize in modern web technologies including Node.js, React, and cloud platforms. I'm particularly interested in contributing to innovative projects that make a real impact.</p>\n\n          <p>I've attached my resume for your review, which highlights my technical skills and previous accomplishments. I'd welcome the opportunity to discuss how my background and enthusiasm align with your team's needs.</p>\n\n          <p>Thank you for considering my application. I look forward to the possibility of contributing to Trilogy Innovations's success.</p>\n\n          <p>Best regards,<br>\n          Sameer Bagul<br>\n          Software Developer<br>\n          <a href=\"mailto:sameer@example.com\">sameer@example.com</a></p>\n        </div>\n      ",
+    "to": "",
+    "html": "",
+    "companyName": "",
+    "templateId": "",
+    "templateName": "",
+    "templateCategory": "",
+    "userEmail": "",
+    "batchId": "",
+    "status": "failed",
+    "sentAt": null,
+    "deliveredAt": null,
+    "failedAt": "2025-10-01T10:55:55.944Z",
+    "error": "Rate limit exceeded. Please wait before sending more emails.",
+    "retryCount": 3,
+    "maxRetries": 3,
+    "attachments": [],
+    "metadata": {
+      "userEmail": "sameer@example.com",
+      "batchId": "csv-import-1759315036607",
+      "errorCategory": "RATE_LIMIT"
+    },
+    "createdAt": "2025-10-01T10:55:55.944Z",
+    "updatedAt": "2025-10-01T10:55:55.946Z"
+  },
+  {
+    "id": "8191b615-dc8d-4b50-bb57-785245759b70",
+    "campaignId": "",
+    "recipient": {
+      "email": "anupam.j@gsl.in",
+      "companyName": "Ginesys"
+    },
+    "template": {
+      "id": "csv-template",
+      "name": "CSV Import Template",
+      "category": "job-application"
+    },
+    "subject": "Job Opportunity - Software Developer Position",
+    "content": "\n        <div style=\"font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;\">\n          <h2 style=\"color: #333;\">Job Opportunity at Ginesys</h2>\n\n          <p>Dear Hiring Team,</p>\n\n          <p>I hope this email finds you well. I'm writing to express my interest in software development opportunities at Ginesys.</p>\n\n          <p>With several years of experience in full-stack development, I specialize in modern web technologies including Node.js, React, and cloud platforms. I'm particularly interested in contributing to innovative projects that make a real impact.</p>\n\n          <p>I've attached my resume for your review, which highlights my technical skills and previous accomplishments. I'd welcome the opportunity to discuss how my background and enthusiasm align with your team's needs.</p>\n\n          <p>Thank you for considering my application. I look forward to the possibility of contributing to Ginesys's success.</p>\n\n          <p>Best regards,<br>\n          Sameer Bagul<br>\n          Software Developer<br>\n          <a href=\"mailto:sameer@example.com\">sameer@example.com</a></p>\n        </div>\n      ",
+    "to": "",
+    "html": "",
+    "companyName": "",
+    "templateId": "",
+    "templateName": "",
+    "templateCategory": "",
+    "userEmail": "",
+    "batchId": "",
+    "status": "failed",
+    "sentAt": null,
+    "deliveredAt": null,
+    "failedAt": "2025-10-01T10:56:12.966Z",
+    "error": "Rate limit exceeded. Please wait before sending more emails.",
+    "retryCount": 3,
+    "maxRetries": 3,
+    "attachments": [],
+    "metadata": {
+      "userEmail": "sameer@example.com",
+      "batchId": "csv-import-1759315036607",
+      "errorCategory": "RATE_LIMIT"
+    },
+    "createdAt": "2025-10-01T10:56:12.966Z",
+    "updatedAt": "2025-10-01T10:56:12.968Z"
+  },
+  {
+    "id": "d4a73b63-a272-43d5-b18e-40afba53444d",
+    "campaignId": "",
+    "recipient": {
+      "email": "anupam.srivastava@reltio.com",
+      "companyName": "Reltio"
+    },
+    "template": {
+      "id": "csv-template",
+      "name": "CSV Import Template",
+      "category": "job-application"
+    },
+    "subject": "Job Opportunity - Software Developer Position",
+    "content": "\n        <div style=\"font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;\">\n          <h2 style=\"color: #333;\">Job Opportunity at Reltio</h2>\n\n          <p>Dear Hiring Team,</p>\n\n          <p>I hope this email finds you well. I'm writing to express my interest in software development opportunities at Reltio.</p>\n\n          <p>With several years of experience in full-stack development, I specialize in modern web technologies including Node.js, React, and cloud platforms. I'm particularly interested in contributing to innovative projects that make a real impact.</p>\n\n          <p>I've attached my resume for your review, which highlights my technical skills and previous accomplishments. I'd welcome the opportunity to discuss how my background and enthusiasm align with your team's needs.</p>\n\n          <p>Thank you for considering my application. I look forward to the possibility of contributing to Reltio's success.</p>\n\n          <p>Best regards,<br>\n          Sameer Bagul<br>\n          Software Developer<br>\n          <a href=\"mailto:sameer@example.com\">sameer@example.com</a></p>\n        </div>\n      ",
+    "to": "",
+    "html": "",
+    "companyName": "",
+    "templateId": "",
+    "templateName": "",
+    "templateCategory": "",
+    "userEmail": "",
+    "batchId": "",
+    "status": "failed",
+    "sentAt": null,
+    "deliveredAt": null,
+    "failedAt": "2025-10-01T10:56:29.988Z",
+    "error": "Rate limit exceeded. Please wait before sending more emails.",
+    "retryCount": 3,
+    "maxRetries": 3,
+    "attachments": [],
+    "metadata": {
+      "userEmail": "sameer@example.com",
+      "batchId": "csv-import-1759315036607",
+      "errorCategory": "RATE_LIMIT"
+    },
+    "createdAt": "2025-10-01T10:56:29.988Z",
+    "updatedAt": "2025-10-01T10:56:29.990Z"
+  },
+  {
+    "id": "eb6e781d-6580-4806-9d68-209a617c1624",
+    "campaignId": "",
+    "recipient": {
+      "email": "anupamadg@erevmax.com",
+      "companyName": "eRevMax"
+    },
+    "template": {
+      "id": "csv-template",
+      "name": "CSV Import Template",
+      "category": "job-application"
+    },
+    "subject": "Job Opportunity - Software Developer Position",
+    "content": "\n        <div style=\"font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;\">\n          <h2 style=\"color: #333;\">Job Opportunity at eRevMax</h2>\n\n          <p>Dear Hiring Team,</p>\n\n          <p>I hope this email finds you well. I'm writing to express my interest in software development opportunities at eRevMax.</p>\n\n          <p>With several years of experience in full-stack development, I specialize in modern web technologies including Node.js, React, and cloud platforms. I'm particularly interested in contributing to innovative projects that make a real impact.</p>\n\n          <p>I've attached my resume for your review, which highlights my technical skills and previous accomplishments. I'd welcome the opportunity to discuss how my background and enthusiasm align with your team's needs.</p>\n\n          <p>Thank you for considering my application. I look forward to the possibility of contributing to eRevMax's success.</p>\n\n          <p>Best regards,<br>\n          Sameer Bagul<br>\n          Software Developer<br>\n          <a href=\"mailto:sameer@example.com\">sameer@example.com</a></p>\n        </div>\n      ",
+    "to": "",
+    "html": "",
+    "companyName": "",
+    "templateId": "",
+    "templateName": "",
+    "templateCategory": "",
+    "userEmail": "",
+    "batchId": "",
+    "status": "failed",
+    "sentAt": null,
+    "deliveredAt": null,
+    "failedAt": "2025-10-01T10:56:47.012Z",
+    "error": "Rate limit exceeded. Please wait before sending more emails.",
+    "retryCount": 3,
+    "maxRetries": 3,
+    "attachments": [],
+    "metadata": {
+      "userEmail": "sameer@example.com",
+      "batchId": "csv-import-1759315036607",
+      "errorCategory": "RATE_LIMIT"
+    },
+    "createdAt": "2025-10-01T10:56:47.012Z",
+    "updatedAt": "2025-10-01T10:56:47.013Z"
+  },
+  {
+    "id": "373222fb-b5df-40b4-ab7d-bfbf462646b1",
+    "campaignId": "",
+    "recipient": {
+      "email": "anupriya.gandhi@juliacomputing.com",
+      "companyName": "Julia Computing"
+    },
+    "template": {
+      "id": "csv-template",
+      "name": "CSV Import Template",
+      "category": "job-application"
+    },
+    "subject": "Job Opportunity - Software Developer Position",
+    "content": "\n        <div style=\"font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;\">\n          <h2 style=\"color: #333;\">Job Opportunity at Julia Computing</h2>\n\n          <p>Dear Hiring Team,</p>\n\n          <p>I hope this email finds you well. I'm writing to express my interest in software development opportunities at Julia Computing.</p>\n\n          <p>With several years of experience in full-stack development, I specialize in modern web technologies including Node.js, React, and cloud platforms. I'm particularly interested in contributing to innovative projects that make a real impact.</p>\n\n          <p>I've attached my resume for your review, which highlights my technical skills and previous accomplishments. I'd welcome the opportunity to discuss how my background and enthusiasm align with your team's needs.</p>\n\n          <p>Thank you for considering my application. I look forward to the possibility of contributing to Julia Computing's success.</p>\n\n          <p>Best regards,<br>\n          Sameer Bagul<br>\n          Software Developer<br>\n          <a href=\"mailto:sameer@example.com\">sameer@example.com</a></p>\n        </div>\n      ",
+    "to": "",
+    "html": "",
+    "companyName": "",
+    "templateId": "",
+    "templateName": "",
+    "templateCategory": "",
+    "userEmail": "",
+    "batchId": "",
+    "status": "failed",
+    "sentAt": null,
+    "deliveredAt": null,
+    "failedAt": "2025-10-01T10:57:14.046Z",
+    "error": "Rate limit exceeded. Please wait before sending more emails.",
+    "retryCount": 3,
+    "maxRetries": 3,
+    "attachments": [],
+    "metadata": {
+      "userEmail": "sameer@example.com",
+      "batchId": "csv-import-1759315036607",
+      "errorCategory": "RATE_LIMIT"
+    },
+    "createdAt": "2025-10-01T10:57:14.046Z",
+    "updatedAt": "2025-10-01T10:57:14.047Z"
+  },
+  {
+    "id": "16075abc-f229-4b99-a4b4-659c29264344",
+    "campaignId": "",
+    "recipient": {
+      "email": "anurag.rana@sirionlabs.com",
+      "companyName": "SirionLabs"
+    },
+    "template": {
+      "id": "csv-template",
+      "name": "CSV Import Template",
+      "category": "job-application"
+    },
+    "subject": "Job Opportunity - Software Developer Position",
+    "content": "\n        <div style=\"font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;\">\n          <h2 style=\"color: #333;\">Job Opportunity at SirionLabs</h2>\n\n          <p>Dear Hiring Team,</p>\n\n          <p>I hope this email finds you well. I'm writing to express my interest in software development opportunities at SirionLabs.</p>\n\n          <p>With several years of experience in full-stack development, I specialize in modern web technologies including Node.js, React, and cloud platforms. I'm particularly interested in contributing to innovative projects that make a real impact.</p>\n\n          <p>I've attached my resume for your review, which highlights my technical skills and previous accomplishments. I'd welcome the opportunity to discuss how my background and enthusiasm align with your team's needs.</p>\n\n          <p>Thank you for considering my application. I look forward to the possibility of contributing to SirionLabs's success.</p>\n\n          <p>Best regards,<br>\n          Sameer Bagul<br>\n          Software Developer<br>\n          <a href=\"mailto:sameer@example.com\">sameer@example.com</a></p>\n        </div>\n      ",
+    "to": "",
+    "html": "",
+    "companyName": "",
+    "templateId": "",
+    "templateName": "",
+    "templateCategory": "",
+    "userEmail": "",
+    "batchId": "",
+    "status": "failed",
+    "sentAt": null,
+    "deliveredAt": null,
+    "failedAt": "2025-10-01T10:57:31.068Z",
+    "error": "Rate limit exceeded. Please wait before sending more emails.",
+    "retryCount": 3,
+    "maxRetries": 3,
+    "attachments": [],
+    "metadata": {
+      "userEmail": "sameer@example.com",
+      "batchId": "csv-import-1759315036607",
+      "errorCategory": "RATE_LIMIT"
+    },
+    "createdAt": "2025-10-01T10:57:31.068Z",
+    "updatedAt": "2025-10-01T10:57:31.069Z"
+  },
+  {
+    "id": "d8e889f0-cc9b-48b4-a2fc-375444e3602b",
+    "campaignId": "",
+    "recipient": {
+      "email": "anurag@uniphore.com",
+      "companyName": "Uniphore"
+    },
+    "template": {
+      "id": "csv-template",
+      "name": "CSV Import Template",
+      "category": "job-application"
+    },
+    "subject": "Job Opportunity - Software Developer Position",
+    "content": "\n        <div style=\"font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;\">\n          <h2 style=\"color: #333;\">Job Opportunity at Uniphore</h2>\n\n          <p>Dear Hiring Team,</p>\n\n          <p>I hope this email finds you well. I'm writing to express my interest in software development opportunities at Uniphore.</p>\n\n          <p>With several years of experience in full-stack development, I specialize in modern web technologies including Node.js, React, and cloud platforms. I'm particularly interested in contributing to innovative projects that make a real impact.</p>\n\n          <p>I've attached my resume for your review, which highlights my technical skills and previous accomplishments. I'd welcome the opportunity to discuss how my background and enthusiasm align with your team's needs.</p>\n\n          <p>Thank you for considering my application. I look forward to the possibility of contributing to Uniphore's success.</p>\n\n          <p>Best regards,<br>\n          Sameer Bagul<br>\n          Software Developer<br>\n          <a href=\"mailto:sameer@example.com\">sameer@example.com</a></p>\n        </div>\n      ",
+    "to": "",
+    "html": "",
+    "companyName": "",
+    "templateId": "",
+    "templateName": "",
+    "templateCategory": "",
+    "userEmail": "",
+    "batchId": "",
+    "status": "failed",
+    "sentAt": null,
+    "deliveredAt": null,
+    "failedAt": "2025-10-01T10:57:48.090Z",
+    "error": "Rate limit exceeded. Please wait before sending more emails.",
+    "retryCount": 3,
+    "maxRetries": 3,
+    "attachments": [],
+    "metadata": {
+      "userEmail": "sameer@example.com",
+      "batchId": "csv-import-1759315036607",
+      "errorCategory": "RATE_LIMIT"
+    },
+    "createdAt": "2025-10-01T10:57:48.090Z",
+    "updatedAt": "2025-10-01T10:57:48.091Z"
+  },
+  {
+    "id": "27f9d30c-337d-40a6-ab42-047e9dc7da1f",
+    "campaignId": "",
+    "recipient": {
+      "email": "anusha@srswebsolutions.com",
+      "companyName": "SRS Web Solutions"
+    },
+    "template": {
+      "id": "csv-template",
+      "name": "CSV Import Template",
+      "category": "job-application"
+    },
+    "subject": "Job Opportunity - Software Developer Position",
+    "content": "\n        <div style=\"font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;\">\n          <h2 style=\"color: #333;\">Job Opportunity at SRS Web Solutions</h2>\n\n          <p>Dear Hiring Team,</p>\n\n          <p>I hope this email finds you well. I'm writing to express my interest in software development opportunities at SRS Web Solutions.</p>\n\n          <p>With several years of experience in full-stack development, I specialize in modern web technologies including Node.js, React, and cloud platforms. I'm particularly interested in contributing to innovative projects that make a real impact.</p>\n\n          <p>I've attached my resume for your review, which highlights my technical skills and previous accomplishments. I'd welcome the opportunity to discuss how my background and enthusiasm align with your team's needs.</p>\n\n          <p>Thank you for considering my application. I look forward to the possibility of contributing to SRS Web Solutions's success.</p>\n\n          <p>Best regards,<br>\n          Sameer Bagul<br>\n          Software Developer<br>\n          <a href=\"mailto:sameer@example.com\">sameer@example.com</a></p>\n        </div>\n      ",
+    "to": "",
+    "html": "",
+    "companyName": "",
+    "templateId": "",
+    "templateName": "",
+    "templateCategory": "",
+    "userEmail": "",
+    "batchId": "",
+    "status": "failed",
+    "sentAt": null,
+    "deliveredAt": null,
+    "failedAt": "2025-10-01T10:58:05.113Z",
+    "error": "Rate limit exceeded. Please wait before sending more emails.",
+    "retryCount": 3,
+    "maxRetries": 3,
+    "attachments": [],
+    "metadata": {
+      "userEmail": "sameer@example.com",
+      "batchId": "csv-import-1759315036607",
+      "errorCategory": "RATE_LIMIT"
+    },
+    "createdAt": "2025-10-01T10:58:05.113Z",
+    "updatedAt": "2025-10-01T10:58:05.114Z"
+  },
+  {
+    "id": "48759363-a164-48d6-aaec-31493d3c1f46",
+    "campaignId": "",
+    "recipient": {
+      "email": "anusha.kishore@loco.gg",
+      "companyName": "Loco"
+    },
+    "template": {
+      "id": "csv-template",
+      "name": "CSV Import Template",
+      "category": "job-application"
+    },
+    "subject": "Job Opportunity - Software Developer Position",
+    "content": "\n        <div style=\"font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;\">\n          <h2 style=\"color: #333;\">Job Opportunity at Loco</h2>\n\n          <p>Dear Hiring Team,</p>\n\n          <p>I hope this email finds you well. I'm writing to express my interest in software development opportunities at Loco.</p>\n\n          <p>With several years of experience in full-stack development, I specialize in modern web technologies including Node.js, React, and cloud platforms. I'm particularly interested in contributing to innovative projects that make a real impact.</p>\n\n          <p>I've attached my resume for your review, which highlights my technical skills and previous accomplishments. I'd welcome the opportunity to discuss how my background and enthusiasm align with your team's needs.</p>\n\n          <p>Thank you for considering my application. I look forward to the possibility of contributing to Loco's success.</p>\n\n          <p>Best regards,<br>\n          Sameer Bagul<br>\n          Software Developer<br>\n          <a href=\"mailto:sameer@example.com\">sameer@example.com</a></p>\n        </div>\n      ",
+    "to": "",
+    "html": "",
+    "companyName": "",
+    "templateId": "",
+    "templateName": "",
+    "templateCategory": "",
+    "userEmail": "",
+    "batchId": "",
+    "status": "failed",
+    "sentAt": null,
+    "deliveredAt": null,
+    "failedAt": "2025-10-01T10:58:22.136Z",
+    "error": "Rate limit exceeded. Please wait before sending more emails.",
+    "retryCount": 3,
+    "maxRetries": 3,
+    "attachments": [],
+    "metadata": {
+      "userEmail": "sameer@example.com",
+      "batchId": "csv-import-1759315036607",
+      "errorCategory": "RATE_LIMIT"
+    },
+    "createdAt": "2025-10-01T10:58:22.136Z",
+    "updatedAt": "2025-10-01T10:58:22.137Z"
+  },
+  {
+    "id": "49626882-c143-4e6c-8352-4a368d8e4207",
+    "campaignId": "",
+    "recipient": {
+      "email": "aparna.srikanth@appsian.com",
+      "companyName": "Pathlock"
+    },
+    "template": {
+      "id": "csv-template",
+      "name": "CSV Import Template",
+      "category": "job-application"
+    },
+    "subject": "Job Opportunity - Software Developer Position",
+    "content": "\n        <div style=\"font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;\">\n          <h2 style=\"color: #333;\">Job Opportunity at Pathlock</h2>\n\n          <p>Dear Hiring Team,</p>\n\n          <p>I hope this email finds you well. I'm writing to express my interest in software development opportunities at Pathlock.</p>\n\n          <p>With several years of experience in full-stack development, I specialize in modern web technologies including Node.js, React, and cloud platforms. I'm particularly interested in contributing to innovative projects that make a real impact.</p>\n\n          <p>I've attached my resume for your review, which highlights my technical skills and previous accomplishments. I'd welcome the opportunity to discuss how my background and enthusiasm align with your team's needs.</p>\n\n          <p>Thank you for considering my application. I look forward to the possibility of contributing to Pathlock's success.</p>\n\n          <p>Best regards,<br>\n          Sameer Bagul<br>\n          Software Developer<br>\n          <a href=\"mailto:sameer@example.com\">sameer@example.com</a></p>\n        </div>\n      ",
+    "to": "",
+    "html": "",
+    "companyName": "",
+    "templateId": "",
+    "templateName": "",
+    "templateCategory": "",
+    "userEmail": "",
+    "batchId": "",
+    "status": "failed",
+    "sentAt": null,
+    "deliveredAt": null,
+    "failedAt": "2025-10-01T10:58:36.156Z",
+    "error": "Rate limit exceeded. Please wait before sending more emails.",
+    "retryCount": 3,
+    "maxRetries": 3,
+    "attachments": [],
+    "metadata": {
+      "userEmail": "sameer@example.com",
+      "batchId": "csv-import-1759315036607",
+      "errorCategory": "RATE_LIMIT"
+    },
+    "createdAt": "2025-10-01T10:58:36.156Z",
+    "updatedAt": "2025-10-01T10:58:36.157Z"
+  },
+  {
+    "id": "7f143499-7dd0-43e8-af57-be86f48d3426",
+    "campaignId": "",
+    "recipient": {
+      "email": "aradhana@safexpay.com",
+      "companyName": "SafexPay"
+    },
+    "template": {
+      "id": "csv-template",
+      "name": "CSV Import Template",
+      "category": "job-application"
+    },
+    "subject": "Job Opportunity - Software Developer Position",
+    "content": "\n        <div style=\"font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;\">\n          <h2 style=\"color: #333;\">Job Opportunity at SafexPay</h2>\n\n          <p>Dear Hiring Team,</p>\n\n          <p>I hope this email finds you well. I'm writing to express my interest in software development opportunities at SafexPay.</p>\n\n          <p>With several years of experience in full-stack development, I specialize in modern web technologies including Node.js, React, and cloud platforms. I'm particularly interested in contributing to innovative projects that make a real impact.</p>\n\n          <p>I've attached my resume for your review, which highlights my technical skills and previous accomplishments. I'd welcome the opportunity to discuss how my background and enthusiasm align with your team's needs.</p>\n\n          <p>Thank you for considering my application. I look forward to the possibility of contributing to SafexPay's success.</p>\n\n          <p>Best regards,<br>\n          Sameer Bagul<br>\n          Software Developer<br>\n          <a href=\"mailto:sameer@example.com\">sameer@example.com</a></p>\n        </div>\n      ",
+    "to": "",
+    "html": "",
+    "companyName": "",
+    "templateId": "",
+    "templateName": "",
+    "templateCategory": "",
+    "userEmail": "",
+    "batchId": "",
+    "status": "failed",
+    "sentAt": null,
+    "deliveredAt": null,
+    "failedAt": "2025-10-01T10:58:53.180Z",
+    "error": "Rate limit exceeded. Please wait before sending more emails.",
+    "retryCount": 3,
+    "maxRetries": 3,
+    "attachments": [],
+    "metadata": {
+      "userEmail": "sameer@example.com",
+      "batchId": "csv-import-1759315036607",
+      "errorCategory": "RATE_LIMIT"
+    },
+    "createdAt": "2025-10-01T10:58:53.180Z",
+    "updatedAt": "2025-10-01T10:58:53.181Z"
+  },
+  {
+    "id": "d340567c-ff8e-4567-b8aa-01ed84216622",
+    "campaignId": "",
+    "recipient": {
+      "email": "arathi@suntecgroup.com",
+      "companyName": "SunTec Business Solutions"
+    },
+    "template": {
+      "id": "csv-template",
+      "name": "CSV Import Template",
+      "category": "job-application"
+    },
+    "subject": "Job Opportunity - Software Developer Position",
+    "content": "\n        <div style=\"font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;\">\n          <h2 style=\"color: #333;\">Job Opportunity at SunTec Business Solutions</h2>\n\n          <p>Dear Hiring Team,</p>\n\n          <p>I hope this email finds you well. I'm writing to express my interest in software development opportunities at SunTec Business Solutions.</p>\n\n          <p>With several years of experience in full-stack development, I specialize in modern web technologies including Node.js, React, and cloud platforms. I'm particularly interested in contributing to innovative projects that make a real impact.</p>\n\n          <p>I've attached my resume for your review, which highlights my technical skills and previous accomplishments. I'd welcome the opportunity to discuss how my background and enthusiasm align with your team's needs.</p>\n\n          <p>Thank you for considering my application. I look forward to the possibility of contributing to SunTec Business Solutions's success.</p>\n\n          <p>Best regards,<br>\n          Sameer Bagul<br>\n          Software Developer<br>\n          <a href=\"mailto:sameer@example.com\">sameer@example.com</a></p>\n        </div>\n      ",
+    "to": "",
+    "html": "",
+    "companyName": "",
+    "templateId": "",
+    "templateName": "",
+    "templateCategory": "",
+    "userEmail": "",
+    "batchId": "",
+    "status": "failed",
+    "sentAt": null,
+    "deliveredAt": null,
+    "failedAt": "2025-10-01T10:59:10.201Z",
+    "error": "Rate limit exceeded. Please wait before sending more emails.",
+    "retryCount": 3,
+    "maxRetries": 3,
+    "attachments": [],
+    "metadata": {
+      "userEmail": "sameer@example.com",
+      "batchId": "csv-import-1759315036607",
+      "errorCategory": "RATE_LIMIT"
+    },
+    "createdAt": "2025-10-01T10:59:10.201Z",
+    "updatedAt": "2025-10-01T10:59:10.202Z"
+  },
+  {
+    "id": "7c64eb5b-8125-4547-892c-1515f7d5eb16",
+    "campaignId": "",
+    "recipient": {
+      "email": "aravind.chandrasekar@tigerspike.com",
+      "companyName": "Concentrix Tigerspike"
+    },
+    "template": {
+      "id": "csv-template",
+      "name": "CSV Import Template",
+      "category": "job-application"
+    },
+    "subject": "Job Opportunity - Software Developer Position",
+    "content": "\n        <div style=\"font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;\">\n          <h2 style=\"color: #333;\">Job Opportunity at Concentrix Tigerspike</h2>\n\n          <p>Dear Hiring Team,</p>\n\n          <p>I hope this email finds you well. I'm writing to express my interest in software development opportunities at Concentrix Tigerspike.</p>\n\n          <p>With several years of experience in full-stack development, I specialize in modern web technologies including Node.js, React, and cloud platforms. I'm particularly interested in contributing to innovative projects that make a real impact.</p>\n\n          <p>I've attached my resume for your review, which highlights my technical skills and previous accomplishments. I'd welcome the opportunity to discuss how my background and enthusiasm align with your team's needs.</p>\n\n          <p>Thank you for considering my application. I look forward to the possibility of contributing to Concentrix Tigerspike's success.</p>\n\n          <p>Best regards,<br>\n          Sameer Bagul<br>\n          Software Developer<br>\n          <a href=\"mailto:sameer@example.com\">sameer@example.com</a></p>\n        </div>\n      ",
+    "to": "",
+    "html": "",
+    "companyName": "",
+    "templateId": "",
+    "templateName": "",
+    "templateCategory": "",
+    "userEmail": "",
+    "batchId": "",
+    "status": "failed",
+    "sentAt": null,
+    "deliveredAt": null,
+    "failedAt": "2025-10-01T10:59:27.222Z",
+    "error": "Rate limit exceeded. Please wait before sending more emails.",
+    "retryCount": 3,
+    "maxRetries": 3,
+    "attachments": [],
+    "metadata": {
+      "userEmail": "sameer@example.com",
+      "batchId": "csv-import-1759315036607",
+      "errorCategory": "RATE_LIMIT"
+    },
+    "createdAt": "2025-10-01T10:59:27.222Z",
+    "updatedAt": "2025-10-01T10:59:27.224Z"
+  },
+  {
+    "id": "74a0190f-609d-48a0-8fa6-b746fc516e3a",
+    "campaignId": "",
+    "recipient": {
+      "email": "archana@aufait.in",
+      "companyName": "Aufait Technologies"
+    },
+    "template": {
+      "id": "csv-template",
+      "name": "CSV Import Template",
+      "category": "job-application"
+    },
+    "subject": "Job Opportunity - Software Developer Position",
+    "content": "\n        <div style=\"font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;\">\n          <h2 style=\"color: #333;\">Job Opportunity at Aufait Technologies</h2>\n\n          <p>Dear Hiring Team,</p>\n\n          <p>I hope this email finds you well. I'm writing to express my interest in software development opportunities at Aufait Technologies.</p>\n\n          <p>With several years of experience in full-stack development, I specialize in modern web technologies including Node.js, React, and cloud platforms. I'm particularly interested in contributing to innovative projects that make a real impact.</p>\n\n          <p>I've attached my resume for your review, which highlights my technical skills and previous accomplishments. I'd welcome the opportunity to discuss how my background and enthusiasm align with your team's needs.</p>\n\n          <p>Thank you for considering my application. I look forward to the possibility of contributing to Aufait Technologies's success.</p>\n\n          <p>Best regards,<br>\n          Sameer Bagul<br>\n          Software Developer<br>\n          <a href=\"mailto:sameer@example.com\">sameer@example.com</a></p>\n        </div>\n      ",
+    "to": "",
+    "html": "",
+    "companyName": "",
+    "templateId": "",
+    "templateName": "",
+    "templateCategory": "",
+    "userEmail": "",
+    "batchId": "",
+    "status": "failed",
+    "sentAt": null,
+    "deliveredAt": null,
+    "failedAt": "2025-10-01T10:59:44.241Z",
+    "error": "Rate limit exceeded. Please wait before sending more emails.",
+    "retryCount": 3,
+    "maxRetries": 3,
+    "attachments": [],
+    "metadata": {
+      "userEmail": "sameer@example.com",
+      "batchId": "csv-import-1759315036607",
+      "errorCategory": "RATE_LIMIT"
+    },
+    "createdAt": "2025-10-01T10:59:44.241Z",
+    "updatedAt": "2025-10-01T10:59:44.242Z"
+  },
+  {
+    "id": "f68eb0ab-572b-4a81-b032-4df973a4c16d",
+    "campaignId": "",
+    "recipient": {
+      "email": "archana.manne@locuz.com",
+      "companyName": "Locuz"
+    },
+    "template": {
+      "id": "csv-template",
+      "name": "CSV Import Template",
+      "category": "job-application"
+    },
+    "subject": "Job Opportunity - Software Developer Position",
+    "content": "\n        <div style=\"font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;\">\n          <h2 style=\"color: #333;\">Job Opportunity at Locuz</h2>\n\n          <p>Dear Hiring Team,</p>\n\n          <p>I hope this email finds you well. I'm writing to express my interest in software development opportunities at Locuz.</p>\n\n          <p>With several years of experience in full-stack development, I specialize in modern web technologies including Node.js, React, and cloud platforms. I'm particularly interested in contributing to innovative projects that make a real impact.</p>\n\n          <p>I've attached my resume for your review, which highlights my technical skills and previous accomplishments. I'd welcome the opportunity to discuss how my background and enthusiasm align with your team's needs.</p>\n\n          <p>Thank you for considering my application. I look forward to the possibility of contributing to Locuz's success.</p>\n\n          <p>Best regards,<br>\n          Sameer Bagul<br>\n          Software Developer<br>\n          <a href=\"mailto:sameer@example.com\">sameer@example.com</a></p>\n        </div>\n      ",
+    "to": "",
+    "html": "",
+    "companyName": "",
+    "templateId": "",
+    "templateName": "",
+    "templateCategory": "",
+    "userEmail": "",
+    "batchId": "",
+    "status": "failed",
+    "sentAt": null,
+    "deliveredAt": null,
+    "failedAt": "2025-10-01T11:00:01.260Z",
+    "error": "Rate limit exceeded. Please wait before sending more emails.",
+    "retryCount": 3,
+    "maxRetries": 3,
+    "attachments": [],
+    "metadata": {
+      "userEmail": "sameer@example.com",
+      "batchId": "csv-import-1759315036607",
+      "errorCategory": "RATE_LIMIT"
+    },
+    "createdAt": "2025-10-01T11:00:01.260Z",
+    "updatedAt": "2025-10-01T11:00:01.261Z"
+  },
+  {
+    "id": "918ec98e-56b2-4a72-aaf6-429d8ec21532",
+    "campaignId": "",
+    "recipient": {
+      "email": "archana.sarda@microlise.com",
+      "companyName": "Microlise"
+    },
+    "template": {
+      "id": "csv-template",
+      "name": "CSV Import Template",
+      "category": "job-application"
+    },
+    "subject": "Job Opportunity - Software Developer Position",
+    "content": "\n        <div style=\"font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;\">\n          <h2 style=\"color: #333;\">Job Opportunity at Microlise</h2>\n\n          <p>Dear Hiring Team,</p>\n\n          <p>I hope this email finds you well. I'm writing to express my interest in software development opportunities at Microlise.</p>\n\n          <p>With several years of experience in full-stack development, I specialize in modern web technologies including Node.js, React, and cloud platforms. I'm particularly interested in contributing to innovative projects that make a real impact.</p>\n\n          <p>I've attached my resume for your review, which highlights my technical skills and previous accomplishments. I'd welcome the opportunity to discuss how my background and enthusiasm align with your team's needs.</p>\n\n          <p>Thank you for considering my application. I look forward to the possibility of contributing to Microlise's success.</p>\n\n          <p>Best regards,<br>\n          Sameer Bagul<br>\n          Software Developer<br>\n          <a href=\"mailto:sameer@example.com\">sameer@example.com</a></p>\n        </div>\n      ",
+    "to": "",
+    "html": "",
+    "companyName": "",
+    "templateId": "",
+    "templateName": "",
+    "templateCategory": "",
+    "userEmail": "",
+    "batchId": "",
+    "status": "failed",
+    "sentAt": null,
+    "deliveredAt": null,
+    "failedAt": "2025-10-01T11:00:18.283Z",
+    "error": "Rate limit exceeded. Please wait before sending more emails.",
+    "retryCount": 3,
+    "maxRetries": 3,
+    "attachments": [],
+    "metadata": {
+      "userEmail": "sameer@example.com",
+      "batchId": "csv-import-1759315036607",
+      "errorCategory": "RATE_LIMIT"
+    },
+    "createdAt": "2025-10-01T11:00:18.283Z",
+    "updatedAt": "2025-10-01T11:00:18.284Z"
+  },
+  {
+    "id": "a09c52b4-0862-4bfb-ab45-419c69d228d5",
+    "campaignId": "",
+    "recipient": {
+      "email": "archana.shinde@cognologix.com",
+      "companyName": "Cognologix Technologies"
+    },
+    "template": {
+      "id": "csv-template",
+      "name": "CSV Import Template",
+      "category": "job-application"
+    },
+    "subject": "Job Opportunity - Software Developer Position",
+    "content": "\n        <div style=\"font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;\">\n          <h2 style=\"color: #333;\">Job Opportunity at Cognologix Technologies</h2>\n\n          <p>Dear Hiring Team,</p>\n\n          <p>I hope this email finds you well. I'm writing to express my interest in software development opportunities at Cognologix Technologies.</p>\n\n          <p>With several years of experience in full-stack development, I specialize in modern web technologies including Node.js, React, and cloud platforms. I'm particularly interested in contributing to innovative projects that make a real impact.</p>\n\n          <p>I've attached my resume for your review, which highlights my technical skills and previous accomplishments. I'd welcome the opportunity to discuss how my background and enthusiasm align with your team's needs.</p>\n\n          <p>Thank you for considering my application. I look forward to the possibility of contributing to Cognologix Technologies's success.</p>\n\n          <p>Best regards,<br>\n          Sameer Bagul<br>\n          Software Developer<br>\n          <a href=\"mailto:sameer@example.com\">sameer@example.com</a></p>\n        </div>\n      ",
+    "to": "",
+    "html": "",
+    "companyName": "",
+    "templateId": "",
+    "templateName": "",
+    "templateCategory": "",
+    "userEmail": "",
+    "batchId": "",
+    "status": "failed",
+    "sentAt": null,
+    "deliveredAt": null,
+    "failedAt": "2025-10-01T11:00:35.302Z",
+    "error": "Rate limit exceeded. Please wait before sending more emails.",
+    "retryCount": 3,
+    "maxRetries": 3,
+    "attachments": [],
+    "metadata": {
+      "userEmail": "sameer@example.com",
+      "batchId": "csv-import-1759315036607",
+      "errorCategory": "RATE_LIMIT"
+    },
+    "createdAt": "2025-10-01T11:00:35.302Z",
+    "updatedAt": "2025-10-01T11:00:35.304Z"
+  },
+  {
+    "id": "c5e3df32-0128-4d30-91c1-aadbe876ae4a",
+    "campaignId": "",
+    "recipient": {
+      "email": "arjun.chatterjee@sunlife.com",
+      "companyName": "Sun Life"
+    },
+    "template": {
+      "id": "csv-template",
+      "name": "CSV Import Template",
+      "category": "job-application"
+    },
+    "subject": "Job Opportunity - Software Developer Position",
+    "content": "\n        <div style=\"font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;\">\n          <h2 style=\"color: #333;\">Job Opportunity at Sun Life</h2>\n\n          <p>Dear Hiring Team,</p>\n\n          <p>I hope this email finds you well. I'm writing to express my interest in software development opportunities at Sun Life.</p>\n\n          <p>With several years of experience in full-stack development, I specialize in modern web technologies including Node.js, React, and cloud platforms. I'm particularly interested in contributing to innovative projects that make a real impact.</p>\n\n          <p>I've attached my resume for your review, which highlights my technical skills and previous accomplishments. I'd welcome the opportunity to discuss how my background and enthusiasm align with your team's needs.</p>\n\n          <p>Thank you for considering my application. I look forward to the possibility of contributing to Sun Life's success.</p>\n\n          <p>Best regards,<br>\n          Sameer Bagul<br>\n          Software Developer<br>\n          <a href=\"mailto:sameer@example.com\">sameer@example.com</a></p>\n        </div>\n      ",
+    "to": "",
+    "html": "",
+    "companyName": "",
+    "templateId": "",
+    "templateName": "",
+    "templateCategory": "",
+    "userEmail": "",
+    "batchId": "",
+    "status": "failed",
+    "sentAt": null,
+    "deliveredAt": null,
+    "failedAt": "2025-10-01T11:00:52.322Z",
+    "error": "Rate limit exceeded. Please wait before sending more emails.",
+    "retryCount": 3,
+    "maxRetries": 3,
+    "attachments": [],
+    "metadata": {
+      "userEmail": "sameer@example.com",
+      "batchId": "csv-import-1759315036607",
+      "errorCategory": "RATE_LIMIT"
+    },
+    "createdAt": "2025-10-01T11:00:52.322Z",
+    "updatedAt": "2025-10-01T11:00:52.324Z"
+  },
+  {
+    "id": "2b91a928-69e7-4a90-b011-8d9d9c5150b6",
+    "campaignId": "",
+    "recipient": {
+      "email": "arpanaj@umbrellainfocare.com",
+      "companyName": "Umbrella Infocare"
+    },
+    "template": {
+      "id": "csv-template",
+      "name": "CSV Import Template",
+      "category": "job-application"
+    },
+    "subject": "Job Opportunity - Software Developer Position",
+    "content": "\n        <div style=\"font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;\">\n          <h2 style=\"color: #333;\">Job Opportunity at Umbrella Infocare</h2>\n\n          <p>Dear Hiring Team,</p>\n\n          <p>I hope this email finds you well. I'm writing to express my interest in software development opportunities at Umbrella Infocare.</p>\n\n          <p>With several years of experience in full-stack development, I specialize in modern web technologies including Node.js, React, and cloud platforms. I'm particularly interested in contributing to innovative projects that make a real impact.</p>\n\n          <p>I've attached my resume for your review, which highlights my technical skills and previous accomplishments. I'd welcome the opportunity to discuss how my background and enthusiasm align with your team's needs.</p>\n\n          <p>Thank you for considering my application. I look forward to the possibility of contributing to Umbrella Infocare's success.</p>\n\n          <p>Best regards,<br>\n          Sameer Bagul<br>\n          Software Developer<br>\n          <a href=\"mailto:sameer@example.com\">sameer@example.com</a></p>\n        </div>\n      ",
+    "to": "",
+    "html": "",
+    "companyName": "",
+    "templateId": "",
+    "templateName": "",
+    "templateCategory": "",
+    "userEmail": "",
+    "batchId": "",
+    "status": "failed",
+    "sentAt": null,
+    "deliveredAt": null,
+    "failedAt": "2025-10-01T11:01:09.346Z",
+    "error": "Rate limit exceeded. Please wait before sending more emails.",
+    "retryCount": 3,
+    "maxRetries": 3,
+    "attachments": [],
+    "metadata": {
+      "userEmail": "sameer@example.com",
+      "batchId": "csv-import-1759315036607",
+      "errorCategory": "RATE_LIMIT"
+    },
+    "createdAt": "2025-10-01T11:01:09.346Z",
+    "updatedAt": "2025-10-01T11:01:09.348Z"
+  },
+  {
+    "id": "9aa3ed26-ed63-4313-8134-546170644af9",
+    "campaignId": "",
+    "recipient": {
+      "email": "arpita.sarkar@webskitters.com",
+      "companyName": "WEBSKITTERS TECHNOLOGY SOLUTIONS"
+    },
+    "template": {
+      "id": "csv-template",
+      "name": "CSV Import Template",
+      "category": "job-application"
+    },
+    "subject": "Job Opportunity - Software Developer Position",
+    "content": "\n        <div style=\"font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;\">\n          <h2 style=\"color: #333;\">Job Opportunity at WEBSKITTERS TECHNOLOGY SOLUTIONS</h2>\n\n          <p>Dear Hiring Team,</p>\n\n          <p>I hope this email finds you well. I'm writing to express my interest in software development opportunities at WEBSKITTERS TECHNOLOGY SOLUTIONS.</p>\n\n          <p>With several years of experience in full-stack development, I specialize in modern web technologies including Node.js, React, and cloud platforms. I'm particularly interested in contributing to innovative projects that make a real impact.</p>\n\n          <p>I've attached my resume for your review, which highlights my technical skills and previous accomplishments. I'd welcome the opportunity to discuss how my background and enthusiasm align with your team's needs.</p>\n\n          <p>Thank you for considering my application. I look forward to the possibility of contributing to WEBSKITTERS TECHNOLOGY SOLUTIONS's success.</p>\n\n          <p>Best regards,<br>\n          Sameer Bagul<br>\n          Software Developer<br>\n          <a href=\"mailto:sameer@example.com\">sameer@example.com</a></p>\n        </div>\n      ",
+    "to": "",
+    "html": "",
+    "companyName": "",
+    "templateId": "",
+    "templateName": "",
+    "templateCategory": "",
+    "userEmail": "",
+    "batchId": "",
+    "status": "failed",
+    "sentAt": null,
+    "deliveredAt": null,
+    "failedAt": "2025-10-01T11:01:36.381Z",
+    "error": "Rate limit exceeded. Please wait before sending more emails.",
+    "retryCount": 3,
+    "maxRetries": 3,
+    "attachments": [],
+    "metadata": {
+      "userEmail": "sameer@example.com",
+      "batchId": "csv-import-1759315036607",
+      "errorCategory": "RATE_LIMIT"
+    },
+    "createdAt": "2025-10-01T11:01:36.381Z",
+    "updatedAt": "2025-10-01T11:01:36.382Z"
+  },
+  {
+    "id": "0a2324d6-4ab8-45b1-97fa-156763567c6b",
+    "campaignId": "",
+    "recipient": {
+      "email": "qa@artoonsolutions.com",
+      "companyName": "Artoon Solutions"
+    },
+    "template": {
+      "id": "csv-template",
+      "name": "CSV Import Template",
+      "category": "job-application"
+    },
+    "subject": "Job Opportunity - Software Developer Position",
+    "content": "\n        <div style=\"font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;\">\n          <h2 style=\"color: #333;\">Job Opportunity at Artoon Solutions</h2>\n\n          <p>Dear Hiring Team,</p>\n\n          <p>I hope this email finds you well. I'm writing to express my interest in software development opportunities at Artoon Solutions.</p>\n\n          <p>With several years of experience in full-stack development, I specialize in modern web technologies including Node.js, React, and cloud platforms. I'm particularly interested in contributing to innovative projects that make a real impact.</p>\n\n          <p>I've attached my resume for your review, which highlights my technical skills and previous accomplishments. I'd welcome the opportunity to discuss how my background and enthusiasm align with your team's needs.</p>\n\n          <p>Thank you for considering my application. I look forward to the possibility of contributing to Artoon Solutions's success.</p>\n\n          <p>Best regards,<br>\n          Sameer Bagul<br>\n          Software Developer<br>\n          <a href=\"mailto:sameer@example.com\">sameer@example.com</a></p>\n        </div>\n      ",
+    "to": "",
+    "html": "",
+    "companyName": "",
+    "templateId": "",
+    "templateName": "",
+    "templateCategory": "",
+    "userEmail": "",
+    "batchId": "",
+    "status": "failed",
+    "sentAt": null,
+    "deliveredAt": null,
+    "failedAt": "2025-10-01T11:01:53.403Z",
+    "error": "Rate limit exceeded. Please wait before sending more emails.",
+    "retryCount": 3,
+    "maxRetries": 3,
+    "attachments": [],
+    "metadata": {
+      "userEmail": "sameer@example.com",
+      "batchId": "csv-import-1759315036607",
+      "errorCategory": "RATE_LIMIT"
+    },
+    "createdAt": "2025-10-01T11:01:53.403Z",
+    "updatedAt": "2025-10-01T11:01:53.405Z"
+  },
+  {
+    "id": "707624d3-30b1-4683-9a6b-715881d9e1e4",
+    "campaignId": "",
+    "recipient": {
+      "email": "arun.kumar@bobtechsolutions.com",
+      "companyName": "BOB Tech Solutions"
+    },
+    "template": {
+      "id": "csv-template",
+      "name": "CSV Import Template",
+      "category": "job-application"
+    },
+    "subject": "Job Opportunity - Software Developer Position",
+    "content": "\n        <div style=\"font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;\">\n          <h2 style=\"color: #333;\">Job Opportunity at BOB Tech Solutions</h2>\n\n          <p>Dear Hiring Team,</p>\n\n          <p>I hope this email finds you well. I'm writing to express my interest in software development opportunities at BOB Tech Solutions.</p>\n\n          <p>With several years of experience in full-stack development, I specialize in modern web technologies including Node.js, React, and cloud platforms. I'm particularly interested in contributing to innovative projects that make a real impact.</p>\n\n          <p>I've attached my resume for your review, which highlights my technical skills and previous accomplishments. I'd welcome the opportunity to discuss how my background and enthusiasm align with your team's needs.</p>\n\n          <p>Thank you for considering my application. I look forward to the possibility of contributing to BOB Tech Solutions's success.</p>\n\n          <p>Best regards,<br>\n          Sameer Bagul<br>\n          Software Developer<br>\n          <a href=\"mailto:sameer@example.com\">sameer@example.com</a></p>\n        </div>\n      ",
+    "to": "",
+    "html": "",
+    "companyName": "",
+    "templateId": "",
+    "templateName": "",
+    "templateCategory": "",
+    "userEmail": "",
+    "batchId": "",
+    "status": "failed",
+    "sentAt": null,
+    "deliveredAt": null,
+    "failedAt": "2025-10-01T11:02:10.427Z",
+    "error": "Rate limit exceeded. Please wait before sending more emails.",
+    "retryCount": 3,
+    "maxRetries": 3,
+    "attachments": [],
+    "metadata": {
+      "userEmail": "sameer@example.com",
+      "batchId": "csv-import-1759315036607",
+      "errorCategory": "RATE_LIMIT"
+    },
+    "createdAt": "2025-10-01T11:02:10.427Z",
+    "updatedAt": "2025-10-01T11:02:10.428Z"
+  },
+  {
+    "id": "80c73a48-f455-4986-8117-ef951efe0bc1",
+    "campaignId": "",
+    "recipient": {
+      "email": "sameerbagul0077@gmail.com",
+      "companyName": "Google Inc"
+    },
+    "template": {
+      "id": "",
+      "name": "Unknown",
+      "category": "unknown"
+    },
+    "subject": "Software Developer Opportunity | Google Inc",
+    "content": "Hi there,\n\nI'm <strong>Sameer Bagul</strong>, a full-stack developer and final-year Computer Engineering student from the College of Engineering, Pune.\n\nWith over 40+ MERN projects and 2 years of freelance experience, I have developed scalable web applications, AI-driven platforms, and DevOps pipelines. My recent experience includes:\n\n<strong>LabsCheck, Pune</strong> – Built full-stack systems and automated lead operations for 100,000+ leads using AI agents.\n\n<strong>Walnut Solutions</strong> – Improved SEO and engagement by 30% through responsive web applications in Next.js.\n\n<strong>Smart India Hackathon Winner</strong> – Developed HireMe | Skillify, an AI-powered skill development platform serving 1,000+ users.\n\nI am particularly skilled in MERN Stack, Next.js, AI/ML (PyTorch, LangChain, Hugging Face), and DevOps tools (Docker, Nginx, CI/CD). My portfolio and projects can be viewed here: <a href=\"http://sameerbagul.me\">Portfolio</a> | <a href=\"https://github.com/Sameer-Bagul\">GitHub</a>.\n\nI am seeking internship or entry-level opportunities at Google Inc where I can contribute my technical skills, problem-solving mindset, and passion for innovation. I would love the chance to discuss how I can add value to your team.\n\nPlease find my resume attached for your reference.\nLooking forward to your response.\n\nBest regards,\n<strong>Sameer Bagul</strong>\n+91 7841941033\n<a href=\"mailto:sameerbagul2004@gmail.com\">sameerbagul2004@gmail.com</a>",
+    "to": "",
+    "html": "",
+    "companyName": "",
+    "templateId": "",
+    "templateName": "",
+    "templateCategory": "",
+    "userEmail": "",
+    "batchId": "",
+    "status": "sent",
+    "sentAt": "2025-10-01T11:02:21.959Z",
+    "deliveredAt": "2025-10-01T11:02:21.959Z",
+    "failedAt": null,
+    "error": null,
+    "retryCount": 0,
+    "maxRetries": 3,
+    "attachments": [],
+    "metadata": {
+      "messageId": "<b8a0ba9c-24f6-194c-2a3a-5ad10f38110d@localhost>",
+      "userEmail": "",
+      "batchId": "",
+      "smtpResponse": "250 2.0.0 OK  1759316541 d9443c01a7336-27ed69bc295sm183944015ad.123 - gsmtp"
+    },
+    "createdAt": "2025-10-01T11:02:21.959Z",
+    "updatedAt": "2025-10-01T11:02:21.960Z"
+  },
+  {
+    "id": "4f5e12fb-860d-4fd7-bf80-e3cdb46761f7",
+    "campaignId": "",
+    "recipient": {
+      "email": "arun.kumar@shipsy.io",
+      "companyName": "Shipsy"
+    },
+    "template": {
+      "id": "csv-template",
+      "name": "CSV Import Template",
+      "category": "job-application"
+    },
+    "subject": "Job Opportunity - Software Developer Position",
+    "content": "\n        <div style=\"font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;\">\n          <h2 style=\"color: #333;\">Job Opportunity at Shipsy</h2>\n\n          <p>Dear Hiring Team,</p>\n\n          <p>I hope this email finds you well. I'm writing to express my interest in software development opportunities at Shipsy.</p>\n\n          <p>With several years of experience in full-stack development, I specialize in modern web technologies including Node.js, React, and cloud platforms. I'm particularly interested in contributing to innovative projects that make a real impact.</p>\n\n          <p>I've attached my resume for your review, which highlights my technical skills and previous accomplishments. I'd welcome the opportunity to discuss how my background and enthusiasm align with your team's needs.</p>\n\n          <p>Thank you for considering my application. I look forward to the possibility of contributing to Shipsy's success.</p>\n\n          <p>Best regards,<br>\n          Sameer Bagul<br>\n          Software Developer<br>\n          <a href=\"mailto:sameer@example.com\">sameer@example.com</a></p>\n        </div>\n      ",
+    "to": "",
+    "html": "",
+    "companyName": "",
+    "templateId": "",
+    "templateName": "",
+    "templateCategory": "",
+    "userEmail": "",
+    "batchId": "",
+    "status": "failed",
+    "sentAt": null,
+    "deliveredAt": null,
+    "failedAt": "2025-10-01T11:02:27.450Z",
+    "error": "Rate limit exceeded. Please wait before sending more emails.",
+    "retryCount": 3,
+    "maxRetries": 3,
+    "attachments": [],
+    "metadata": {
+      "userEmail": "sameer@example.com",
+      "batchId": "csv-import-1759315036607",
+      "errorCategory": "RATE_LIMIT"
+    },
+    "createdAt": "2025-10-01T11:02:27.450Z",
+    "updatedAt": "2025-10-01T11:02:27.451Z"
+  },
+  {
+    "id": "903db37f-477a-4893-839e-3d78bd69031d",
+    "campaignId": "",
+    "recipient": {
+      "email": "sammyy7071@gmail.com",
+      "companyName": "Apple Inc"
+    },
+    "template": {
+      "id": "",
+      "name": "Unknown",
+      "category": "unknown"
+    },
+    "subject": "Software Developer Opportunity | Apple Inc",
+    "content": "Hi there,\n\nI'm <strong>Sameer Bagul</strong>, a full-stack developer and final-year Computer Engineering student from the College of Engineering, Pune.\n\nWith over 40+ MERN projects and 2 years of freelance experience, I have developed scalable web applications, AI-driven platforms, and DevOps pipelines. My recent experience includes:\n\n<strong>LabsCheck, Pune</strong> – Built full-stack systems and automated lead operations for 100,000+ leads using AI agents.\n\n<strong>Walnut Solutions</strong> – Improved SEO and engagement by 30% through responsive web applications in Next.js.\n\n<strong>Smart India Hackathon Winner</strong> – Developed HireMe | Skillify, an AI-powered skill development platform serving 1,000+ users.\n\nI am particularly skilled in MERN Stack, Next.js, AI/ML (PyTorch, LangChain, Hugging Face), and DevOps tools (Docker, Nginx, CI/CD). My portfolio and projects can be viewed here: <a href=\"http://sameerbagul.me\">Portfolio</a> | <a href=\"https://github.com/Sameer-Bagul\">GitHub</a>.\n\nI am seeking internship or entry-level opportunities at Apple Inc where I can contribute my technical skills, problem-solving mindset, and passion for innovation. I would love the chance to discuss how I can add value to your team.\n\nPlease find my resume attached for your reference.\nLooking forward to your response.\n\nBest regards,\n<strong>Sameer Bagul</strong>\n+91 7841941033\n<a href=\"mailto:sameerbagul2004@gmail.com\">sameerbagul2004@gmail.com</a>",
+    "to": "",
+    "html": "",
+    "companyName": "",
+    "templateId": "",
+    "templateName": "",
+    "templateCategory": "",
+    "userEmail": "",
+    "batchId": "",
+    "status": "sent",
+    "sentAt": "2025-10-01T11:02:38.314Z",
+    "deliveredAt": "2025-10-01T11:02:38.314Z",
+    "failedAt": null,
+    "error": null,
+    "retryCount": 0,
+    "maxRetries": 3,
+    "attachments": [],
+    "metadata": {
+      "messageId": "<47d9073a-2540-549b-506b-79fcedf21338@localhost>",
+      "userEmail": "",
+      "batchId": "",
+      "smtpResponse": "250 2.0.0 OK  1759316558 d9443c01a7336-27ed69bc295sm183944015ad.123 - gsmtp"
+    },
+    "createdAt": "2025-10-01T11:02:38.314Z",
+    "updatedAt": "2025-10-01T11:02:38.316Z"
+  },
+  {
+    "id": "896d1571-4b8e-4021-8d0a-d714b7f37273",
+    "campaignId": "",
+    "recipient": {
+      "email": "arun.kumar@wavicledata.com",
+      "companyName": "Wavicle Data Solutions"
+    },
+    "template": {
+      "id": "csv-template",
+      "name": "CSV Import Template",
+      "category": "job-application"
+    },
+    "subject": "Job Opportunity - Software Developer Position",
+    "content": "\n        <div style=\"font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;\">\n          <h2 style=\"color: #333;\">Job Opportunity at Wavicle Data Solutions</h2>\n\n          <p>Dear Hiring Team,</p>\n\n          <p>I hope this email finds you well. I'm writing to express my interest in software development opportunities at Wavicle Data Solutions.</p>\n\n          <p>With several years of experience in full-stack development, I specialize in modern web technologies including Node.js, React, and cloud platforms. I'm particularly interested in contributing to innovative projects that make a real impact.</p>\n\n          <p>I've attached my resume for your review, which highlights my technical skills and previous accomplishments. I'd welcome the opportunity to discuss how my background and enthusiasm align with your team's needs.</p>\n\n          <p>Thank you for considering my application. I look forward to the possibility of contributing to Wavicle Data Solutions's success.</p>\n\n          <p>Best regards,<br>\n          Sameer Bagul<br>\n          Software Developer<br>\n          <a href=\"mailto:sameer@example.com\">sameer@example.com</a></p>\n        </div>\n      ",
+    "to": "",
+    "html": "",
+    "companyName": "",
+    "templateId": "",
+    "templateName": "",
+    "templateCategory": "",
+    "userEmail": "",
+    "batchId": "",
+    "status": "failed",
+    "sentAt": null,
+    "deliveredAt": null,
+    "failedAt": "2025-10-01T11:02:44.473Z",
+    "error": "Rate limit exceeded. Please wait before sending more emails.",
+    "retryCount": 3,
+    "maxRetries": 3,
+    "attachments": [],
+    "metadata": {
+      "userEmail": "sameer@example.com",
+      "batchId": "csv-import-1759315036607",
+      "errorCategory": "RATE_LIMIT"
+    },
+    "createdAt": "2025-10-01T11:02:44.473Z",
+    "updatedAt": "2025-10-01T11:02:44.475Z"
+  },
+  {
+    "id": "ae8f7014-3a1e-4ac3-ac13-30f5ac702b6d",
+    "campaignId": "",
+    "recipient": {
+      "email": "arun.ravi@ipsoft.com",
+      "companyName": "Amelia"
+    },
+    "template": {
+      "id": "csv-template",
+      "name": "CSV Import Template",
+      "category": "job-application"
+    },
+    "subject": "Job Opportunity - Software Developer Position",
+    "content": "\n        <div style=\"font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;\">\n          <h2 style=\"color: #333;\">Job Opportunity at Amelia</h2>\n\n          <p>Dear Hiring Team,</p>\n\n          <p>I hope this email finds you well. I'm writing to express my interest in software development opportunities at Amelia.</p>\n\n          <p>With several years of experience in full-stack development, I specialize in modern web technologies including Node.js, React, and cloud platforms. I'm particularly interested in contributing to innovative projects that make a real impact.</p>\n\n          <p>I've attached my resume for your review, which highlights my technical skills and previous accomplishments. I'd welcome the opportunity to discuss how my background and enthusiasm align with your team's needs.</p>\n\n          <p>Thank you for considering my application. I look forward to the possibility of contributing to Amelia's success.</p>\n\n          <p>Best regards,<br>\n          Sameer Bagul<br>\n          Software Developer<br>\n          <a href=\"mailto:sameer@example.com\">sameer@example.com</a></p>\n        </div>\n      ",
+    "to": "",
+    "html": "",
+    "companyName": "",
+    "templateId": "",
+    "templateName": "",
+    "templateCategory": "",
+    "userEmail": "",
+    "batchId": "",
+    "status": "failed",
+    "sentAt": null,
+    "deliveredAt": null,
+    "failedAt": "2025-10-01T11:03:01.499Z",
+    "error": "Rate limit exceeded. Please wait before sending more emails.",
+    "retryCount": 3,
+    "maxRetries": 3,
+    "attachments": [],
+    "metadata": {
+      "userEmail": "sameer@example.com",
+      "batchId": "csv-import-1759315036607",
+      "errorCategory": "RATE_LIMIT"
+    },
+    "createdAt": "2025-10-01T11:03:01.499Z",
+    "updatedAt": "2025-10-01T11:03:01.500Z"
+  },
+  {
+    "id": "93687239-db3b-460f-b7e7-aafea3b2c5ba",
+    "campaignId": "",
+    "recipient": {
+      "email": "arun@xto10x.com",
+      "companyName": "xto10x"
+    },
+    "template": {
+      "id": "csv-template",
+      "name": "CSV Import Template",
+      "category": "job-application"
+    },
+    "subject": "Job Opportunity - Software Developer Position",
+    "content": "\n        <div style=\"font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;\">\n          <h2 style=\"color: #333;\">Job Opportunity at xto10x</h2>\n\n          <p>Dear Hiring Team,</p>\n\n          <p>I hope this email finds you well. I'm writing to express my interest in software development opportunities at xto10x.</p>\n\n          <p>With several years of experience in full-stack development, I specialize in modern web technologies including Node.js, React, and cloud platforms. I'm particularly interested in contributing to innovative projects that make a real impact.</p>\n\n          <p>I've attached my resume for your review, which highlights my technical skills and previous accomplishments. I'd welcome the opportunity to discuss how my background and enthusiasm align with your team's needs.</p>\n\n          <p>Thank you for considering my application. I look forward to the possibility of contributing to xto10x's success.</p>\n\n          <p>Best regards,<br>\n          Sameer Bagul<br>\n          Software Developer<br>\n          <a href=\"mailto:sameer@example.com\">sameer@example.com</a></p>\n        </div>\n      ",
+    "to": "",
+    "html": "",
+    "companyName": "",
+    "templateId": "",
+    "templateName": "",
+    "templateCategory": "",
+    "userEmail": "",
+    "batchId": "",
+    "status": "failed",
+    "sentAt": null,
+    "deliveredAt": null,
+    "failedAt": "2025-10-01T11:03:18.522Z",
+    "error": "Rate limit exceeded. Please wait before sending more emails.",
+    "retryCount": 3,
+    "maxRetries": 3,
+    "attachments": [],
+    "metadata": {
+      "userEmail": "sameer@example.com",
+      "batchId": "csv-import-1759315036607",
+      "errorCategory": "RATE_LIMIT"
+    },
+    "createdAt": "2025-10-01T11:03:18.522Z",
+    "updatedAt": "2025-10-01T11:03:18.524Z"
+  },
+  {
+    "id": "d08ed0ff-dacd-43b8-ba6e-813c3697bc5f",
+    "campaignId": "",
+    "recipient": {
+      "email": "arunima.bhushan@orcapodservices.com",
+      "companyName": "Orcapod"
+    },
+    "template": {
+      "id": "csv-template",
+      "name": "CSV Import Template",
+      "category": "job-application"
+    },
+    "subject": "Job Opportunity - Software Developer Position",
+    "content": "\n        <div style=\"font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;\">\n          <h2 style=\"color: #333;\">Job Opportunity at Orcapod</h2>\n\n          <p>Dear Hiring Team,</p>\n\n          <p>I hope this email finds you well. I'm writing to express my interest in software development opportunities at Orcapod.</p>\n\n          <p>With several years of experience in full-stack development, I specialize in modern web technologies including Node.js, React, and cloud platforms. I'm particularly interested in contributing to innovative projects that make a real impact.</p>\n\n          <p>I've attached my resume for your review, which highlights my technical skills and previous accomplishments. I'd welcome the opportunity to discuss how my background and enthusiasm align with your team's needs.</p>\n\n          <p>Thank you for considering my application. I look forward to the possibility of contributing to Orcapod's success.</p>\n\n          <p>Best regards,<br>\n          Sameer Bagul<br>\n          Software Developer<br>\n          <a href=\"mailto:sameer@example.com\">sameer@example.com</a></p>\n        </div>\n      ",
+    "to": "",
+    "html": "",
+    "companyName": "",
+    "templateId": "",
+    "templateName": "",
+    "templateCategory": "",
+    "userEmail": "",
+    "batchId": "",
+    "status": "failed",
+    "sentAt": null,
+    "deliveredAt": null,
+    "failedAt": "2025-10-01T11:03:35.542Z",
+    "error": "Rate limit exceeded. Please wait before sending more emails.",
+    "retryCount": 3,
+    "maxRetries": 3,
+    "attachments": [],
+    "metadata": {
+      "userEmail": "sameer@example.com",
+      "batchId": "csv-import-1759315036607",
+      "errorCategory": "RATE_LIMIT"
+    },
+    "createdAt": "2025-10-01T11:03:35.542Z",
+    "updatedAt": "2025-10-01T11:03:35.543Z"
+  },
+  {
+    "id": "18bf9ee0-7c31-4131-98b3-24e496be2c3f",
+    "campaignId": "",
+    "recipient": {
+      "email": "sharon@srinsofttech.com",
+      "companyName": "SrinSoft Technologies"
+    },
+    "template": {
+      "id": "csv-template",
+      "name": "CSV Import Template",
+      "category": "job-application"
+    },
+    "subject": "Job Opportunity - Software Developer Position",
+    "content": "\n        <div style=\"font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;\">\n          <h2 style=\"color: #333;\">Job Opportunity at SrinSoft Technologies</h2>\n\n          <p>Dear Hiring Team,</p>\n\n          <p>I hope this email finds you well. I'm writing to express my interest in software development opportunities at SrinSoft Technologies.</p>\n\n          <p>With several years of experience in full-stack development, I specialize in modern web technologies including Node.js, React, and cloud platforms. I'm particularly interested in contributing to innovative projects that make a real impact.</p>\n\n          <p>I've attached my resume for your review, which highlights my technical skills and previous accomplishments. I'd welcome the opportunity to discuss how my background and enthusiasm align with your team's needs.</p>\n\n          <p>Thank you for considering my application. I look forward to the possibility of contributing to SrinSoft Technologies's success.</p>\n\n          <p>Best regards,<br>\n          Sameer Bagul<br>\n          Software Developer<br>\n          <a href=\"mailto:sameer@example.com\">sameer@example.com</a></p>\n        </div>\n      ",
+    "to": "",
+    "html": "",
+    "companyName": "",
+    "templateId": "",
+    "templateName": "",
+    "templateCategory": "",
+    "userEmail": "",
+    "batchId": "",
+    "status": "failed",
+    "sentAt": null,
+    "deliveredAt": null,
+    "failedAt": "2025-10-01T11:03:52.564Z",
+    "error": "Rate limit exceeded. Please wait before sending more emails.",
+    "retryCount": 3,
+    "maxRetries": 3,
+    "attachments": [],
+    "metadata": {
+      "userEmail": "sameer@example.com",
+      "batchId": "csv-import-1759315036607",
+      "errorCategory": "RATE_LIMIT"
+    },
+    "createdAt": "2025-10-01T11:03:52.564Z",
+    "updatedAt": "2025-10-01T11:03:52.565Z"
+  },
+  {
+    "id": "e5b00c54-8f4a-4154-897f-c8995d1ba0c0",
+    "campaignId": "",
+    "recipient": {
+      "email": "ashraf.mulla@qseap.com",
+      "companyName": "qSEAp Infotech"
+    },
+    "template": {
+      "id": "csv-template",
+      "name": "CSV Import Template",
+      "category": "job-application"
+    },
+    "subject": "Job Opportunity - Software Developer Position",
+    "content": "\n        <div style=\"font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;\">\n          <h2 style=\"color: #333;\">Job Opportunity at qSEAp Infotech</h2>\n\n          <p>Dear Hiring Team,</p>\n\n          <p>I hope this email finds you well. I'm writing to express my interest in software development opportunities at qSEAp Infotech.</p>\n\n          <p>With several years of experience in full-stack development, I specialize in modern web technologies including Node.js, React, and cloud platforms. I'm particularly interested in contributing to innovative projects that make a real impact.</p>\n\n          <p>I've attached my resume for your review, which highlights my technical skills and previous accomplishments. I'd welcome the opportunity to discuss how my background and enthusiasm align with your team's needs.</p>\n\n          <p>Thank you for considering my application. I look forward to the possibility of contributing to qSEAp Infotech's success.</p>\n\n          <p>Best regards,<br>\n          Sameer Bagul<br>\n          Software Developer<br>\n          <a href=\"mailto:sameer@example.com\">sameer@example.com</a></p>\n        </div>\n      ",
+    "to": "",
+    "html": "",
+    "companyName": "",
+    "templateId": "",
+    "templateName": "",
+    "templateCategory": "",
+    "userEmail": "",
+    "batchId": "",
+    "status": "failed",
+    "sentAt": null,
+    "deliveredAt": null,
+    "failedAt": "2025-10-01T11:04:09.586Z",
+    "error": "Rate limit exceeded. Please wait before sending more emails.",
+    "retryCount": 3,
+    "maxRetries": 3,
+    "attachments": [],
+    "metadata": {
+      "userEmail": "sameer@example.com",
+      "batchId": "csv-import-1759315036607",
+      "errorCategory": "RATE_LIMIT"
+    },
+    "createdAt": "2025-10-01T11:04:09.586Z",
+    "updatedAt": "2025-10-01T11:04:09.587Z"
+  },
+  {
+    "id": "7a01bc40-8423-4fc0-bd59-89db38690706",
+    "campaignId": "",
+    "recipient": {
+      "email": "ashwani@successive.tech",
+      "companyName": "Successive Technologies"
+    },
+    "template": {
+      "id": "csv-template",
+      "name": "CSV Import Template",
+      "category": "job-application"
+    },
+    "subject": "Job Opportunity - Software Developer Position",
+    "content": "\n        <div style=\"font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;\">\n          <h2 style=\"color: #333;\">Job Opportunity at Successive Technologies</h2>\n\n          <p>Dear Hiring Team,</p>\n\n          <p>I hope this email finds you well. I'm writing to express my interest in software development opportunities at Successive Technologies.</p>\n\n          <p>With several years of experience in full-stack development, I specialize in modern web technologies including Node.js, React, and cloud platforms. I'm particularly interested in contributing to innovative projects that make a real impact.</p>\n\n          <p>I've attached my resume for your review, which highlights my technical skills and previous accomplishments. I'd welcome the opportunity to discuss how my background and enthusiasm align with your team's needs.</p>\n\n          <p>Thank you for considering my application. I look forward to the possibility of contributing to Successive Technologies's success.</p>\n\n          <p>Best regards,<br>\n          Sameer Bagul<br>\n          Software Developer<br>\n          <a href=\"mailto:sameer@example.com\">sameer@example.com</a></p>\n        </div>\n      ",
+    "to": "",
+    "html": "",
+    "companyName": "",
+    "templateId": "",
+    "templateName": "",
+    "templateCategory": "",
+    "userEmail": "",
+    "batchId": "",
+    "status": "failed",
+    "sentAt": null,
+    "deliveredAt": null,
+    "failedAt": "2025-10-01T11:04:36.618Z",
+    "error": "Rate limit exceeded. Please wait before sending more emails.",
+    "retryCount": 3,
+    "maxRetries": 3,
+    "attachments": [],
+    "metadata": {
+      "userEmail": "sameer@example.com",
+      "batchId": "csv-import-1759315036607",
+      "errorCategory": "RATE_LIMIT"
+    },
+    "createdAt": "2025-10-01T11:04:36.618Z",
+    "updatedAt": "2025-10-01T11:04:36.620Z"
+  },
+  {
+    "id": "5c8f7ffc-1d6e-48cf-a9c3-29358193110f",
+    "campaignId": "",
+    "recipient": {
+      "email": "ashwin@suki.ai",
+      "companyName": "Suki"
+    },
+    "template": {
+      "id": "csv-template",
+      "name": "CSV Import Template",
+      "category": "job-application"
+    },
+    "subject": "Job Opportunity - Software Developer Position",
+    "content": "\n        <div style=\"font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;\">\n          <h2 style=\"color: #333;\">Job Opportunity at Suki</h2>\n\n          <p>Dear Hiring Team,</p>\n\n          <p>I hope this email finds you well. I'm writing to express my interest in software development opportunities at Suki.</p>\n\n          <p>With several years of experience in full-stack development, I specialize in modern web technologies including Node.js, React, and cloud platforms. I'm particularly interested in contributing to innovative projects that make a real impact.</p>\n\n          <p>I've attached my resume for your review, which highlights my technical skills and previous accomplishments. I'd welcome the opportunity to discuss how my background and enthusiasm align with your team's needs.</p>\n\n          <p>Thank you for considering my application. I look forward to the possibility of contributing to Suki's success.</p>\n\n          <p>Best regards,<br>\n          Sameer Bagul<br>\n          Software Developer<br>\n          <a href=\"mailto:sameer@example.com\">sameer@example.com</a></p>\n        </div>\n      ",
+    "to": "",
+    "html": "",
+    "companyName": "",
+    "templateId": "",
+    "templateName": "",
+    "templateCategory": "",
+    "userEmail": "",
+    "batchId": "",
+    "status": "failed",
+    "sentAt": null,
+    "deliveredAt": null,
+    "failedAt": "2025-10-01T11:04:53.642Z",
+    "error": "Rate limit exceeded. Please wait before sending more emails.",
+    "retryCount": 3,
+    "maxRetries": 3,
+    "attachments": [],
+    "metadata": {
+      "userEmail": "sameer@example.com",
+      "batchId": "csv-import-1759315036607",
+      "errorCategory": "RATE_LIMIT"
+    },
+    "createdAt": "2025-10-01T11:04:53.642Z",
+    "updatedAt": "2025-10-01T11:04:53.643Z"
+  },
+  {
+    "id": "cf90c69a-5f6b-4bb2-b92a-f59b931a077c",
+    "campaignId": "",
+    "recipient": {
+      "email": "ashwini.ashok@eton-solutions.com",
+      "companyName": "Eton Solutions LP"
+    },
+    "template": {
+      "id": "csv-template",
+      "name": "CSV Import Template",
+      "category": "job-application"
+    },
+    "subject": "Job Opportunity - Software Developer Position",
+    "content": "\n        <div style=\"font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;\">\n          <h2 style=\"color: #333;\">Job Opportunity at Eton Solutions LP</h2>\n\n          <p>Dear Hiring Team,</p>\n\n          <p>I hope this email finds you well. I'm writing to express my interest in software development opportunities at Eton Solutions LP.</p>\n\n          <p>With several years of experience in full-stack development, I specialize in modern web technologies including Node.js, React, and cloud platforms. I'm particularly interested in contributing to innovative projects that make a real impact.</p>\n\n          <p>I've attached my resume for your review, which highlights my technical skills and previous accomplishments. I'd welcome the opportunity to discuss how my background and enthusiasm align with your team's needs.</p>\n\n          <p>Thank you for considering my application. I look forward to the possibility of contributing to Eton Solutions LP's success.</p>\n\n          <p>Best regards,<br>\n          Sameer Bagul<br>\n          Software Developer<br>\n          <a href=\"mailto:sameer@example.com\">sameer@example.com</a></p>\n        </div>\n      ",
+    "to": "",
+    "html": "",
+    "companyName": "",
+    "templateId": "",
+    "templateName": "",
+    "templateCategory": "",
+    "userEmail": "",
+    "batchId": "",
+    "status": "failed",
+    "sentAt": null,
+    "deliveredAt": null,
+    "failedAt": "2025-10-01T11:05:10.665Z",
+    "error": "Rate limit exceeded. Please wait before sending more emails.",
+    "retryCount": 3,
+    "maxRetries": 3,
+    "attachments": [],
+    "metadata": {
+      "userEmail": "sameer@example.com",
+      "batchId": "csv-import-1759315036607",
+      "errorCategory": "RATE_LIMIT"
+    },
+    "createdAt": "2025-10-01T11:05:10.665Z",
+    "updatedAt": "2025-10-01T11:05:10.666Z"
+  },
+  {
+    "id": "5b12678b-0788-465b-b995-98026995199b",
+    "campaignId": "",
+    "recipient": {
+      "email": "ashwini.janardhanan@kaleyra.com",
+      "companyName": "Kaleyra"
+    },
+    "template": {
+      "id": "csv-template",
+      "name": "CSV Import Template",
+      "category": "job-application"
+    },
+    "subject": "Job Opportunity - Software Developer Position",
+    "content": "\n        <div style=\"font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;\">\n          <h2 style=\"color: #333;\">Job Opportunity at Kaleyra</h2>\n\n          <p>Dear Hiring Team,</p>\n\n          <p>I hope this email finds you well. I'm writing to express my interest in software development opportunities at Kaleyra.</p>\n\n          <p>With several years of experience in full-stack development, I specialize in modern web technologies including Node.js, React, and cloud platforms. I'm particularly interested in contributing to innovative projects that make a real impact.</p>\n\n          <p>I've attached my resume for your review, which highlights my technical skills and previous accomplishments. I'd welcome the opportunity to discuss how my background and enthusiasm align with your team's needs.</p>\n\n          <p>Thank you for considering my application. I look forward to the possibility of contributing to Kaleyra's success.</p>\n\n          <p>Best regards,<br>\n          Sameer Bagul<br>\n          Software Developer<br>\n          <a href=\"mailto:sameer@example.com\">sameer@example.com</a></p>\n        </div>\n      ",
+    "to": "",
+    "html": "",
+    "companyName": "",
+    "templateId": "",
+    "templateName": "",
+    "templateCategory": "",
+    "userEmail": "",
+    "batchId": "",
+    "status": "failed",
+    "sentAt": null,
+    "deliveredAt": null,
+    "failedAt": "2025-10-01T11:05:27.687Z",
+    "error": "Rate limit exceeded. Please wait before sending more emails.",
+    "retryCount": 3,
+    "maxRetries": 3,
+    "attachments": [],
+    "metadata": {
+      "userEmail": "sameer@example.com",
+      "batchId": "csv-import-1759315036607",
+      "errorCategory": "RATE_LIMIT"
+    },
+    "createdAt": "2025-10-01T11:05:27.687Z",
+    "updatedAt": "2025-10-01T11:05:27.695Z"
+  },
+  {
+    "id": "30f2201b-da95-408a-b7ad-dd6f79cf593b",
+    "campaignId": "",
+    "recipient": {
+      "email": "agoka@workfusion.com",
+      "companyName": "WorkFusion"
+    },
+    "template": {
+      "id": "csv-template",
+      "name": "CSV Import Template",
+      "category": "job-application"
+    },
+    "subject": "Job Opportunity - Software Developer Position",
+    "content": "\n        <div style=\"font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;\">\n          <h2 style=\"color: #333;\">Job Opportunity at WorkFusion</h2>\n\n          <p>Dear Hiring Team,</p>\n\n          <p>I hope this email finds you well. I'm writing to express my interest in software development opportunities at WorkFusion.</p>\n\n          <p>With several years of experience in full-stack development, I specialize in modern web technologies including Node.js, React, and cloud platforms. I'm particularly interested in contributing to innovative projects that make a real impact.</p>\n\n          <p>I've attached my resume for your review, which highlights my technical skills and previous accomplishments. I'd welcome the opportunity to discuss how my background and enthusiasm align with your team's needs.</p>\n\n          <p>Thank you for considering my application. I look forward to the possibility of contributing to WorkFusion's success.</p>\n\n          <p>Best regards,<br>\n          Sameer Bagul<br>\n          Software Developer<br>\n          <a href=\"mailto:sameer@example.com\">sameer@example.com</a></p>\n        </div>\n      ",
+    "to": "",
+    "html": "",
+    "companyName": "",
+    "templateId": "",
+    "templateName": "",
+    "templateCategory": "",
+    "userEmail": "",
+    "batchId": "",
+    "status": "failed",
+    "sentAt": null,
+    "deliveredAt": null,
+    "failedAt": "2025-10-01T11:05:44.712Z",
+    "error": "Rate limit exceeded. Please wait before sending more emails.",
+    "retryCount": 3,
+    "maxRetries": 3,
+    "attachments": [],
+    "metadata": {
+      "userEmail": "sameer@example.com",
+      "batchId": "csv-import-1759315036607",
+      "errorCategory": "RATE_LIMIT"
+    },
+    "createdAt": "2025-10-01T11:05:44.712Z",
+    "updatedAt": "2025-10-01T11:05:44.721Z"
+  },
+  {
+    "id": "a40ba93a-75ce-4ff8-9bcf-5a65583c41cc",
+    "campaignId": "",
+    "recipient": {
+      "email": "aswin@psrtek.com",
+      "companyName": "PSRTEK"
+    },
+    "template": {
+      "id": "csv-template",
+      "name": "CSV Import Template",
+      "category": "job-application"
+    },
+    "subject": "Job Opportunity - Software Developer Position",
+    "content": "\n        <div style=\"font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;\">\n          <h2 style=\"color: #333;\">Job Opportunity at PSRTEK</h2>\n\n          <p>Dear Hiring Team,</p>\n\n          <p>I hope this email finds you well. I'm writing to express my interest in software development opportunities at PSRTEK.</p>\n\n          <p>With several years of experience in full-stack development, I specialize in modern web technologies including Node.js, React, and cloud platforms. I'm particularly interested in contributing to innovative projects that make a real impact.</p>\n\n          <p>I've attached my resume for your review, which highlights my technical skills and previous accomplishments. I'd welcome the opportunity to discuss how my background and enthusiasm align with your team's needs.</p>\n\n          <p>Thank you for considering my application. I look forward to the possibility of contributing to PSRTEK's success.</p>\n\n          <p>Best regards,<br>\n          Sameer Bagul<br>\n          Software Developer<br>\n          <a href=\"mailto:sameer@example.com\">sameer@example.com</a></p>\n        </div>\n      ",
+    "to": "",
+    "html": "",
+    "companyName": "",
+    "templateId": "",
+    "templateName": "",
+    "templateCategory": "",
+    "userEmail": "",
+    "batchId": "",
+    "status": "failed",
+    "sentAt": null,
+    "deliveredAt": null,
+    "failedAt": "2025-10-01T11:05:58.743Z",
+    "error": "Rate limit exceeded. Please wait before sending more emails.",
+    "retryCount": 3,
+    "maxRetries": 3,
+    "attachments": [],
+    "metadata": {
+      "userEmail": "sameer@example.com",
+      "batchId": "csv-import-1759315036607",
+      "errorCategory": "RATE_LIMIT"
+    },
+    "createdAt": "2025-10-01T11:05:58.743Z",
+    "updatedAt": "2025-10-01T11:05:58.745Z"
+  },
+  {
+    "id": "140467fa-4f16-41df-84a6-a48a183bb894",
+    "campaignId": "",
+    "recipient": {
+      "email": "atin.karmokar@pentagon.co.in",
+      "companyName": "Pentagon System and Services"
+    },
+    "template": {
+      "id": "csv-template",
+      "name": "CSV Import Template",
+      "category": "job-application"
+    },
+    "subject": "Job Opportunity - Software Developer Position",
+    "content": "\n        <div style=\"font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;\">\n          <h2 style=\"color: #333;\">Job Opportunity at Pentagon System and Services</h2>\n\n          <p>Dear Hiring Team,</p>\n\n          <p>I hope this email finds you well. I'm writing to express my interest in software development opportunities at Pentagon System and Services.</p>\n\n          <p>With several years of experience in full-stack development, I specialize in modern web technologies including Node.js, React, and cloud platforms. I'm particularly interested in contributing to innovative projects that make a real impact.</p>\n\n          <p>I've attached my resume for your review, which highlights my technical skills and previous accomplishments. I'd welcome the opportunity to discuss how my background and enthusiasm align with your team's needs.</p>\n\n          <p>Thank you for considering my application. I look forward to the possibility of contributing to Pentagon System and Services's success.</p>\n\n          <p>Best regards,<br>\n          Sameer Bagul<br>\n          Software Developer<br>\n          <a href=\"mailto:sameer@example.com\">sameer@example.com</a></p>\n        </div>\n      ",
+    "to": "",
+    "html": "",
+    "companyName": "",
+    "templateId": "",
+    "templateName": "",
+    "templateCategory": "",
+    "userEmail": "",
+    "batchId": "",
+    "status": "failed",
+    "sentAt": null,
+    "deliveredAt": null,
+    "failedAt": "2025-10-01T11:06:15.769Z",
+    "error": "Rate limit exceeded. Please wait before sending more emails.",
+    "retryCount": 3,
+    "maxRetries": 3,
+    "attachments": [],
+    "metadata": {
+      "userEmail": "sameer@example.com",
+      "batchId": "csv-import-1759315036607",
+      "errorCategory": "RATE_LIMIT"
+    },
+    "createdAt": "2025-10-01T11:06:15.769Z",
+    "updatedAt": "2025-10-01T11:06:15.771Z"
+  },
+  {
+    "id": "4ba7ee2d-dc4c-4054-b9cf-923fa4170b04",
+    "campaignId": "",
+    "recipient": {
+      "email": "ayush.sinha@sugarboxnetworks.com",
+      "companyName": "SugarBox Networks"
+    },
+    "template": {
+      "id": "csv-template",
+      "name": "CSV Import Template",
+      "category": "job-application"
+    },
+    "subject": "Job Opportunity - Software Developer Position",
+    "content": "\n        <div style=\"font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;\">\n          <h2 style=\"color: #333;\">Job Opportunity at SugarBox Networks</h2>\n\n          <p>Dear Hiring Team,</p>\n\n          <p>I hope this email finds you well. I'm writing to express my interest in software development opportunities at SugarBox Networks.</p>\n\n          <p>With several years of experience in full-stack development, I specialize in modern web technologies including Node.js, React, and cloud platforms. I'm particularly interested in contributing to innovative projects that make a real impact.</p>\n\n          <p>I've attached my resume for your review, which highlights my technical skills and previous accomplishments. I'd welcome the opportunity to discuss how my background and enthusiasm align with your team's needs.</p>\n\n          <p>Thank you for considering my application. I look forward to the possibility of contributing to SugarBox Networks's success.</p>\n\n          <p>Best regards,<br>\n          Sameer Bagul<br>\n          Software Developer<br>\n          <a href=\"mailto:sameer@example.com\">sameer@example.com</a></p>\n        </div>\n      ",
+    "to": "",
+    "html": "",
+    "companyName": "",
+    "templateId": "",
+    "templateName": "",
+    "templateCategory": "",
+    "userEmail": "",
+    "batchId": "",
+    "status": "failed",
+    "sentAt": null,
+    "deliveredAt": null,
+    "failedAt": "2025-10-01T11:06:32.793Z",
+    "error": "Rate limit exceeded. Please wait before sending more emails.",
+    "retryCount": 3,
+    "maxRetries": 3,
+    "attachments": [],
+    "metadata": {
+      "userEmail": "sameer@example.com",
+      "batchId": "csv-import-1759315036607",
+      "errorCategory": "RATE_LIMIT"
+    },
+    "createdAt": "2025-10-01T11:06:32.793Z",
+    "updatedAt": "2025-10-01T11:06:32.795Z"
+  },
+  {
+    "id": "56253f24-84b6-4715-b6c8-6a06ed677fef",
+    "campaignId": "",
+    "recipient": {
+      "email": "balaji@isourceindia.com",
+      "companyName": "iSource ITES"
+    },
+    "template": {
+      "id": "csv-template",
+      "name": "CSV Import Template",
+      "category": "job-application"
+    },
+    "subject": "Job Opportunity - Software Developer Position",
+    "content": "\n        <div style=\"font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;\">\n          <h2 style=\"color: #333;\">Job Opportunity at iSource ITES</h2>\n\n          <p>Dear Hiring Team,</p>\n\n          <p>I hope this email finds you well. I'm writing to express my interest in software development opportunities at iSource ITES.</p>\n\n          <p>With several years of experience in full-stack development, I specialize in modern web technologies including Node.js, React, and cloud platforms. I'm particularly interested in contributing to innovative projects that make a real impact.</p>\n\n          <p>I've attached my resume for your review, which highlights my technical skills and previous accomplishments. I'd welcome the opportunity to discuss how my background and enthusiasm align with your team's needs.</p>\n\n          <p>Thank you for considering my application. I look forward to the possibility of contributing to iSource ITES's success.</p>\n\n          <p>Best regards,<br>\n          Sameer Bagul<br>\n          Software Developer<br>\n          <a href=\"mailto:sameer@example.com\">sameer@example.com</a></p>\n        </div>\n      ",
+    "to": "",
+    "html": "",
+    "companyName": "",
+    "templateId": "",
+    "templateName": "",
+    "templateCategory": "",
+    "userEmail": "",
+    "batchId": "",
+    "status": "failed",
+    "sentAt": null,
+    "deliveredAt": null,
+    "failedAt": "2025-10-01T11:06:49.816Z",
+    "error": "Rate limit exceeded. Please wait before sending more emails.",
+    "retryCount": 3,
+    "maxRetries": 3,
+    "attachments": [],
+    "metadata": {
+      "userEmail": "sameer@example.com",
+      "batchId": "csv-import-1759315036607",
+      "errorCategory": "RATE_LIMIT"
+    },
+    "createdAt": "2025-10-01T11:06:49.816Z",
+    "updatedAt": "2025-10-01T11:06:49.817Z"
+  },
+  {
+    "id": "99d503c1-b7e3-43b7-a80d-bb0243d366f4",
+    "campaignId": "",
+    "recipient": {
+      "email": "balaji.thiyagarajan@thirdware.com",
+      "companyName": "Thirdware Solution INC"
+    },
+    "template": {
+      "id": "csv-template",
+      "name": "CSV Import Template",
+      "category": "job-application"
+    },
+    "subject": "Job Opportunity - Software Developer Position",
+    "content": "\n        <div style=\"font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;\">\n          <h2 style=\"color: #333;\">Job Opportunity at Thirdware Solution INC</h2>\n\n          <p>Dear Hiring Team,</p>\n\n          <p>I hope this email finds you well. I'm writing to express my interest in software development opportunities at Thirdware Solution INC.</p>\n\n          <p>With several years of experience in full-stack development, I specialize in modern web technologies including Node.js, React, and cloud platforms. I'm particularly interested in contributing to innovative projects that make a real impact.</p>\n\n          <p>I've attached my resume for your review, which highlights my technical skills and previous accomplishments. I'd welcome the opportunity to discuss how my background and enthusiasm align with your team's needs.</p>\n\n          <p>Thank you for considering my application. I look forward to the possibility of contributing to Thirdware Solution INC's success.</p>\n\n          <p>Best regards,<br>\n          Sameer Bagul<br>\n          Software Developer<br>\n          <a href=\"mailto:sameer@example.com\">sameer@example.com</a></p>\n        </div>\n      ",
+    "to": "",
+    "html": "",
+    "companyName": "",
+    "templateId": "",
+    "templateName": "",
+    "templateCategory": "",
+    "userEmail": "",
+    "batchId": "",
+    "status": "failed",
+    "sentAt": null,
+    "deliveredAt": null,
+    "failedAt": "2025-10-01T11:07:06.836Z",
+    "error": "Rate limit exceeded. Please wait before sending more emails.",
+    "retryCount": 3,
+    "maxRetries": 3,
+    "attachments": [],
+    "metadata": {
+      "userEmail": "sameer@example.com",
+      "batchId": "csv-import-1759315036607",
+      "errorCategory": "RATE_LIMIT"
+    },
+    "createdAt": "2025-10-01T11:07:06.836Z",
+    "updatedAt": "2025-10-01T11:07:06.837Z"
+  },
+  {
+    "id": "4389687b-c52d-4b31-a021-a185a492a94e",
+    "campaignId": "",
+    "recipient": {
+      "email": "balesh@adarshsolutions.com",
+      "companyName": "Adarsh Solutions"
+    },
+    "template": {
+      "id": "csv-template",
+      "name": "CSV Import Template",
+      "category": "job-application"
+    },
+    "subject": "Job Opportunity - Software Developer Position",
+    "content": "\n        <div style=\"font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;\">\n          <h2 style=\"color: #333;\">Job Opportunity at Adarsh Solutions</h2>\n\n          <p>Dear Hiring Team,</p>\n\n          <p>I hope this email finds you well. I'm writing to express my interest in software development opportunities at Adarsh Solutions.</p>\n\n          <p>With several years of experience in full-stack development, I specialize in modern web technologies including Node.js, React, and cloud platforms. I'm particularly interested in contributing to innovative projects that make a real impact.</p>\n\n          <p>I've attached my resume for your review, which highlights my technical skills and previous accomplishments. I'd welcome the opportunity to discuss how my background and enthusiasm align with your team's needs.</p>\n\n          <p>Thank you for considering my application. I look forward to the possibility of contributing to Adarsh Solutions's success.</p>\n\n          <p>Best regards,<br>\n          Sameer Bagul<br>\n          Software Developer<br>\n          <a href=\"mailto:sameer@example.com\">sameer@example.com</a></p>\n        </div>\n      ",
+    "to": "",
+    "html": "",
+    "companyName": "",
+    "templateId": "",
+    "templateName": "",
+    "templateCategory": "",
+    "userEmail": "",
+    "batchId": "",
+    "status": "failed",
+    "sentAt": null,
+    "deliveredAt": null,
+    "failedAt": "2025-10-01T11:07:23.858Z",
+    "error": "Rate limit exceeded. Please wait before sending more emails.",
+    "retryCount": 3,
+    "maxRetries": 3,
+    "attachments": [],
+    "metadata": {
+      "userEmail": "sameer@example.com",
+      "batchId": "csv-import-1759315036607",
+      "errorCategory": "RATE_LIMIT"
+    },
+    "createdAt": "2025-10-01T11:07:23.858Z",
+    "updatedAt": "2025-10-01T11:07:23.860Z"
+  },
+  {
+    "id": "71b51392-e6c1-4b37-8a81-c079bf27ec66",
+    "campaignId": "",
+    "recipient": {
+      "email": "balneet.birah@netsolutions.com",
+      "companyName": "Net Solutions"
+    },
+    "template": {
+      "id": "csv-template",
+      "name": "CSV Import Template",
+      "category": "job-application"
+    },
+    "subject": "Job Opportunity - Software Developer Position",
+    "content": "\n        <div style=\"font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;\">\n          <h2 style=\"color: #333;\">Job Opportunity at Net Solutions</h2>\n\n          <p>Dear Hiring Team,</p>\n\n          <p>I hope this email finds you well. I'm writing to express my interest in software development opportunities at Net Solutions.</p>\n\n          <p>With several years of experience in full-stack development, I specialize in modern web technologies including Node.js, React, and cloud platforms. I'm particularly interested in contributing to innovative projects that make a real impact.</p>\n\n          <p>I've attached my resume for your review, which highlights my technical skills and previous accomplishments. I'd welcome the opportunity to discuss how my background and enthusiasm align with your team's needs.</p>\n\n          <p>Thank you for considering my application. I look forward to the possibility of contributing to Net Solutions's success.</p>\n\n          <p>Best regards,<br>\n          Sameer Bagul<br>\n          Software Developer<br>\n          <a href=\"mailto:sameer@example.com\">sameer@example.com</a></p>\n        </div>\n      ",
+    "to": "",
+    "html": "",
+    "companyName": "",
+    "templateId": "",
+    "templateName": "",
+    "templateCategory": "",
+    "userEmail": "",
+    "batchId": "",
+    "status": "failed",
+    "sentAt": null,
+    "deliveredAt": null,
+    "failedAt": "2025-10-01T11:07:40.879Z",
+    "error": "Rate limit exceeded. Please wait before sending more emails.",
+    "retryCount": 3,
+    "maxRetries": 3,
+    "attachments": [],
+    "metadata": {
+      "userEmail": "sameer@example.com",
+      "batchId": "csv-import-1759315036607",
+      "errorCategory": "RATE_LIMIT"
+    },
+    "createdAt": "2025-10-01T11:07:40.879Z",
+    "updatedAt": "2025-10-01T11:07:40.880Z"
+  },
+  {
+    "id": "4d8e2898-ef11-4f7a-afec-bf08c657b1b2",
+    "campaignId": "",
+    "recipient": {
+      "email": "banmeet.kour@itbd.net",
+      "companyName": "IT BY DESIGN"
+    },
+    "template": {
+      "id": "csv-template",
+      "name": "CSV Import Template",
+      "category": "job-application"
+    },
+    "subject": "Job Opportunity - Software Developer Position",
+    "content": "\n        <div style=\"font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;\">\n          <h2 style=\"color: #333;\">Job Opportunity at IT BY DESIGN</h2>\n\n          <p>Dear Hiring Team,</p>\n\n          <p>I hope this email finds you well. I'm writing to express my interest in software development opportunities at IT BY DESIGN.</p>\n\n          <p>With several years of experience in full-stack development, I specialize in modern web technologies including Node.js, React, and cloud platforms. I'm particularly interested in contributing to innovative projects that make a real impact.</p>\n\n          <p>I've attached my resume for your review, which highlights my technical skills and previous accomplishments. I'd welcome the opportunity to discuss how my background and enthusiasm align with your team's needs.</p>\n\n          <p>Thank you for considering my application. I look forward to the possibility of contributing to IT BY DESIGN's success.</p>\n\n          <p>Best regards,<br>\n          Sameer Bagul<br>\n          Software Developer<br>\n          <a href=\"mailto:sameer@example.com\">sameer@example.com</a></p>\n        </div>\n      ",
+    "to": "",
+    "html": "",
+    "companyName": "",
+    "templateId": "",
+    "templateName": "",
+    "templateCategory": "",
+    "userEmail": "",
+    "batchId": "",
+    "status": "failed",
+    "sentAt": null,
+    "deliveredAt": null,
+    "failedAt": "2025-10-01T11:07:57.904Z",
+    "error": "Rate limit exceeded. Please wait before sending more emails.",
+    "retryCount": 3,
+    "maxRetries": 3,
+    "attachments": [],
+    "metadata": {
+      "userEmail": "sameer@example.com",
+      "batchId": "csv-import-1759315036607",
+      "errorCategory": "RATE_LIMIT"
+    },
+    "createdAt": "2025-10-01T11:07:57.904Z",
+    "updatedAt": "2025-10-01T11:07:57.906Z"
+  },
+  {
+    "id": "5cc56a0b-d1e9-4fb6-b18b-30da75f34c41",
+    "campaignId": "",
+    "recipient": {
+      "email": "sameerbagul0077@gmail.com",
+      "companyName": "Google Inc"
+    },
+    "template": {
+      "id": "",
+      "name": "Unknown",
+      "category": "unknown"
+    },
+    "subject": "Software Developer Opportunity | Google Inc",
+    "content": "Hi there,\n\nI'm <strong>Sameer Bagul</strong>, a full-stack developer and final-year Computer Engineering student from the College of Engineering, Pune.\n\nWith over 40+ MERN projects and 2 years of freelance experience, I have developed scalable web applications, AI-driven platforms, and DevOps pipelines. My recent experience includes:\n\n<strong>LabsCheck, Pune</strong> – Built full-stack systems and automated lead operations for 100,000+ leads using AI agents.\n\n<strong>Walnut Solutions</strong> – Improved SEO and engagement by 30% through responsive web applications in Next.js.\n\n<strong>Smart India Hackathon Winner</strong> – Developed HireMe | Skillify, an AI-powered skill development platform serving 1,000+ users.\n\nI am particularly skilled in MERN Stack, Next.js, AI/ML (PyTorch, LangChain, Hugging Face), and DevOps tools (Docker, Nginx, CI/CD). My portfolio and projects can be viewed here: <a href=\"http://sameerbagul.me\">Portfolio</a> | <a href=\"https://github.com/Sameer-Bagul\">GitHub</a>.\n\nI am seeking internship or entry-level opportunities at Google Inc where I can contribute my technical skills, problem-solving mindset, and passion for innovation. I would love the chance to discuss how I can add value to your team.\n\nPlease find my resume attached for your reference.\nLooking forward to your response.\n\nBest regards,\n<strong>Sameer Bagul</strong>\n+91 7841941033\n<a href=\"mailto:sameerbagul2004@gmail.com\">sameerbagul2004@gmail.com</a>",
+    "to": "",
+    "html": "",
+    "companyName": "",
+    "templateId": "",
+    "templateName": "",
+    "templateCategory": "",
+    "userEmail": "",
+    "batchId": "",
+    "status": "sent",
+    "sentAt": "2025-10-01T11:08:12.452Z",
+    "deliveredAt": "2025-10-01T11:08:12.452Z",
+    "failedAt": null,
+    "error": null,
+    "retryCount": 0,
+    "maxRetries": 3,
+    "attachments": [],
+    "metadata": {
+      "messageId": "<e495444d-c801-53ae-f3d8-ea04d1fbd12f@localhost>",
+      "userEmail": "",
+      "batchId": "",
+      "smtpResponse": "250 2.0.0 OK  1759316892 d9443c01a7336-27ed6881fcasm183429875ad.93 - gsmtp"
+    },
+    "createdAt": "2025-10-01T11:08:12.452Z",
+    "updatedAt": "2025-10-01T11:08:12.454Z"
+  },
+  {
+    "id": "33d4e965-deee-46b9-8ab9-be924ba9c1f2",
+    "campaignId": "",
+    "recipient": {
+      "email": "bagrawal@cpg-inc.com",
+      "companyName": "Computer Power Group"
+    },
+    "template": {
+      "id": "csv-template",
+      "name": "CSV Import Template",
+      "category": "job-application"
+    },
+    "subject": "Job Opportunity - Software Developer Position",
+    "content": "\n        <div style=\"font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;\">\n          <h2 style=\"color: #333;\">Job Opportunity at Computer Power Group</h2>\n\n          <p>Dear Hiring Team,</p>\n\n          <p>I hope this email finds you well. I'm writing to express my interest in software development opportunities at Computer Power Group.</p>\n\n          <p>With several years of experience in full-stack development, I specialize in modern web technologies including Node.js, React, and cloud platforms. I'm particularly interested in contributing to innovative projects that make a real impact.</p>\n\n          <p>I've attached my resume for your review, which highlights my technical skills and previous accomplishments. I'd welcome the opportunity to discuss how my background and enthusiasm align with your team's needs.</p>\n\n          <p>Thank you for considering my application. I look forward to the possibility of contributing to Computer Power Group's success.</p>\n\n          <p>Best regards,<br>\n          Sameer Bagul<br>\n          Software Developer<br>\n          <a href=\"mailto:sameer@example.com\">sameer@example.com</a></p>\n        </div>\n      ",
+    "to": "",
+    "html": "",
+    "companyName": "",
+    "templateId": "",
+    "templateName": "",
+    "templateCategory": "",
+    "userEmail": "",
+    "batchId": "",
+    "status": "failed",
+    "sentAt": null,
+    "deliveredAt": null,
+    "failedAt": "2025-10-01T11:08:14.923Z",
+    "error": "Rate limit exceeded. Please wait before sending more emails.",
+    "retryCount": 3,
+    "maxRetries": 3,
+    "attachments": [],
+    "metadata": {
+      "userEmail": "sameer@example.com",
+      "batchId": "csv-import-1759315036607",
+      "errorCategory": "RATE_LIMIT"
+    },
+    "createdAt": "2025-10-01T11:08:14.923Z",
+    "updatedAt": "2025-10-01T11:08:14.925Z"
+  },
+  {
+    "id": "e5bbd91d-8c47-4f8a-9137-064d5f893723",
+    "campaignId": "",
+    "recipient": {
+      "email": "sammyy7071@gmail.com",
+      "companyName": "Apple Inc"
+    },
+    "template": {
+      "id": "",
+      "name": "Unknown",
+      "category": "unknown"
+    },
+    "subject": "Software Developer Opportunity | Apple Inc",
+    "content": "Hi there,\n\nI'm <strong>Sameer Bagul</strong>, a full-stack developer and final-year Computer Engineering student from the College of Engineering, Pune.\n\nWith over 40+ MERN projects and 2 years of freelance experience, I have developed scalable web applications, AI-driven platforms, and DevOps pipelines. My recent experience includes:\n\n<strong>LabsCheck, Pune</strong> – Built full-stack systems and automated lead operations for 100,000+ leads using AI agents.\n\n<strong>Walnut Solutions</strong> – Improved SEO and engagement by 30% through responsive web applications in Next.js.\n\n<strong>Smart India Hackathon Winner</strong> – Developed HireMe | Skillify, an AI-powered skill development platform serving 1,000+ users.\n\nI am particularly skilled in MERN Stack, Next.js, AI/ML (PyTorch, LangChain, Hugging Face), and DevOps tools (Docker, Nginx, CI/CD). My portfolio and projects can be viewed here: <a href=\"http://sameerbagul.me\">Portfolio</a> | <a href=\"https://github.com/Sameer-Bagul\">GitHub</a>.\n\nI am seeking internship or entry-level opportunities at Apple Inc where I can contribute my technical skills, problem-solving mindset, and passion for innovation. I would love the chance to discuss how I can add value to your team.\n\nPlease find my resume attached for your reference.\nLooking forward to your response.\n\nBest regards,\n<strong>Sameer Bagul</strong>\n+91 7841941033\n<a href=\"mailto:sameerbagul2004@gmail.com\">sameerbagul2004@gmail.com</a>",
+    "to": "",
+    "html": "",
+    "companyName": "",
+    "templateId": "",
+    "templateName": "",
+    "templateCategory": "",
+    "userEmail": "",
+    "batchId": "",
+    "status": "sent",
+    "sentAt": "2025-10-01T11:08:28.809Z",
+    "deliveredAt": "2025-10-01T11:08:28.809Z",
+    "failedAt": null,
+    "error": null,
+    "retryCount": 0,
+    "maxRetries": 3,
+    "attachments": [],
+    "metadata": {
+      "messageId": "<a0aee46f-49ae-cf83-8aa5-d4fc8964b2cb@localhost>",
+      "userEmail": "",
+      "batchId": "",
+      "smtpResponse": "250 2.0.0 OK  1759316908 d9443c01a7336-27ed6881fcasm183429875ad.93 - gsmtp"
+    },
+    "createdAt": "2025-10-01T11:08:28.809Z",
+    "updatedAt": "2025-10-01T11:08:28.811Z"
+  },
+  {
+    "id": "652fa4e9-13fb-45c4-855c-cc4ee0bf8825",
+    "campaignId": "",
+    "recipient": {
+      "email": "barkha@trellissoft.ai",
+      "companyName": "Trellissoft,"
+    },
+    "template": {
+      "id": "csv-template",
+      "name": "CSV Import Template",
+      "category": "job-application"
+    },
+    "subject": "Job Opportunity - Software Developer Position",
+    "content": "\n        <div style=\"font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;\">\n          <h2 style=\"color: #333;\">Job Opportunity at Trellissoft,</h2>\n\n          <p>Dear Hiring Team,</p>\n\n          <p>I hope this email finds you well. I'm writing to express my interest in software development opportunities at Trellissoft,.</p>\n\n          <p>With several years of experience in full-stack development, I specialize in modern web technologies including Node.js, React, and cloud platforms. I'm particularly interested in contributing to innovative projects that make a real impact.</p>\n\n          <p>I've attached my resume for your review, which highlights my technical skills and previous accomplishments. I'd welcome the opportunity to discuss how my background and enthusiasm align with your team's needs.</p>\n\n          <p>Thank you for considering my application. I look forward to the possibility of contributing to Trellissoft,'s success.</p>\n\n          <p>Best regards,<br>\n          Sameer Bagul<br>\n          Software Developer<br>\n          <a href=\"mailto:sameer@example.com\">sameer@example.com</a></p>\n        </div>\n      ",
+    "to": "",
+    "html": "",
+    "companyName": "",
+    "templateId": "",
+    "templateName": "",
+    "templateCategory": "",
+    "userEmail": "",
+    "batchId": "",
+    "status": "failed",
+    "sentAt": null,
+    "deliveredAt": null,
+    "failedAt": "2025-10-01T11:08:31.949Z",
+    "error": "Rate limit exceeded. Please wait before sending more emails.",
+    "retryCount": 3,
+    "maxRetries": 3,
+    "attachments": [],
+    "metadata": {
+      "userEmail": "sameer@example.com",
+      "batchId": "csv-import-1759315036607",
+      "errorCategory": "RATE_LIMIT"
+    },
+    "createdAt": "2025-10-01T11:08:31.949Z",
+    "updatedAt": "2025-10-01T11:08:31.951Z"
+  },
+  {
+    "id": "d13b4055-070e-4de0-a87c-2c6e388d4aca",
+    "campaignId": "",
+    "recipient": {
+      "email": "barkha@wobot.ai",
+      "companyName": "Wobot.ai"
+    },
+    "template": {
+      "id": "csv-template",
+      "name": "CSV Import Template",
+      "category": "job-application"
+    },
+    "subject": "Job Opportunity - Software Developer Position",
+    "content": "\n        <div style=\"font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;\">\n          <h2 style=\"color: #333;\">Job Opportunity at Wobot.ai</h2>\n\n          <p>Dear Hiring Team,</p>\n\n          <p>I hope this email finds you well. I'm writing to express my interest in software development opportunities at Wobot.ai.</p>\n\n          <p>With several years of experience in full-stack development, I specialize in modern web technologies including Node.js, React, and cloud platforms. I'm particularly interested in contributing to innovative projects that make a real impact.</p>\n\n          <p>I've attached my resume for your review, which highlights my technical skills and previous accomplishments. I'd welcome the opportunity to discuss how my background and enthusiasm align with your team's needs.</p>\n\n          <p>Thank you for considering my application. I look forward to the possibility of contributing to Wobot.ai's success.</p>\n\n          <p>Best regards,<br>\n          Sameer Bagul<br>\n          Software Developer<br>\n          <a href=\"mailto:sameer@example.com\">sameer@example.com</a></p>\n        </div>\n      ",
+    "to": "",
+    "html": "",
+    "companyName": "",
+    "templateId": "",
+    "templateName": "",
+    "templateCategory": "",
+    "userEmail": "",
+    "batchId": "",
+    "status": "failed",
+    "sentAt": null,
+    "deliveredAt": null,
+    "failedAt": "2025-10-01T11:08:58.982Z",
+    "error": "Rate limit exceeded. Please wait before sending more emails.",
+    "retryCount": 3,
+    "maxRetries": 3,
+    "attachments": [],
+    "metadata": {
+      "userEmail": "sameer@example.com",
+      "batchId": "csv-import-1759315036607",
+      "errorCategory": "RATE_LIMIT"
+    },
+    "createdAt": "2025-10-01T11:08:58.982Z",
+    "updatedAt": "2025-10-01T11:08:58.983Z"
+  },
+  {
+    "id": "776eebfa-ccc5-46c4-ab5c-d25f1f61118b",
+    "campaignId": "",
+    "recipient": {
+      "email": "benoy.koshy@sisainfosec.com",
+      "companyName": "SISA"
+    },
+    "template": {
+      "id": "csv-template",
+      "name": "CSV Import Template",
+      "category": "job-application"
+    },
+    "subject": "Job Opportunity - Software Developer Position",
+    "content": "\n        <div style=\"font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;\">\n          <h2 style=\"color: #333;\">Job Opportunity at SISA</h2>\n\n          <p>Dear Hiring Team,</p>\n\n          <p>I hope this email finds you well. I'm writing to express my interest in software development opportunities at SISA.</p>\n\n          <p>With several years of experience in full-stack development, I specialize in modern web technologies including Node.js, React, and cloud platforms. I'm particularly interested in contributing to innovative projects that make a real impact.</p>\n\n          <p>I've attached my resume for your review, which highlights my technical skills and previous accomplishments. I'd welcome the opportunity to discuss how my background and enthusiasm align with your team's needs.</p>\n\n          <p>Thank you for considering my application. I look forward to the possibility of contributing to SISA's success.</p>\n\n          <p>Best regards,<br>\n          Sameer Bagul<br>\n          Software Developer<br>\n          <a href=\"mailto:sameer@example.com\">sameer@example.com</a></p>\n        </div>\n      ",
+    "to": "",
+    "html": "",
+    "companyName": "",
+    "templateId": "",
+    "templateName": "",
+    "templateCategory": "",
+    "userEmail": "",
+    "batchId": "",
+    "status": "failed",
+    "sentAt": null,
+    "deliveredAt": null,
+    "failedAt": "2025-10-01T11:09:16.004Z",
+    "error": "Rate limit exceeded. Please wait before sending more emails.",
+    "retryCount": 3,
+    "maxRetries": 3,
+    "attachments": [],
+    "metadata": {
+      "userEmail": "sameer@example.com",
+      "batchId": "csv-import-1759315036607",
+      "errorCategory": "RATE_LIMIT"
+    },
+    "createdAt": "2025-10-01T11:09:16.004Z",
+    "updatedAt": "2025-10-01T11:09:16.005Z"
+  },
+  {
+    "id": "6c6de016-4afd-40c2-8e5a-66cb01a26db2",
+    "campaignId": "",
+    "recipient": {
+      "email": "bensley.zachariah@fulcrumdigital.com",
+      "companyName": "Fulcrum Digital Inc"
+    },
+    "template": {
+      "id": "csv-template",
+      "name": "CSV Import Template",
+      "category": "job-application"
+    },
+    "subject": "Job Opportunity - Software Developer Position",
+    "content": "\n        <div style=\"font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;\">\n          <h2 style=\"color: #333;\">Job Opportunity at Fulcrum Digital Inc</h2>\n\n          <p>Dear Hiring Team,</p>\n\n          <p>I hope this email finds you well. I'm writing to express my interest in software development opportunities at Fulcrum Digital Inc.</p>\n\n          <p>With several years of experience in full-stack development, I specialize in modern web technologies including Node.js, React, and cloud platforms. I'm particularly interested in contributing to innovative projects that make a real impact.</p>\n\n          <p>I've attached my resume for your review, which highlights my technical skills and previous accomplishments. I'd welcome the opportunity to discuss how my background and enthusiasm align with your team's needs.</p>\n\n          <p>Thank you for considering my application. I look forward to the possibility of contributing to Fulcrum Digital Inc's success.</p>\n\n          <p>Best regards,<br>\n          Sameer Bagul<br>\n          Software Developer<br>\n          <a href=\"mailto:sameer@example.com\">sameer@example.com</a></p>\n        </div>\n      ",
+    "to": "",
+    "html": "",
+    "companyName": "",
+    "templateId": "",
+    "templateName": "",
+    "templateCategory": "",
+    "userEmail": "",
+    "batchId": "",
+    "status": "failed",
+    "sentAt": null,
+    "deliveredAt": null,
+    "failedAt": "2025-10-01T11:09:33.026Z",
+    "error": "Rate limit exceeded. Please wait before sending more emails.",
+    "retryCount": 3,
+    "maxRetries": 3,
+    "attachments": [],
+    "metadata": {
+      "userEmail": "sameer@example.com",
+      "batchId": "csv-import-1759315036607",
+      "errorCategory": "RATE_LIMIT"
+    },
+    "createdAt": "2025-10-01T11:09:33.026Z",
+    "updatedAt": "2025-10-01T11:09:33.027Z"
+  },
+  {
+    "id": "3565c8ce-5b5a-4494-b5a0-042797ef2f40",
+    "campaignId": "",
+    "recipient": {
+      "email": "bhakti.dharod@idfy.com",
+      "companyName": "IDfy"
+    },
+    "template": {
+      "id": "csv-template",
+      "name": "CSV Import Template",
+      "category": "job-application"
+    },
+    "subject": "Job Opportunity - Software Developer Position",
+    "content": "\n        <div style=\"font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;\">\n          <h2 style=\"color: #333;\">Job Opportunity at IDfy</h2>\n\n          <p>Dear Hiring Team,</p>\n\n          <p>I hope this email finds you well. I'm writing to express my interest in software development opportunities at IDfy.</p>\n\n          <p>With several years of experience in full-stack development, I specialize in modern web technologies including Node.js, React, and cloud platforms. I'm particularly interested in contributing to innovative projects that make a real impact.</p>\n\n          <p>I've attached my resume for your review, which highlights my technical skills and previous accomplishments. I'd welcome the opportunity to discuss how my background and enthusiasm align with your team's needs.</p>\n\n          <p>Thank you for considering my application. I look forward to the possibility of contributing to IDfy's success.</p>\n\n          <p>Best regards,<br>\n          Sameer Bagul<br>\n          Software Developer<br>\n          <a href=\"mailto:sameer@example.com\">sameer@example.com</a></p>\n        </div>\n      ",
+    "to": "",
+    "html": "",
+    "companyName": "",
+    "templateId": "",
+    "templateName": "",
+    "templateCategory": "",
+    "userEmail": "",
+    "batchId": "",
+    "status": "failed",
+    "sentAt": null,
+    "deliveredAt": null,
+    "failedAt": "2025-10-01T11:09:50.050Z",
+    "error": "Rate limit exceeded. Please wait before sending more emails.",
+    "retryCount": 3,
+    "maxRetries": 3,
+    "attachments": [],
+    "metadata": {
+      "userEmail": "sameer@example.com",
+      "batchId": "csv-import-1759315036607",
+      "errorCategory": "RATE_LIMIT"
+    },
+    "createdAt": "2025-10-01T11:09:50.050Z",
+    "updatedAt": "2025-10-01T11:09:50.051Z"
   }
 ]
