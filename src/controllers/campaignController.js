@@ -11,7 +11,7 @@ class CampaignController {
   // GET /api/campaigns - Get all campaigns
   async getAllCampaigns(req, res) {
     try {
-      const campaigns = this.campaignService.getAllCampaigns();
+      const campaigns = await this.campaignService.getAllCampaigns();
       const campaignSummaries = campaigns.map(campaign => ({
         id: campaign.id,
         name: campaign.name,

@@ -231,7 +231,8 @@ class EmailService {
       // Validate and sanitize input data
       const inputValidation = this.validateAndSanitizeEmailData(emailData);
       if (!inputValidation.valid) {
-        const errorMsg = `Input validation failed: ${inputValidation.errors.join(', ')}`;
+        const errors = inputValidation.errors || ['Unknown validation error'];
+        const errorMsg = `Input validation failed: ${errors.join(', ')}`;
         logger.warning(this.sanitizeErrorMessage({ message: errorMsg }, emailData.to));
         throw new Error(errorMsg);
       }
@@ -240,8 +241,9 @@ class EmailService {
 
       // Additional email model validation
       const validation = email.isValid();
-      if (!validation.valid) {
-        const errorMsg = `Email validation failed: ${validation.errors.join(', ')}`;
+      if (!validation || !validation.valid) {
+        const errors = validation?.errors || ['Unknown validation error'];
+        const errorMsg = `Email validation failed: ${errors.join(', ')}`;
         logger.warning(this.sanitizeErrorMessage({ message: errorMsg }, email.to));
         throw new Error(errorMsg);
       }
@@ -259,7 +261,7 @@ class EmailService {
 
       logger.email(`Email sent successfully to ${email.to} - MessageID: ${result.messageId}`);
 
-      // Create email record in MongoDB
+      // Create email record in file storage
       try {
         const emailRecord = new Email({
           campaignId: campaignId,
@@ -293,9 +295,9 @@ class EmailService {
           templateId: email.templateId
         });
 
-      } catch (dbError) {
-        logger.error(`Failed to save email record to database: ${dbError.message}`);
-        // Continue execution even if DB save fails
+      } catch (fileError) {
+        logger.error(`Failed to save email record to file storage: ${fileError.message}`);
+        // Continue execution even if file save fails
       }
 
       return {
@@ -322,7 +324,7 @@ class EmailService {
         return this.sendEmail(emailData, retryCount + 1, campaignId);
       }
 
-      // Create email record for failed email in MongoDB
+      // Create email record for failed email in file storage
       try {
         const failedEmailRecord = new Email({
           campaignId: campaignId,
@@ -357,9 +359,9 @@ class EmailService {
           retryCount
         });
 
-      } catch (dbError) {
-        logger.error(`Failed to save failed email record to database: ${dbError.message}`);
-        // Continue execution even if DB save fails
+      } catch (fileError) {
+        logger.error(`Failed to save failed email record to file storage: ${fileError.message}`);
+        // Continue execution even if file save fails
       }
 
       // Return appropriate error response based on category

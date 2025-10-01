@@ -3,8 +3,6 @@ const Email = require('../models/Email');
 const Log = require('../models/Log');
 const logger = require('../utils/logger');
 const DateUtils = require('../utils/dateUtils');
-const database = require('../config/database');
-const mongodb = require('../config/mongodb');
 
 class CampaignService {
   constructor() {
@@ -12,10 +10,6 @@ class CampaignService {
     this.cacheTimeout = 5 * 60 * 1000; // 5 minutes cache timeout
   }
 
-  // Check if MongoDB is available
-  isMongoDBAvailable() {
-    return mongodb && mongodb.isConnected;
-  }
 
   // Get campaign from cache or database
   getCampaignFromCache(campaignId) {
@@ -49,7 +43,14 @@ class CampaignService {
         userEmail: campaignData.userEmail
       })}`);
 
-      const campaign = new Campaign(campaignData);
+      // Ensure required fields are set
+      const enrichedData = {
+        ...campaignData,
+        id: campaignData.id || require('crypto').randomUUID(),
+        totalEmails: campaignData.totalEmails || campaignData.contacts?.length || 0
+      };
+
+      const campaign = new Campaign(enrichedData);
       logger.info(`[CAMPAIGN SERVICE] Campaign instance created with ID: ${campaign.id}`);
 
       // Validate campaign
@@ -58,25 +59,16 @@ class CampaignService {
         throw new Error(`Campaign validation failed: ${validation.errors.join(', ')}`);
       }
 
-      let savedCampaign;
+      // Save to file storage
+      savedCampaign = await campaign.save();
+      logger.info(`[CAMPAIGN SERVICE] Saved campaign to file storage with ID: ${savedCampaign.id}`);
 
-      if (this.isMongoDBAvailable()) {
-        // Save to MongoDB
-        savedCampaign = await campaign.save();
-        logger.info(`[CAMPAIGN SERVICE] Saved campaign to MongoDB with ID: ${savedCampaign.id}`);
-
-        // Log campaign creation
-        await Log.logCampaignEvent(savedCampaign.id, 'created', {
-          name: savedCampaign.name,
-          totalEmails: savedCampaign.totalEmails,
-          userEmail: savedCampaign.userEmail
-        });
-      } else {
-        // Fall back to JSON file storage
-        const campaignJson = campaign.toJSON();
-        savedCampaign = database.addCampaign(campaignJson);
-        logger.info(`[CAMPAIGN SERVICE] Saved campaign to JSON storage with ID: ${savedCampaign.id}`);
-      }
+      // Log campaign creation
+      await Log.logCampaignEvent(savedCampaign.id, 'created', {
+        name: savedCampaign.name,
+        totalEmails: savedCampaign.totalEmails,
+        userEmail: savedCampaign.userEmail
+      });
 
       // Update cache
       this.updateCache(savedCampaign);
@@ -99,8 +91,8 @@ class CampaignService {
         return cached;
       }
 
-      // Load from database
-      const campaign = await Campaign.findOne({ id: campaignId });
+      // Load from file storage
+      const campaign = await Campaign.findById(campaignId);
       if (!campaign) {
         return null;
       }
@@ -116,18 +108,14 @@ class CampaignService {
   // Update campaign with cache invalidation
   async updateCampaign(campaignId, updates) {
     try {
-      const updatedCampaign = await Campaign.findOneAndUpdate(
-        { id: campaignId },
-        {
-          ...updates,
-          updatedAt: new Date()
-        },
-        { new: true }
-      );
-
-      if (!updatedCampaign) {
+      const campaign = await Campaign.findById(campaignId);
+      if (!campaign) {
         throw new Error(`Campaign not found: ${campaignId}`);
       }
+
+      // Update campaign properties
+      Object.assign(campaign, updates);
+      const updatedCampaign = await campaign.save();
 
       // Update cache
       this.updateCache(updatedCampaign);
@@ -156,7 +144,8 @@ class CampaignService {
   // Get all campaigns (no caching for list operations)
   async getAllCampaigns() {
     try {
-      return await Campaign.find({}).sort({ createdAt: -1 });
+      const campaigns = await Campaign.loadAll();
+      return campaigns.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
     } catch (error) {
       logger.error(`Failed to get all campaigns: ${error.message}`);
       return [];

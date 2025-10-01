@@ -17,6 +17,7 @@ const testRoutes = require('./routes/testRoutes');
 
 // Import services and handlers
 const SchedulerService = require('./services/schedulerService');
+const SocketHandler = require('./utils/socketHandler');
 const logger = require('./utils/logger');
 
 class App {
@@ -25,12 +26,14 @@ class App {
     this.server = http.createServer(this.app);
 
     this.schedulerService = null;
-    
+    this.socketHandler = null;
+
     this.setupMiddleware();
     this.setupRoutes();
     this.setupServices();
+    this.setupSocketIO();
     this.setupErrorHandling();
-    
+
     logger.info('Application initialized');
   }
 
@@ -195,6 +198,21 @@ class App {
     logger.info('Services configured');
   }
 
+  setupSocketIO() {
+    // Initialize Socket.IO handler
+    this.socketHandler = new SocketHandler(this.server);
+
+    // Set socket handler in logger for real-time log emission
+    logger.setSocketHandler(this.socketHandler);
+
+    // Set socket handler in scheduler service
+    if (this.schedulerService) {
+      this.schedulerService.setSocketHandler(this.socketHandler);
+    }
+
+    logger.info('Socket.IO configured');
+  }
+
   setupErrorHandling() {
     // 404 handler (must be after all routes)
     this.app.use(notFoundHandler);
@@ -282,6 +300,13 @@ class App {
   // Get scheduler service
   getSchedulerService() {
     return this.schedulerService;
+  }
+
+  // Close socket connections
+  async closeConnections() {
+    if (this.socketHandler) {
+      await this.socketHandler.closeConnections();
+    }
   }
 }
 

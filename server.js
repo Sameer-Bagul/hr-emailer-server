@@ -2,7 +2,6 @@ require('dotenv').config();
 const App = require('./src/app');
 const logger = require('./src/utils/logger');
 const securityCheck = require('./src/utils/securityCheck');
-const mongodb = require('./src/config/mongodb');
 
 // Server configuration
 const PORT = process.env.PORT || 5000;
@@ -21,15 +20,6 @@ const server = appInstance.getServer();
 // Start server
 async function startServer() {
   try {
-    // Connect to MongoDB first (optional - falls back to JSON storage if unavailable)
-    logger.info('🔌 Connecting to MongoDB...');
-    const mongoConnection = await mongodb.connect();
-    if (mongoConnection) {
-      logger.info('✅ MongoDB connected successfully');
-    } else {
-      logger.info('ℹ️ Using JSON file storage (MongoDB not available)');
-    }
-
     // Start HTTP server
     server.listen(PORT, () => {
       logger.info(`🚀 Server running on port ${PORT} in ${NODE_ENV} mode`);
@@ -88,15 +78,9 @@ async function gracefulShutdown(signal) {
       logger.info('✅ Email connections closed');
     }
 
-    // Close MongoDB connection
-    if (mongodb && mongodb.close) {
-      await mongodb.close();
-      logger.info('✅ MongoDB connection closed');
-    }
-
     // Close socket connections
     if (appInstance && appInstance.closeConnections) {
-      appInstance.closeConnections();
+      await appInstance.closeConnections();
       logger.info('✅ Socket connections closed');
     }
 

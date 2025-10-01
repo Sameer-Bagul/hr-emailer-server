@@ -70,42 +70,44 @@ class EmailController {
    *
    * @returns {Promise<void>} Sends JSON response with operation result
    */
-  async sendEmails(req, res) {
-    try {
-      logger.email('Email sending endpoint called');
+   async sendEmails(req, res) {
+     // Response safety mechanism to prevent double responses
+     // This ensures we don't try to send response headers twice
+     let responseSent = false;
 
-      // Debug logging for development
-      console.log('Request body:', req.body);
-      console.log('Request files:', req.files);
+     /**
+      * Safely send JSON response, preventing double responses
+      * @param {Object} data - Response data to send
+      */
+     const safeJson = (data) => {
+       if (!responseSent) {
+         responseSent = true;
+         res.json(data);
+       }
+     };
 
-      // Response safety mechanism to prevent double responses
-      // This ensures we don't try to send response headers twice
-      let responseSent = false;
+     /**
+      * Safely send error response, preventing double responses
+      * @param {Error|string} error - Error to send
+      * @param {number} status - HTTP status code
+      */
+     const safeError = (error, status = 500) => {
+       if (!responseSent) {
+         responseSent = true;
+         // Sanitize error messages to prevent information leakage
+         const sanitizedError = this.sanitizeErrorForResponse(error);
+         res.status(status).json({ error: sanitizedError });
+       }
+     };
 
-      /**
-       * Safely send JSON response, preventing double responses
-       * @param {Object} data - Response data to send
-       */
-      const safeJson = (data) => {
-        if (!responseSent) {
-          responseSent = true;
-          res.json(data);
-        }
-      };
+     try {
+       logger.email('Email sending endpoint called');
 
-      /**
-       * Safely send error response, preventing double responses
-       * @param {Error|string} error - Error to send
-       * @param {number} status - HTTP status code
-       */
-      const safeError = (error, status = 500) => {
-        if (!responseSent) {
-          responseSent = true;
-          // Sanitize error messages to prevent information leakage
-          const sanitizedError = this.sanitizeErrorForResponse(error);
-          res.status(status).json({ error: sanitizedError });
-        }
-      };
+       // Debug logging for development
+       console.log('Request body:', req.body);
+       console.log('Request files:', req.files);
+
+       logger.info('[DEBUG] Starting sendEmails processing');
 
       const { delayMs, resumeDocLink, userEmail, campaignType, templateId, manualRecipients } = req.body;
       const files = req.files;
@@ -146,6 +148,7 @@ class EmailController {
           return safeError('No valid recipients found in Excel file', 400);
         }
         hasValidRecipients = true;
+        logger.info(`[DEBUG] File parsed successfully, recipients: ${recipients.length}`);
       } else if (manualRecipients) {
         // Handle manual recipients
         try {
@@ -168,6 +171,7 @@ class EmailController {
 
 
       // Load template based on templateId or use default
+      logger.info(`[DEBUG] Loading template, templateId: ${templateId}`);
       let template;
       if (templateId) {
         template = Template.getTemplateById(templateId);
@@ -181,6 +185,7 @@ class EmailController {
       if (!template) {
         return safeError('Failed to load email template', 500);
       }
+      logger.info(`[DEBUG] Template loaded successfully: ${template.name}`);
 
       // Convert recipients to campaign format
       const contacts = recipients.map(r => ({
@@ -189,14 +194,16 @@ class EmailController {
       }));
 
       // Check if this should be a multi-day campaign
-      if (campaignType === 'multi-day' || contacts.length > 1) {
+      if (campaignType === 'multi-day') {
         logger.campaign('Creating multi-day campaign...');
-        
+        logger.info(`[DEBUG] Campaign type: ${campaignType}, contacts: ${contacts.length}`);
+
         if (!userEmail) {
           return safeError('User email is required for multi-day campaigns', 400);
         }
 
         // Create campaign
+        logger.info('[DEBUG] Preparing campaign data');
         const campaignData = {
           name: `${template.category === 'freelancing' ? 'Freelancing' : 'Job Application'} Campaign - ${new Date().toLocaleDateString()}`,
           contacts,
@@ -213,15 +220,17 @@ class EmailController {
           }] : []
         };
 
+        logger.info('[DEBUG] Calling campaignService.createCampaign');
         const campaign = await this.campaignService.createCampaign(campaignData);
-        
+        logger.info('[DEBUG] Campaign created successfully');
+
         // Debug logging
         logger.info(`Campaign object after creation: ${JSON.stringify({
           id: campaign?.id,
           name: campaign?.name,
           hasContacts: campaign?.contacts?.length > 0
         }, null, 2)}`);
-        
+
         if (!campaign?.id) {
           logger.error('Campaign ID is undefined after creation!');
           return safeError('Failed to create campaign - invalid ID', 500);

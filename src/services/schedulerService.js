@@ -13,8 +13,14 @@ class SchedulerService {
     this.activeJobs = new Map();
     this.isRunning = false;
     this.DAILY_EMAIL_LIMIT = 300; // Gmail safe limit
-    
+
     logger.info('Scheduler service initialized');
+  }
+
+  // Set socket handler (for when it's not available during construction)
+  setSocketHandler(socketHandler) {
+    this.socketHandler = socketHandler;
+    logger.info('Socket handler set for scheduler service');
   }
 
   // Start the scheduler
@@ -61,8 +67,12 @@ class SchedulerService {
     }
 
     this.activeJobs.forEach((job, name) => {
-      job.destroy();
-      logger.info(`Stopped scheduled job: ${name}`);
+      try {
+        job.stop();
+        logger.info(`Stopped scheduled job: ${name}`);
+      } catch (error) {
+        logger.error(`Error stopping job ${name}: ${error.message}`);
+      }
     });
 
     this.activeJobs.clear();
@@ -74,8 +84,8 @@ class SchedulerService {
   scheduleJob(name, cronExpression, task) {
     try {
       if (this.activeJobs.has(name)) {
-        logger.warning(`Job ${name} already exists, destroying old job`);
-        this.activeJobs.get(name).destroy();
+        logger.warning(`Job ${name} already exists, stopping old job`);
+        this.activeJobs.get(name).stop();
       }
 
       const job = cron.schedule(cronExpression, async () => {
@@ -116,12 +126,12 @@ class SchedulerService {
   removeJob(name) {
     try {
       if (this.activeJobs.has(name)) {
-        this.activeJobs.get(name).destroy();
+        this.activeJobs.get(name).stop();
         this.activeJobs.delete(name);
         logger.info(`Removed scheduled job: ${name}`);
         return true;
       }
-      
+
       logger.warning(`Job ${name} not found`);
       return false;
     } catch (error) {

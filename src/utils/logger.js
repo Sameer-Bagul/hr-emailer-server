@@ -1,4 +1,4 @@
-const Log = require('../models/Log');
+const FileLogger = require('./fileLogger');
 
 class Logger {
   constructor() {
@@ -13,21 +13,13 @@ class Logger {
       cyan: '\x1b[36m'
     };
     this.socketHandler = null;
-    this.dbLoggingEnabled = process.env.DB_LOGGING_ENABLED !== 'false';
-    this._mongodb = null;
-  }
+    this.fileLogger = new FileLogger({
+      logLevel: process.env.LOG_LEVEL || 'info',
+      ttlDays: parseInt(process.env.LOG_TTL_DAYS) || 90
+    });
 
-  // Lazy load MongoDB connection to avoid circular dependency
-  get mongodb() {
-    if (!this._mongodb) {
-      try {
-        this._mongodb = require('../config/mongodb');
-      } catch (error) {
-        // Fallback if MongoDB is not available
-        this._mongodb = { isConnected: false };
-      }
-    }
-    return this._mongodb;
+    // Start periodic cleanup
+    this.fileLogger.startCleanup();
   }
 
   // Set socket handler for real-time log emission
@@ -35,24 +27,12 @@ class Logger {
     this.socketHandler = socketHandler;
   }
 
-  // Save log to database
-  async saveLogToDB(level, message, category = 'system', data = {}) {
-    if (!this.dbLoggingEnabled || !this.mongodb.isConnected) {
-      return;
-    }
-
+  // Save log to file
+  async saveLogToFile(level, message, category = 'system', data = {}) {
     try {
-      const logData = {
-        level: level.toLowerCase(),
-        message: this.sanitizeMessage(message),
-        category,
-        data,
-        timestamp: new Date()
-      };
-
       // Add memory usage for performance monitoring
       if (process.memoryUsage) {
-        logData.memoryUsage = {
+        data.memoryUsage = {
           rss: Math.round(process.memoryUsage().rss / 1024 / 1024), // MB
           heapTotal: Math.round(process.memoryUsage().heapTotal / 1024 / 1024),
           heapUsed: Math.round(process.memoryUsage().heapUsed / 1024 / 1024),
@@ -60,10 +40,10 @@ class Logger {
         };
       }
 
-      await Log.create(logData);
+      await this.fileLogger.log(level, message, category, data);
     } catch (error) {
-      // Prevent infinite logging loops - don't log DB errors
-      console.error('Failed to save log to database:', error.message);
+      // Prevent infinite logging loops - don't log file errors
+      console.error('Failed to save log to file:', error.message);
     }
   }
 
@@ -121,19 +101,19 @@ class Logger {
   info(message, emoji = 'ℹ️') {
     console.log(this.colors.blue + this.formatMessage('INFO', message, emoji) + this.colors.reset);
     this.emitToSocket('INFO', message, emoji);
-    this.saveLogToDB('info', message, 'system');
+    this.saveLogToFile('info', message, 'system');
   }
 
   success(message, emoji = '✅') {
     console.log(this.colors.green + this.formatMessage('SUCCESS', message, emoji) + this.colors.reset);
     this.emitToSocket('SUCCESS', message, emoji);
-    this.saveLogToDB('info', message, 'system');
+    this.saveLogToFile('info', message, 'system');
   }
 
   warn(message, emoji = '⚠️') {
     console.log(this.colors.yellow + this.formatMessage('WARNING', message, emoji) + this.colors.reset);
     this.emitToSocket('WARNING', message, emoji);
-    this.saveLogToDB('warn', message, 'system');
+    this.saveLogToFile('warn', message, 'system');
   }
 
   warning(message, emoji = '⚠️') {
@@ -143,33 +123,66 @@ class Logger {
   error(message, emoji = '❌') {
     console.error(this.colors.red + this.formatMessage('ERROR', message, emoji) + this.colors.reset);
     this.emitToSocket('ERROR', message, emoji);
-    this.saveLogToDB('error', message, 'system');
+    this.saveLogToFile('error', message, 'system');
   }
 
   debug(message, emoji = '🐛') {
     if (process.env.NODE_ENV === 'development' || process.env.DEBUG === 'true') {
       console.log(this.colors.magenta + this.formatMessage('DEBUG', message, emoji) + this.colors.reset);
       this.emitToSocket('DEBUG', message, emoji);
-      this.saveLogToDB('debug', message, 'system');
+      this.saveLogToFile('debug', message, 'system');
     }
   }
 
   campaign(message, emoji = '📧') {
     console.log(this.colors.cyan + this.formatMessage('CAMPAIGN', message, emoji) + this.colors.reset);
     this.emitToSocket('CAMPAIGN', message, emoji);
-    this.saveLogToDB('info', message, 'campaign');
+    this.saveLogToFile('info', message, 'campaign');
   }
 
   email(message, emoji = '📨') {
     console.log(this.colors.green + this.formatMessage('EMAIL', message, emoji) + this.colors.reset);
     this.emitToSocket('EMAIL', message, emoji);
-    this.saveLogToDB('info', message, 'email');
+    this.saveLogToFile('info', message, 'email');
   }
 
   file(message, emoji = '📁') {
     console.log(this.colors.blue + this.formatMessage('FILE', message, emoji) + this.colors.reset);
     this.emitToSocket('FILE', message, emoji);
-    this.saveLogToDB('info', message, 'system');
+    this.saveLogToFile('info', message, 'system');
+  }
+
+  // Query methods
+  async queryLogs(options = {}) {
+    return await this.fileLogger.query(options);
+  }
+
+  async getLogsByLevel(level, limit = 100) {
+    return await this.queryLogs({ level, limit });
+  }
+
+  async getLogsByCategory(category, limit = 100) {
+    return await this.queryLogs({ category, limit });
+  }
+
+  async getRecentLogs(limit = 100) {
+    return await this.queryLogs({ limit });
+  }
+
+  async getErrorLogs(limit = 100) {
+    return await this.getLogsByLevel('error', limit);
+  }
+
+  async getLogsByDateRange(startDate, endDate, category = null, limit = 100) {
+    return await this.queryLogs({ startDate, endDate, category, limit });
+  }
+
+  async getLogStats() {
+    return await this.fileLogger.getStats();
+  }
+
+  async cleanupOldLogs() {
+    return await this.fileLogger.cleanupOldLogs();
   }
 }
 
