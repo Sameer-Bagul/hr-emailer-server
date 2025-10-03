@@ -61,41 +61,75 @@ class Template {
   // Job Search Template
   static getJobSearchTemplate() {
     const subject = `Software Developer Opportunity | {{company_name}}`;
-    const content = `Hi there,
+const content = `
+<div style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 650px; margin: 0 auto;">
 
-I'm Sameer Bagul, a full-stack developer and final-year Computer Engineering student from the College of Engineering, Pune.
+  <p>Dear Hiring Manager,</p>
 
-With over 40+ MERN projects and 2 years of freelance experience, I have developed scalable web applications, AI-driven platforms, and DevOps pipelines.
+  <p>
+    My name is <strong>Sameer Bagul</strong>, a final-year B.Tech (Information Technology) student at 
+    <strong>PES Modern College of Engineering, Pune</strong>.  
+    I am a <strong>Full-Stack & AI Developer with DevOps expertise</strong>, bringing 2+ years of freelancing and professional experience in building scalable web applications, AI-driven platforms, and modern deployment pipelines.
+  </p>
 
-🚀 RECENT EXPERIENCE:
+  <p>
+    In addition to my internships, my <strong>freelancing background</strong> has given me the opportunity to deliver high-quality solutions to real clients, enhancing my skills in end-to-end project execution, communication, and business impact.  
+    This blend of <strong>industry, freelance, and academic experience</strong> makes me confident in my ability to take ownership of projects and excel in software development roles at <strong>{{company_name}}</strong>.
+  </p>
 
-• LabsCheck, Pune – Built full-stack systems and automated lead operations for 100,000+ leads using AI agents
+  <h3 style="color:#2c5282; margin-top:25px; margin-bottom:10px;">Professional Experience</h3>
+  <ul style="margin-left:20px; line-height:1.8;">
+    <li><strong>LabsCheck, Pune</strong> – Built full-stack systems and automated lead operations for 100,000+ leads using AI agents; deployed medical lab platforms with Docker, Nginx & CI/CD achieving 99% uptime.</li>
+    <li><strong>Walnut Solutions</strong> – Developed responsive Next.js applications, improving SEO and engagement by 30%, integrated APIs, and optimized UI performance.</li>
+    <li><strong>Freelance Projects</strong> – Delivered custom software solutions such as <em>BillCraft</em> (multi-shop billing platform) and other MERN/Next.js platforms, driving measurable client growth and efficiency.</li>
+  </ul>
 
-• Walnut Solutions – Improved SEO and engagement by 30% through responsive web applications in Next.js
+  <h3 style="color:#2c5282; margin-top:25px; margin-bottom:10px;">Key Projects</h3>
+  <ul style="margin-left:20px; line-height:1.8;">
+    <li><strong>HireMe | Skillify</strong> – AI-powered skill development platform with 1,000+ users; Smart India Hackathon Winner 2024.</li>
+    <li><strong>BillCraft (Freelance)</strong> – Multi-shop billing system for 18+ outlets and 200+ products with analytics dashboards.</li>
+    <li><strong>Evento</strong> – Event management platform in Next.js, increasing student participation by 25% and supporting 500+ concurrent users.</li>
+  </ul>
 
-• Smart India Hackathon Winner – Developed HireMe | Skillify, an AI-powered skill development platform serving 1,000+ users
+  <h3 style="color:#2c5282; margin-top:25px; margin-bottom:10px;">Technical Skills</h3>
+  <p style="background:#f7fafc; padding:15px; border-left:4px solid #3182ce;">
+    <strong>Languages:</strong> JavaScript, TypeScript, Python, Java, C, C++ <br>
+    <strong>Frameworks:</strong> MERN, Next.js, React.js, Three.js <br>
+    <strong>Databases:</strong> MongoDB, SQL, Firebase <br>
+    <strong>DevOps:</strong> Docker, Nginx, Git, CI/CD, Portainer <br>
+    <strong>AI/ML:</strong> PyTorch, TensorFlow, Hugging Face, LangChain, NLP
+  </p>
 
-💻 TECHNICAL SKILLS:
-MERN Stack | Next.js | AI/ML (PyTorch, LangChain, Hugging Face) | DevOps (Docker, Nginx, CI/CD)
+  <p style="margin-top:25px;">
+    Recognized as a <strong>Smart India Hackathon Winner</strong> and <strong>National Hackathon Champion</strong>, 
+    I bring not only technical depth but also leadership, having mentored 200+ students as Technical Lead of the APP Club.  
+    With my proven track record of delivering impactful freelance and professional projects, I believe I am well-positioned to contribute meaningfully at <strong>{{company_name}}</strong>.
+  </p>
 
-📂 PORTFOLIO & PROJECTS:
-Portfolio: http://sameerbagul.me
-GitHub: https://github.com/Sameer-Bagul
+  <p>
+    Please find my resume attached for your consideration. I would welcome the opportunity to discuss how I can support your team’s goals and deliver high-quality software solutions.
+  </p>
 
-I am seeking internship or entry-level opportunities at {{company_name}} where I can contribute my technical skills, problem-solving mindset, and passion for innovation.
+  <p>Thank you for your time and consideration.</p>
 
-I would love the chance to discuss how I can add value to your team.
+  <hr style="border:none; border-top:1px solid #e2e8f0; margin:25px 0;">
 
-Please find my resume attached for your reference.
+  <p style="margin-bottom:5px;"><strong>Best regards,</strong></p>
+  <p style="margin-bottom:5px;"><strong>Sameer Bagul</strong></p>
+  <p style="margin-bottom:5px;">Pune, India</p>
+  <p style="margin-bottom:5px;">+91 7841941033</p>
+  <p style="margin-bottom:5px;">
+    <a href="mailto:sameerbagul2004@gmail.com" style="color:#3182ce; text-decoration:none;">sameerbagul2004@gmail.com</a>
+  </p>
+  <p style="margin-bottom:5px;">
+    <a href="http://sameerbagul.me" style="color:#3182ce; text-decoration:none;">Portfolio</a> | 
+    <a href="https://github.com/Sameer-Bagul" style="color:#3182ce; text-decoration:none;">GitHub</a> | 
+    <a href="https://linkedin.com/in/sameer-bagul" style="color:#3182ce; text-decoration:none;">LinkedIn</a>
+  </p>
 
-Looking forward to your response.
+</div>
+`;
 
----
-
-Best regards,
-Sameer Bagul
-📱 +91 7841941033
-✉️ sameerbagul2004@gmail.com`;
 
     return new Template({
       id: "job-search",
@@ -111,50 +145,76 @@ Sameer Bagul
   // Lead Search Template
   static getLeadSearchTemplate() {
     const subject = `Partnership Opportunity - Full-Stack Development Services | {{company_name}}`;
-    const content = `Hello,
+    
+const content = `
+<div style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 650px; margin: 0 auto;">
 
-I'm Sameer Bagul, a skilled full-stack developer specializing in modern web technologies and AI automation solutions.
+  <p>Dear Hiring Manager,</p>
 
-I noticed {{company_name}} and believe there might be an opportunity for us to collaborate.
+  <p>
+    My name is <strong>Sameer Bagul</strong>, a final-year B.Tech (Information Technology) student at 
+    <strong>PES Modern College of Engineering, Pune</strong>.  
+    I am a <strong>Full-Stack & AI Developer with DevOps expertise</strong>, bringing 2+ years of freelancing and professional experience in building scalable web applications, AI-driven platforms, and modern deployment pipelines.
+  </p>
 
-🚀 DEVELOPMENT SERVICES I OFFER:
+  <p>
+    In addition to my internships, my <strong>freelancing background</strong> has given me the opportunity to deliver high-quality solutions to real clients, enhancing my skills in end-to-end project execution, communication, and business impact.  
+    This blend of <strong>industry, freelance, and academic experience</strong> makes me confident in my ability to take ownership of projects and excel in software development roles at <strong>{{company_name}}</strong>.
+  </p>
 
-Full-Stack Development:
-• MERN Stack (MongoDB, Express.js, React, Node.js)
-• Next.js & TypeScript applications
-• Real-time applications with Socket.IO
+  <h3 style="color:#2c5282; margin-top:25px; margin-bottom:10px;">Professional Experience</h3>
+  <ul style="margin-left:20px; line-height:1.8;">
+    <li><strong>LabsCheck, Pune</strong> – Built full-stack systems and automated lead operations for 100,000+ leads using AI agents; deployed medical lab platforms with Docker, Nginx & CI/CD achieving 99% uptime.</li>
+    <li><strong>Walnut Solutions</strong> – Developed responsive Next.js applications, improving SEO and engagement by 30%, integrated APIs, and optimized UI performance.</li>
+    <li><strong>Freelance Projects</strong> – Delivered custom software solutions such as <em>BillCraft</em> (multi-shop billing platform) and other MERN/Next.js platforms, driving measurable client growth and efficiency.</li>
+  </ul>
 
-AI & Automation:
-• AI-powered chatbots and automation
-• Machine Learning integrations
-• Process automation solutions
+  <h3 style="color:#2c5282; margin-top:25px; margin-bottom:10px;">Key Projects</h3>
+  <ul style="margin-left:20px; line-height:1.8;">
+    <li><strong>HireMe | Skillify</strong> – AI-powered skill development platform with 1,000+ users; Smart India Hackathon Winner 2024.</li>
+    <li><strong>BillCraft (Freelance)</strong> – Multi-shop billing system for 18+ outlets and 200+ products with analytics dashboards.</li>
+    <li><strong>Evento</strong> – Event management platform in Next.js, increasing student participation by 25% and supporting 500+ concurrent users.</li>
+  </ul>
 
-DevOps & Deployment:
-• Docker containerization
-• CI/CD pipeline setup
-• Cloud deployment (AWS, Vercel, Render)
+  <h3 style="color:#2c5282; margin-top:25px; margin-bottom:10px;">Technical Skills</h3>
+  <p style="background:#f7fafc; padding:15px; border-left:4px solid #3182ce;">
+    <strong>Languages:</strong> JavaScript, TypeScript, Python, Java, C, C++ <br>
+    <strong>Frameworks:</strong> MERN, Next.js, React.js, Three.js <br>
+    <strong>Databases:</strong> MongoDB, SQL, Firebase <br>
+    <strong>DevOps:</strong> Docker, Nginx, Git, CI/CD, Portainer <br>
+    <strong>AI/ML:</strong> PyTorch, TensorFlow, Hugging Face, LangChain, NLP
+  </p>
 
-🏆 RECENT PROJECT HIGHLIGHTS:
+  <p style="margin-top:25px;">
+    Recognized as a <strong>Smart India Hackathon Winner</strong> and <strong>National Hackathon Champion</strong>, 
+    I bring not only technical depth but also leadership, having mentored 200+ students as Technical Lead of the APP Club.  
+    With my proven track record of delivering impactful freelance and professional projects, I believe I am well-positioned to contribute meaningfully at <strong>{{company_name}}</strong>.
+  </p>
 
-• Automated lead generation system processing 100,000+ leads
-• AI-powered skill development platform with 1,000+ active users
-• E-commerce solutions with payment gateway integrations
+  <p>
+    Please find my resume attached for your consideration. I would welcome the opportunity to discuss how I can support your team’s goals and deliver high-quality software solutions.
+  </p>
 
-I'd love to discuss how I can help {{company_name}} with your development needs. Whether it's building a new application, optimizing existing systems, or implementing automation solutions, I'm here to deliver high-quality results.
+  <p>Thank you for your time and consideration.</p>
 
-📂 PORTFOLIO & WORK:
-Portfolio: http://sameerbagul.me
-GitHub: https://github.com/Sameer-Bagul
+  <hr style="border:none; border-top:1px solid #e2e8f0; margin:25px 0;">
 
-Let's schedule a call to explore potential collaboration opportunities.
+  <p style="margin-bottom:5px;"><strong>Best regards,</strong></p>
+  <p style="margin-bottom:5px;"><strong>Sameer Bagul</strong></p>
+  <p style="margin-bottom:5px;">Pune, India</p>
+  <p style="margin-bottom:5px;">+91 7841941033</p>
+  <p style="margin-bottom:5px;">
+    <a href="mailto:sameerbagul2004@gmail.com" style="color:#3182ce; text-decoration:none;">sameerbagul2004@gmail.com</a>
+  </p>
+  <p style="margin-bottom:5px;">
+    <a href="http://sameerbagul.me" style="color:#3182ce; text-decoration:none;">Portfolio</a> | 
+    <a href="https://github.com/Sameer-Bagul" style="color:#3182ce; text-decoration:none;">GitHub</a> | 
+    <a href="https://linkedin.com/in/sameer-bagul" style="color:#3182ce; text-decoration:none;">LinkedIn</a>
+  </p>
 
----
+</div>
+`;
 
-Best regards,
-Sameer Bagul
-Full-Stack Developer & AI Specialist
-📱 +91 7841941033
-✉️ sameerbagul2004@gmail.com`;
 
     return new Template({
       id: "lead-search",
