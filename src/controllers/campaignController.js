@@ -7,7 +7,7 @@ class CampaignController {
     this.campaignService = new CampaignService();
     this.emailService = new EmailService();
   }
-  
+
   // GET /api/campaigns - Get all campaigns
   async getAllCampaigns(req, res) {
     try {
@@ -34,13 +34,13 @@ class CampaignController {
   async getCampaignById(req, res) {
     try {
       const { id } = req.params;
-      const campaign = this.campaignService.getCampaignById(id);
-      
+      const campaign = await this.campaignService.getCampaignById(id);
+
       if (!campaign) {
         return res.status(404).json({ error: 'Campaign not found' });
       }
 
-      const campaignStats = this.campaignService.getCampaignStats(id);
+      const campaignStats = await this.campaignService.getCampaignStats(id);
       res.json(campaignStats);
     } catch (error) {
       logger.error(`Error getting campaign ${req.params.id}: ${error.message}`);
@@ -52,7 +52,7 @@ class CampaignController {
   async createCampaign(req, res) {
     try {
       const campaignData = req.body;
-      
+
       // Validate required fields
       if (!campaignData.userEmail) {
         return res.status(400).json({ error: 'User email is required for campaigns' });
@@ -63,10 +63,10 @@ class CampaignController {
       }
 
       // Create campaign
-      const campaign = this.campaignService.createCampaign(campaignData);
-      
+      const campaign = await this.campaignService.createCampaign(campaignData);
+
       logger.campaign(`Campaign created successfully: ${campaign.id}`);
-      
+
       res.status(201).json({
         success: true,
         message: 'Campaign created successfully',
@@ -87,13 +87,13 @@ class CampaignController {
     try {
       const { id } = req.params;
       const updates = req.body;
-      
-      const updatedCampaign = this.campaignService.updateCampaign(id, updates);
-      
+
+      const updatedCampaign = await this.campaignService.updateCampaign(id, updates);
+
       res.json({
         success: true,
         message: 'Campaign updated successfully',
-        campaign: updatedCampaign.getProgress()
+        campaign: updatedCampaign
       });
     } catch (error) {
       logger.error(`Error updating campaign ${req.params.id}: ${error.message}`);
@@ -105,12 +105,12 @@ class CampaignController {
   async pauseCampaign(req, res) {
     try {
       const { id } = req.params;
-      const campaign = this.campaignService.pauseCampaign(id);
-      
+      const campaign = await this.campaignService.pauseCampaign(id);
+
       res.json({
         success: true,
         message: 'Campaign paused successfully',
-        campaign: campaign.getProgress()
+        campaign
       });
     } catch (error) {
       logger.error(`Error pausing campaign ${req.params.id}: ${error.message}`);
@@ -122,12 +122,12 @@ class CampaignController {
   async resumeCampaign(req, res) {
     try {
       const { id } = req.params;
-      const campaign = this.campaignService.resumeCampaign(id);
-      
+      const campaign = await this.campaignService.resumeCampaign(id);
+
       res.json({
         success: true,
         message: 'Campaign resumed successfully',
-        campaign: campaign.getProgress()
+        campaign
       });
     } catch (error) {
       logger.error(`Error resuming campaign ${req.params.id}: ${error.message}`);
@@ -139,8 +139,8 @@ class CampaignController {
   async deleteCampaign(req, res) {
     try {
       const { id } = req.params;
-      this.campaignService.deleteCampaign(id);
-      
+      await this.campaignService.deleteCampaign(id);
+
       res.json({
         success: true,
         message: 'Campaign deleted successfully'
@@ -154,8 +154,8 @@ class CampaignController {
   // GET /api/campaigns/summary - Get campaigns summary
   async getCampaignsSummary(req, res) {
     try {
-      const summary = this.campaignService.getCampaignsSummary();
-      res.json(summary);
+      const summary = await this.campaignService.getCampaignsSummary();
+      res.json(summary || { total: 0, active: 0, completed: 0, paused: 0, totalEmailsSent: 0, totalEmailsFailed: 0 });
     } catch (error) {
       logger.error(`Error getting campaigns summary: ${error.message}`);
       res.status(500).json({ error: error.message });
@@ -166,8 +166,8 @@ class CampaignController {
   async getCampaignStats(req, res) {
     try {
       const { id } = req.params;
-      const stats = this.campaignService.getCampaignStats(id);
-      
+      const stats = await this.campaignService.getCampaignStats(id);
+
       if (!stats) {
         return res.status(404).json({ error: 'Campaign not found' });
       }
@@ -191,7 +191,7 @@ class CampaignController {
 
       logger.info('Manually triggering campaign processing...');
       await schedulerService.triggerDailyCampaigns(force);
-      
+
       res.json({
         success: true,
         message: `Campaign processing triggered successfully${force ? ' (forced)' : ''}`
@@ -207,7 +207,7 @@ class CampaignController {
     try {
       const { id } = req.params;
       const { maxBatches = 10 } = req.body;
-      
+
       const schedulerService = req.app.get('schedulerService');
       if (!schedulerService) {
         return res.status(500).json({ error: 'Scheduler service not available' });
@@ -215,7 +215,7 @@ class CampaignController {
 
       logger.info(`Manually continuing campaign processing for ${id}...`);
       const result = await schedulerService.continueCampaignProcessing(id, maxBatches);
-      
+
       res.json({
         success: true,
         message: `Campaign processing continued successfully`,
@@ -237,7 +237,7 @@ class CampaignController {
 
       logger.info('Manually triggering daily summary...');
       await schedulerService.triggerDailySummary();
-      
+
       res.json({
         success: true,
         message: 'Daily summary triggered successfully'
@@ -258,7 +258,7 @@ class CampaignController {
 
       logger.info('Manually triggering evening report...');
       await schedulerService.triggerEveningReport();
-      
+
       res.json({
         success: true,
         message: 'Evening report triggered successfully'

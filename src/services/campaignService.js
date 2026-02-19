@@ -60,7 +60,7 @@ class CampaignService {
       }
 
       // Save to file storage
-      savedCampaign = await campaign.save();
+      const savedCampaign = await campaign.save();
       logger.info(`[CAMPAIGN SERVICE] Saved campaign to file storage with ID: ${savedCampaign.id}`);
 
       // Log campaign creation

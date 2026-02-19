@@ -169,35 +169,35 @@ class EmailService {
     const errorMessage = error.message.toLowerCase();
 
     if (errorMessage.includes('rate limit exceeded') ||
-        errorMessage.includes('rate_limit')) {
+      errorMessage.includes('rate_limit')) {
       return 'RATE_LIMIT';
     }
 
     if (errorMessage.includes('authentication failed') ||
-        errorMessage.includes('invalid credentials') ||
-        errorMessage.includes('535') ||
-        errorMessage.includes('auth')) {
+      errorMessage.includes('invalid credentials') ||
+      errorMessage.includes('535') ||
+      errorMessage.includes('auth')) {
       return 'AUTHENTICATION';
     }
 
     if (errorMessage.includes('connection') ||
-        errorMessage.includes('timeout') ||
-        errorMessage.includes('network') ||
-        errorMessage.includes('econnrefused') ||
-        errorMessage.includes('enotfound')) {
+      errorMessage.includes('timeout') ||
+      errorMessage.includes('network') ||
+      errorMessage.includes('econnrefused') ||
+      errorMessage.includes('enotfound')) {
       return 'NETWORK';
     }
 
     if (errorMessage.includes('too many') ||
-        errorMessage.includes('quota') ||
-        errorMessage.includes('429')) {
+      errorMessage.includes('quota') ||
+      errorMessage.includes('429')) {
       return 'RATE_LIMIT';
     }
 
     if (errorMessage.includes('invalid') ||
-        errorMessage.includes('malformed') ||
-        errorMessage.includes('recipient') ||
-        errorMessage.includes('address')) {
+      errorMessage.includes('malformed') ||
+      errorMessage.includes('recipient') ||
+      errorMessage.includes('address')) {
       return 'VALIDATION';
     }
 
@@ -318,7 +318,7 @@ class EmailService {
 
       // Retry logic for transient errors
       if (retryCount < this.maxRetries &&
-          (errorCategory === 'NETWORK' || errorCategory === 'RATE_LIMIT')) {
+        (errorCategory === 'NETWORK' || errorCategory === 'RATE_LIMIT')) {
         logger.warning(`Retrying email to ${emailData.to} in ${this.retryDelay}ms (attempt ${retryCount + 1}/${this.maxRetries})`);
         await this.delay(this.retryDelay * (retryCount + 1)); // Exponential backoff
         return this.sendEmail(emailData, retryCount + 1, campaignId);
@@ -598,7 +598,7 @@ class EmailService {
   }
 
   // Retry failed batch with exponential backoff
-  async retryFailedBatch(failedEmails, batchNumber, options = {}) {
+  async retryFailedBatch(failedEmails, batchNumber, campaignId = null, options = {}) {
     const maxRetries = options.maxRetries || this.batchRetryConfig.maxBatchRetries;
     const baseDelay = options.baseDelay || 30000; // 30 seconds
 
@@ -1007,7 +1007,7 @@ class EmailService {
         estimatedTimeRemaining: 0
       },
 
-      update: function(progress) {
+      update: function (progress) {
         const now = Date.now();
         Object.assign(this.stats, progress);
 
@@ -1033,7 +1033,7 @@ class EmailService {
         }
       },
 
-      getFinalStats: function() {
+      getFinalStats: function () {
         return {
           ...this.stats,
           totalTime: Date.now() - this.startTime,
@@ -1063,7 +1063,7 @@ class EmailService {
 
       // Prevent email injection
       if (sanitized.to.includes('\n') || sanitized.to.includes('\r') ||
-          sanitized.to.includes('<') || sanitized.to.includes('>')) {
+        sanitized.to.includes('<') || sanitized.to.includes('>')) {
         errors.push('Invalid characters in email address');
       }
     }
@@ -1459,7 +1459,7 @@ class EmailService {
                   </a>
                 </p>
               </div>`;
-            
+
             email.html += resumeSection;
           }
 
@@ -1505,7 +1505,7 @@ class EmailService {
   estimateSendingTime(emailCount, delayMs = 10000) {
     const totalTimeMs = (emailCount - 1) * delayMs; // No delay after last email
     const totalTimeMinutes = Math.ceil(totalTimeMs / 60000);
-    
+
     return {
       totalTimeMs,
       totalTimeMinutes,
@@ -1521,7 +1521,7 @@ class EmailService {
   // Clean up attachments after sending
   cleanupAttachments(emails) {
     const cleanedFiles = [];
-    
+
     emails.forEach(email => {
       if (email.attachments && email.attachments.length > 0) {
         email.attachments.forEach(attachment => {

@@ -104,17 +104,14 @@ class EmailController {
        logger.email('Email sending endpoint called');
 
        // Debug logging for development
-       console.log('Request body:', req.body);
-       console.log('Request files:', req.files);
 
-       logger.info('[DEBUG] Starting sendEmails processing');
+       logger.debug('Starting sendEmails processing');
 
       const { delayMs, resumeDocLink, userEmail, campaignType, templateId, manualRecipients } = req.body;
       const files = req.files;
       const excelFile = files?.file?.[0];
       const resumeFile = files?.resume?.[0];
 
-      console.log('Parsed data:', { delayMs, resumeDocLink, userEmail, campaignType, excelFile: excelFile?.filename, resumeFile: resumeFile?.filename, manualRecipients });
 
       // Validate that we have either a file or manual recipients
       let recipients = [];
@@ -122,23 +119,17 @@ class EmailController {
 
       if (excelFile) {
         // Handle CSV/Excel file upload
-        console.log('File path:', excelFile.path);
-        console.log('File size:', excelFile.size);
-        console.log('About to parse file:', excelFile.path);
 
         // Determine file type and parse accordingly
         const fileExtension = excelFile.originalname.split('.').pop().toLowerCase();
         let parseResult;
 
         if (fileExtension === 'csv') {
-          console.log('Parsing as CSV file');
           parseResult = await this.fileService.parseCsvFile(excelFile.path);
         } else {
-          console.log('Parsing as Excel file');
           parseResult = await this.fileService.parseExcelFile(excelFile.path);
         }
 
-        console.log('Parse result:', parseResult);
         if (!parseResult.success) {
           return safeError(parseResult.error, 400);
         }
@@ -203,7 +194,7 @@ class EmailController {
         }
 
         // Create campaign
-        logger.info('[DEBUG] Preparing campaign data');
+        logger.debug('[DEBUG] Preparing campaign data');
         const campaignData = {
           name: `${template.category === 'freelancing' ? 'Freelancing' : 'Job Application'} Campaign - ${new Date().toLocaleDateString()}`,
           contacts,
@@ -220,9 +211,9 @@ class EmailController {
           }] : []
         };
 
-        logger.info('[DEBUG] Calling campaignService.createCampaign');
+        logger.debug('[DEBUG] Calling campaignService.createCampaign');
         const campaign = await this.campaignService.createCampaign(campaignData);
-        logger.info('[DEBUG] Campaign created successfully');
+        logger.debug('[DEBUG] Campaign created successfully');
 
         // Debug logging
         logger.info(`Campaign object after creation: ${JSON.stringify({

@@ -47,8 +47,7 @@ class Template {
   // Get all available templates
   static getAllTemplates() {
     return [
-      Template.getJobSearchTemplate(),
-      Template.getLeadSearchTemplate()
+      Template.getJobSearchTemplate()
     ];
   }
 
@@ -61,7 +60,7 @@ class Template {
   // Job Search Template
   static getJobSearchTemplate() {
     const subject = `Software Developer Opportunity | {{company_name}}`;
-const content = `
+    const content = `
 <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 650px; margin: 0 auto;">
 
   <p>Dear Hiring Manager,</p>
@@ -145,8 +144,8 @@ const content = `
   // Lead Search Template
   static getLeadSearchTemplate() {
     const subject = `Partnership Opportunity - Full-Stack Development Services | {{company_name}}`;
-    
-const content = `
+
+    const content = `
 <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 650px; margin: 0 auto;">
 
   <p>Dear Hiring Manager,</p>
