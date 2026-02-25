@@ -180,7 +180,7 @@ class Template {
   <p style="margin-bottom:5px;">Pune, India</p>
   <p style="margin-bottom:5px;">+91 7841941033</p>
   <p style="margin-bottom:5px;">
-    <a href="mailto:sameerbagul2004@gmail.com" style="color:#3182ce; text-decoration:none;">sameerbagul2004@gmail.com</a>
+    <a href="mailto:sameerbagul.social@gmail.com" style="color:#3182ce; text-decoration:none;">sameerbagul.social@gmail.com</a>
   </p>
   <p style="margin-bottom:5px;">
     <a href="http://sameerbagul.me" style="color:#3182ce; text-decoration:none;">Portfolio</a> | 
