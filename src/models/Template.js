@@ -72,7 +72,7 @@ class Template {
   </p>
 
   <p>
-    My work focuses on designing production-ready AI systems — including RAG-based tools,
+    My work focuses on designing production-ready AI systems , including RAG-based tools,
     intelligent agents, developer-focused CLI tools, and scalable full-stack applications. I've
     also worked across DevOps, containerized deployments, and CI/CD pipelines to ensure systems
     are reliable and scalable in real-world environments.
@@ -84,7 +84,7 @@ class Template {
   </p>
 
   <p>
-    Rather than listing everything here, I'd encourage you to check my portfolio — it includes
+    Rather than listing everything here, I'd encourage you to check my portfolio , it includes
     detailed breakdowns of my projects, achievements, hackathon wins, and technical implementations.
   </p>
 
