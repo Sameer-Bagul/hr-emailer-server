@@ -1377,7 +1377,7 @@ class EmailService {
       const variables = {
         company_name: recipient.company_name || recipient.companyName,
         email: recipient.email,
-        name: recipient.name,
+        name: recipient.name || 'there',
         ...templateVariables
       };
 
